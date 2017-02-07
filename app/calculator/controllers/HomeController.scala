@@ -16,7 +16,7 @@
 
 package calculator.controllers
 
-import calculator.views.html.{home => pages}
+import calculator.views.html.{home => views}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
@@ -29,6 +29,6 @@ object HomeController extends HomeController
 
 trait HomeController extends FrontendController {
   val welcome: Action[AnyContent] = Action.async { implicit request =>
-		Future.successful(Ok(pages.welcome()))
+		Future.successful(Ok(views.welcome()))
   }
 }
