@@ -16,25 +16,35 @@
 
 package calculator.controllers
 
+import calculator.config.AppConfig
+import mocks.SimpleAppConfig
+import org.scalatest.mock.MockitoSugar
 import play.api.http.Status
+import play.api.i18n.MessagesApi
+import play.api.inject.Injector
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 
-class HomeControllerSpec extends UnitSpec with WithFakeApplication{
+class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar{
+
+  lazy val injector: Injector = fakeApplication.injector
+  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
 
   val fakeRequest = FakeRequest("GET", "/")
+  val mockConfig: AppConfig = new SimpleAppConfig()
 
+  val target = new HomeController(mockConfig, messages)
 
   "GET /" should {
     "return 200" in {
-      val result = HomeController.welcome(fakeRequest)
+      val result = target.welcome(fakeRequest)
       status(result) shouldBe Status.OK
     }
 
     "return HTML" in {
-      val result = HomeController.welcome(fakeRequest)
+      val result = target.welcome(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result) shouldBe Some("utf-8")
     }

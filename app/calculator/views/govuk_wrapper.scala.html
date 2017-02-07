@@ -1,6 +1,4 @@
-@import calculator.config.AppConfig
-
-@(appConfig: AppConfig,
+@(config: calculator.config.AppConfig,
   title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
@@ -39,8 +37,8 @@
 
 @bodyEnd = {
     @uiLayouts.footer(
-      analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
+      analyticsToken = Some(config.analyticsToken),
+      analyticsHost = config.analyticsHost,
       ssoUrl = None,
       scriptElem = scriptElem,
       gaCalls = None)
@@ -62,7 +60,7 @@
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{uiHelpers.reportAProblemLink(config.reportAProblemPartialUrl, config.reportAProblemNonJSUrl)}
 
 @content = {
     @uiLayouts.main_content(

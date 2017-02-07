@@ -16,19 +16,25 @@
 
 package calculator.controllers
 
+import calculator.config.AppConfig
 import calculator.views.html.{home => views}
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import com.google.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
+class HomeController @Inject()(configuration: AppConfig,
+                     val messagesApi: MessagesApi)
+  extends HomeControllerT {
+  override val config: AppConfig = configuration
+}
 
-object HomeController extends HomeController
+trait HomeControllerT extends FrontendController with I18nSupport {
+  val config: AppConfig
 
-trait HomeController extends FrontendController {
-  val welcome: Action[AnyContent] = Action.async { implicit request =>
-		Future.successful(Ok(views.welcome()))
+  def welcome: Action[AnyContent] = Action.async { implicit request =>
+		Future.successful(Ok(views.welcome(config)))
   }
 }

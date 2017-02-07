@@ -22,7 +22,7 @@ class RoutesSpec extends UnitSpec with WithFakeApplication {
 
   "The route for the welcome action on the home controller" should {
     "be /vat-flat-rate-calculator-frontend" in {
-      calculator.controllers.routes.HomeController.welcome().url shouldBe "/vat-flat-rate-calculator"
+      calculator.controllers.routes.HomeController.welcome().url shouldBe "/check-your-vat-flat-rate"
     }
   }
 
