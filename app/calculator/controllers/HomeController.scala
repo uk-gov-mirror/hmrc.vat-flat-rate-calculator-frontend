@@ -16,7 +16,7 @@
 
 package calculator.controllers
 
-import calculator.views.html.helloworld.hello_world
+import calculator.views.html.{home => pages}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
@@ -25,10 +25,10 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.Future
 
 
-object HelloWorld extends HelloWorld
+object HomeController extends HomeController
 
-trait HelloWorld extends FrontendController {
-  val helloWorld = Action.async { implicit request =>
-		Future.successful(Ok(hello_world()))
+trait HomeController extends FrontendController {
+  val welcome: Action[AnyContent] = Action.async { implicit request =>
+		Future.successful(Ok(pages.welcome()))
   }
 }
