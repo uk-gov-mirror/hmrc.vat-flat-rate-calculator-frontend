@@ -1,6 +1,6 @@
 @import calculator.views.html.main_template
 @(config: calculator.config.AppConfig)(implicit request: Request[_], messages: Messages))
 
-@main_template(title = "Hello from vat-flat-rate-calculator-frontend", bodyClasses = None, config = config) {
+@main_template(title = messages("service.title"), bodyClasses = None, config = config) {
     <h1>@messages("home.welcome.title")</h1>
 }
