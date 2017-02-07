@@ -1,3 +1,4 @@
+@import calculator.config.FrontendAppConfig
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
@@ -8,4 +9,4 @@
   <p>@message</p>
 }
 
-@govuk_wrapper(appConfig = uk.gov.hmrc.vatflatratecalculatorfrontend.FrontendAppConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+@govuk_wrapper(appConfig = FrontendAppConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
