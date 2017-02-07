@@ -1,10 +1,11 @@
 package uk.gov.hmrc.vatflatratecalculatorfrontend.controllers
 
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.mvc._
-import scala.concurrent.Future
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc._
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import scala.concurrent.Future
 
 
 object HelloWorld extends HelloWorld
