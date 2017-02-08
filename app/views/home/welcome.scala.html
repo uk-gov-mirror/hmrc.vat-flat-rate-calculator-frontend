@@ -1,0 +1,6 @@
+@import views.html.main_template
+@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages))
+
+@main_template(title = messages("service.title"), bodyClasses = None, appConfig = appConfig) {
+    <h1>@messages("home.welcome.title")</h1>
+}

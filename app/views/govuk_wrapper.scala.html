@@ -1,4 +1,4 @@
-@(config: calculator.config.AppConfig,
+@(appConfig: config.AppConfig,
   title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
@@ -12,7 +12,7 @@
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
-@import calculator.views.html.helpers.phaseBanner
+@import views.html.helpers.phaseBanner
 
 @head = {
     @uiLayouts.head(
@@ -38,8 +38,8 @@
 
 @bodyEnd = {
     @uiLayouts.footer(
-      analyticsToken = Some(config.analyticsToken),
-      analyticsHost = config.analyticsHost,
+      analyticsToken = Some(appConfig.analyticsToken),
+      analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
       scriptElem = scriptElem,
       gaCalls = None)
@@ -61,7 +61,7 @@
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(config.reportAProblemPartialUrl, config.reportAProblemNonJSUrl)}
+@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
     @uiLayouts.main_content(

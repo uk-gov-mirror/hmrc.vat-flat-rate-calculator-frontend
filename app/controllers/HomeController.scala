@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package calculator.controllers
+package controllers
 
-import calculator.config.AppConfig
-import calculator.views.html.{home => views}
+import config.AppConfig
+import views.html.{home => views}
 import com.google.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._

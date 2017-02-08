@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package calculator.config
+package config
 
 import java.io.File
 
-import calculator.views.html.error_template
+import views.html.error_template
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
 import play.api.Mode._

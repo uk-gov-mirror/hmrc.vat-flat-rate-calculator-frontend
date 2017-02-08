@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package calculator.routes
+package routes
 
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -22,7 +22,7 @@ class RoutesSpec extends UnitSpec with WithFakeApplication {
 
   "The route for the welcome action on the home controller" should {
     "be /check-your-vat-flat-rate" in {
-      calculator.controllers.routes.HomeController.welcome().url shouldBe "/check-your-vat-flat-rate"
+      controllers.routes.HomeController.welcome().url shouldBe "/check-your-vat-flat-rate"
     }
   }
 
