@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package app.controllers
+package controllers
 
-import app.config.AppConfig
-import app.views.html.{home => views}
+import config.AppConfig
+import views.html.{home => views}
 import com.google.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._

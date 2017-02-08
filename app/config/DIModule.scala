@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package calculator.routes
+package config
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import com.google.inject.AbstractModule
 
-class RoutesSpec extends UnitSpec with WithFakeApplication {
-
-  "The route for the welcome action on the home controller" should {
-    "be /check-your-vat-flat-rate" in {
-      calculator.controllers.routes.HomeController.welcome().url shouldBe "/check-your-vat-flat-rate"
-    }
+class DIModule extends AbstractModule {
+  protected def configure(): Unit ={
+    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
   }
 
 }

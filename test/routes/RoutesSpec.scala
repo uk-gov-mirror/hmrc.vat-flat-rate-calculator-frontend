@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package calculator.helpers
+package routes
 
-import org.jsoup.select.Elements
-import org.scalatest.Assertions.cancel
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-object AssertionHelpers {
+class RoutesSpec extends UnitSpec with WithFakeApplication {
 
-  //requires a test to validate a non-empty array beffore using this assert
-  def assertHtml(elements: Elements)(test: Elements => Unit): Unit = {
-    if(elements.isEmpty) cancel("element not found")
-    else test(elements)
+  "The route for the welcome action on the home controller" should {
+    "be /check-your-vat-flat-rate" in {
+      calculator.controllers.routes.HomeController.welcome().url shouldBe "/check-your-vat-flat-rate"
+    }
   }
+
 }

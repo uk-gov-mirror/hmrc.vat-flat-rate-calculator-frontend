@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package app.controllers
+package controllers
 
-import app.config.AppConfig
+import config.AppConfig
 import mocks.SimpleAppConfig
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status

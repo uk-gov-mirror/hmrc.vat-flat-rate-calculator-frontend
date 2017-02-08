@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package app.config
+package config
 
 import java.io.File
 
-import app.views.html.error_template
+import views.html.error_template
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
 import play.api.Mode._

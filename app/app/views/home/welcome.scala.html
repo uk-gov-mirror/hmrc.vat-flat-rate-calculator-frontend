@@ -1,6 +1,0 @@
-@import app.views.html.main_template
-@(config: app.config.AppConfig)(implicit request: Request[_], messages: Messages))
-
-@main_template(title = messages("service.title"), bodyClasses = None, config = config) {
-    <h1>@messages("home.welcome.title")</h1>
-}

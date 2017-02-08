@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package app.config
+package helpers
 
-import com.google.inject.AbstractModule
+import org.jsoup.select.Elements
+import org.scalatest.Assertions.cancel
 
-class DIModule extends AbstractModule {
-  protected def configure(): Unit ={
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
+object AssertionHelpers {
+
+  //requires a test to validate a non-empty array before using this assert
+  def assertHtml(elements: Elements)(test: Elements => Unit): Unit = {
+    if(elements.isEmpty) cancel("element not found")
+    else test(elements)
   }
-
 }
