@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package calculator.controllers
+package app.controllers
 
-import calculator.config.AppConfig
+import app.config.AppConfig
 import mocks.SimpleAppConfig
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status

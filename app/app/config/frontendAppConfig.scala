@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package calculator.config
+package app.config
 
 import com.google.inject.Inject
 import play.api.Configuration

@@ -16,7 +16,7 @@
 
 package mocks
 
-import calculator.config.AppConfig
+import app.config.AppConfig
 
 class SimpleAppConfig extends AppConfig{
   override val analyticsToken: String = ""
