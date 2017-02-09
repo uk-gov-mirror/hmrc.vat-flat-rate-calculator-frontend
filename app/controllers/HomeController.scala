@@ -23,26 +23,37 @@ import views.html.{home => views}
 import com.google.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class HomeController @Inject()(configuration: AppConfig,
-                               val messagesApi: MessagesApi) extends HomeControllerT {
-  override val config: AppConfig = configuration
-}
+class HomeController @Inject()(config: AppConfig,
+                               val messagesApi: MessagesApi,
+                               keyStore: StateService) extends FrontendController with I18nSupport {
 
-trait HomeControllerT extends FrontendController with I18nSupport {
-  val config: AppConfig
-
-  ////SETUP METHODS TODO: replace
-
-  def welcome: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok(views.welcome(config,1)))
+  def welcome(i: Int): Action[AnyContent] = Action.async { implicit request =>
+    val num = i + 1
+    keyStore.fetchData[Int]("test").flatMap {
+      case Some(s) => {
+        val n = s.asInstanceOf[Int] + 1
+        keyStore.saveData("test", n)
+        Future.successful(Ok(views.pageTwo(config, n)))
+      }
+      case None    => Future.successful(Ok(views.pageTwo(config, i)))
+    }
   }
 
-  def pageTwo: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.pageTwo(config, 1)))
+  def pageTwo(n: Int): Action[AnyContent] = Action.async { implicit request =>
+    val num = n + 1
+    keyStore.fetchData[Int]("test").flatMap {
+      case Some(p) => {
+        val j = p.asInstanceOf[Int] + 1
+        keyStore.saveData("test", j)
+        Future.successful(Ok(views.pageTwo(config, j)))
+      }
+      case None    => Future.successful(Ok(views.pageTwo(config, n)))
+    }
   }
 }

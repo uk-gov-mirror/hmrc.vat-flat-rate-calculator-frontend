@@ -21,7 +21,7 @@ import play.api.Configuration
 import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig
 
-trait AppConfig {
+trait AppConfig extends ServicesConfig{
   val analyticsToken: String
   val analyticsHost: String
   val reportAProblemPartialUrl: String
@@ -42,7 +42,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
 }
 
 @Singleton
-class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig with ServicesConfig{
+class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig {
 
   private val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
