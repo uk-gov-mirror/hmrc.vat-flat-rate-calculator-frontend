@@ -25,16 +25,6 @@ import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.http.ws._
 import uk.gov.hmrc.http.cache.client.SessionCache
 
-@Singleton
-class FrotendAuditConnector @Inject()() extends Auditing with AppName {
-  override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
-}
-
-@Singleton
-class FrontendAuthConnector @Inject()(override val http: WSHttp) extends AuthConnector with ServicesConfig {
-  lazy val serviceUrl: String = baseUrl("auth")
-}
-
 object FrontendAuditConnector extends Auditing with AppName {
   override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
 }
@@ -42,13 +32,8 @@ object FrontendAuditConnector extends Auditing with AppName {
 object FrontendAuthConnector extends AuthConnector with ServicesConfig {
   val serviceUrl: String = baseUrl("auth")
   lazy val http = WSHttp
-  object WSHttp extends WSGet with WSPut with WSPost with WSDelete with AppName with RunMode {
-    override val hooks = NoneRequired
-  }
-}
 
-class VfrSessionCache @Inject()(override val http: WSHttp, appConfig: AppConfig) extends SessionCache with ServicesConfig with AppName {
-  override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(""))
-  override lazy val baseUri: String = baseUrl("cachable.session-cache")
-  override lazy val defaultSource: String = appName
+}
+object WSHttp extends WSGet with WSPut with WSPost with WSDelete with AppName with RunMode {
+  override val hooks = NoneRequired
 }

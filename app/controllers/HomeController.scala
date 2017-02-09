@@ -16,6 +16,8 @@
 
 package controllers
 
+import javax.inject.Singleton
+
 import config.AppConfig
 import views.html.{home => views}
 import com.google.inject.Inject
@@ -25,16 +27,22 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class HomeController @Inject()(configuration: AppConfig,
-                     val messagesApi: MessagesApi)
-  extends HomeControllerT {
+                               val messagesApi: MessagesApi) extends HomeControllerT {
   override val config: AppConfig = configuration
 }
 
 trait HomeControllerT extends FrontendController with I18nSupport {
   val config: AppConfig
 
+  ////SETUP METHODS TODO: replace
+
   def welcome: Action[AnyContent] = Action.async { implicit request =>
-		Future.successful(Ok(views.welcome(config)))
+        Future.successful(Ok(views.welcome(config,1)))
+  }
+
+  def pageTwo: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.pageTwo(config, 1)))
   }
 }
