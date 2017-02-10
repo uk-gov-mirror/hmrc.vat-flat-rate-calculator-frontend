@@ -28,8 +28,6 @@ import scala.concurrent.Future
 @Singleton
 class StateService @Inject()(keystore: KeystoreConnector) {
 
-//  implicit val hc: HeaderCarrier = keystore.hc
-
   def saveData[T](key: String, data: T)(implicit hc: HeaderCarrier, format: Format[T]): Future[CacheMap] = {
     keystore.saveFormData(key,data)
   }

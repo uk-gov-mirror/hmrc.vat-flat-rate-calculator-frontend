@@ -2,10 +2,10 @@
 @(appConfig: config.AppConfig, num: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("service.title"), bodyClasses = None, appConfig = appConfig) {
-    <h1>@messages("home.page2.title")</h1>
-    <p>@num</p>
+<h1>@messages("home.page1.title")</h1>
+<p>@num</p>
 
-    <a href = '@controllers.routes.HomeController.pageOne'>Home</a>
+<a href = '@controllers.routes.HomeController.pageTwo'>Home</a>
 
 
 }
