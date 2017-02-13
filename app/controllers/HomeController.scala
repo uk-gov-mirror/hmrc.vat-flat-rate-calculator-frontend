@@ -17,10 +17,10 @@
 package controllers
 
 import java.util.UUID
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
-import com.google.inject.Inject
 import config.AppConfig
+import controllers.predicates.ValidatedSession
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.StateService
@@ -28,13 +28,14 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.SessionKeys
 import views.html.{home => views}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+
 
 @Singleton
 class HomeController @Inject()(config: AppConfig,
                                val messagesApi: MessagesApi,
-                               keyStore: StateService) extends FrontendController with I18nSupport {
+                               keyStore: StateService,
+                               session: ValidatedSession) extends FrontendController with I18nSupport{
 
   def welcome: Action[AnyContent] = Action.async { implicit request =>
     keyStore.saveData("test", 0)
@@ -46,7 +47,8 @@ class HomeController @Inject()(config: AppConfig,
     }
   }
 
-  def pageOne: Action[AnyContent] = Action.async { implicit request =>
+  def pageOne: Action[AnyContent] = session.async { implicit request =>
+
     keyStore.fetchData[Int]("test").flatMap {
       case Some(s) =>
         val num = s + 1
@@ -56,7 +58,7 @@ class HomeController @Inject()(config: AppConfig,
     }
   }
 
-  def pageTwo: Action[AnyContent] = Action.async { implicit request =>
+  def pageTwo: Action[AnyContent] = session.async { implicit request =>
     keyStore.fetchData[Int]("test").flatMap {
       case Some(p) =>
         val num = p + 1

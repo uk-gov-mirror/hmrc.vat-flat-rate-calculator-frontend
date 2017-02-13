@@ -17,13 +17,14 @@
 package controllers
 
 import config.AppConfig
-import mocks.SimpleAppConfig
+import connectors.KeystoreConnector
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
+import services.StateService
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 
@@ -33,9 +34,11 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
 
   val fakeRequest = FakeRequest("GET", "/")
-  val mockConfig: AppConfig = new SimpleAppConfig()
+  val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+  val mockStateService: StateService = injector.instanceOf[StateService]
+  val mockKeystore: KeystoreConnector = injector.instanceOf[KeystoreConnector]
 
-  val target = new HomeController(mockConfig, messages)
+  val target = new HomeController(mockConfig, messages, mockStateService)
 
   "GET /" should {
     "return 200" in {
