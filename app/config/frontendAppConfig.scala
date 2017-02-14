@@ -28,26 +28,13 @@ trait AppConfig extends ServicesConfig{
   val reportAProblemNonJSUrl: String
 }
 
-object FrontendAppConfig extends AppConfig with ServicesConfig {
-
-  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-
-  private val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier: String = "MyService"
-
-  override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
-  override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
-  override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-}
-
-@Singleton
 class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig {
 
   private val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
   private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def constructUrl(key: String) = baseUrl(key) + configuration.getString(s"microservice.services.$key.path").getOrElse("")
 
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")

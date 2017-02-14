@@ -28,7 +28,8 @@ trait MicroService {
     import scoverage.ScoverageKeys
     Seq(
       ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*AuthService.*;models/.data/..*;" +
-        "filters.*;.handlers.*;components.*;.*BuildInfo.*;.*FrontendAuditConnector.*;.*Routes.*",
+        "filters.*;.handlers.*;components.*;.*BuildInfo.*;.*FrontendAuditConnector.*",
+      //;.*Routes.*;views.html.helpers.*;nr.*;res.*;prod.*;config.*",
       ScoverageKeys.coverageMinimum := 90,
       ScoverageKeys.coverageFailOnMinimum := false,
       ScoverageKeys.coverageHighlighting := true

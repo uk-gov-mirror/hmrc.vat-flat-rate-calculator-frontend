@@ -18,48 +18,57 @@ package controllers
 
 import java.util.UUID
 
-import config.AppConfig
+import config.{AppConfig, VfrSessionCache, WSHttp}
 import connectors.KeystoreConnector
 import controllers.predicates.ValidatedSession
-import helpers.FakeRequestTo
+import helpers.{ControllerTestSpec, FakeRequestHelper}
+import org.mockito.{ArgumentMatchers, Matchers}
+import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import play.api.http.{HttpEntity, Status}
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
-import play.api.test.Helpers._
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.collection.immutable.Iterable
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar{
+class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
-  lazy val injector: Injector = fakeApplication.injector
+  val injector: Injector = fakeApplication.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
 
+  val mockSessionCache: VfrSessionCache = injector.instanceOf[VfrSessionCache]
   val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   val mockStateService: StateService = injector.instanceOf[StateService]
-  val mockKeystore: KeystoreConnector = injector.instanceOf[KeystoreConnector]
+  val mockKeyStoreConnector: KeystoreConnector = injector.instanceOf[KeystoreConnector]
   val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
 
   val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
 
   "Navigating to the landing page" when {
 
-    val sessionId =  UUID.randomUUID().toString
-
     "there is no sessionId" should {
+      lazy val request = FakeRequest("GET", "/")
+      lazy val result = target.welcome(request)
+
       "generate a sessionId and continue" in {
-        object DataItem extends FakeRequestTo("/", target.welcome, None)
-        status(DataItem.result) shouldBe Status.OK
+        status(result) shouldBe Status.OK
       }
     }
     "there is a sessionId" should {
+      val sessionId =  UUID.randomUUID().toString
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"sessionId-$sessionId")
+      lazy val result = target.welcome(request)
+
       "return 200 " in {
-        object DataItem extends FakeRequestTo("/", target.welcome, Some(sessionId))
-        status(DataItem.result) shouldBe Status.OK
+        status(result) shouldBe Status.OK
       }
     }
   }
@@ -68,16 +77,32 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     val sessionId =  UUID.randomUUID().toString
 
     "there is no sessionId" should {
+      lazy val request = FakeRequest("GET", "/")
+      lazy val result = target.pageOne(request)
       "generate a sessionId and go back to the landing page" in {
-        object DataItem extends FakeRequestTo("/", target.welcome, None)
-        status(DataItem.result) shouldBe Status.OK
+
+        status(result) shouldBe Status.OK
       }
     }
     "there is a sessionId" should {
+      lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
+      lazy val result = target.pageOne(request)
       "return 200 " in {
-        object DataItem extends FakeRequestTo("/", target.pageOne, Some(sessionId))
-        status(DataItem.result) shouldBe Status.OK
+        status(result) shouldBe Status.OK
       }
+    }
+
+    "there is an item in keystore" should {
+
+      //TODO mock a keystore/stateService response here and check that its routing through HomeController correctly
+
+      lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
+      lazy val result = target.pageOne(request)
+
+      "return 200 " in {
+        status(result) shouldBe Status.OK
+      }
+
     }
 
   }

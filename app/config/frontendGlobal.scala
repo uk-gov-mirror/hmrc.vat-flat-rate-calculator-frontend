@@ -47,9 +47,11 @@ object FrontendGlobal
     ApplicationCrypto.verifyConfiguration()
   }
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    error_template(pageTitle, heading, message, FrontendAppConfig)
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html ={
+    val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
+    error_template(pageTitle, heading, message, appConfig)
 
+  }
   override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")
 }
 

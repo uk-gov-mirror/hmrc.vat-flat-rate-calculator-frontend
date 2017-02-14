@@ -41,7 +41,7 @@ class HomeController @Inject()(config: AppConfig,
     keyStore.saveData("test", 0)
     if (request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID().toString
-      Future.successful(Ok(views.welcome(config)).withSession(request.session + (SessionKeys.sessionId -> s"session-$sessionId")))
+      Future.successful(Ok(views.welcome(config)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
     } else {
       Future.successful(Ok(views.welcome(config)))
     }
