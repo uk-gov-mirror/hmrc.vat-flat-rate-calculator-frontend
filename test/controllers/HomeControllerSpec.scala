@@ -50,9 +50,10 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
   val mockKeyStoreConnector: KeystoreConnector = injector.instanceOf[KeystoreConnector]
   val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
 
+
   val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
 
-  "Navigating to the landing page" when {
+    "Navigating to the landing page" when {
 
     "there is no sessionId" should {
       lazy val request = FakeRequest("GET", "/")
@@ -95,16 +96,28 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     "there is an item in keystore" should {
 
       //TODO mock a keystore/stateService response here and check that its routing through HomeController correctly
+//      when(mockStateService.fetchData[Int](ArgumentMatchers.any())(ArgumentMatchers.any(),ArgumentMatchers.any()))
+//        .thenReturn(Future.successful(Some(1)))
+
+      def createMockKeyStore[T](data: Option[T]) = {
+
+        val mockStateService = mock[StateService]
+
+        when(mockStateService.fetchData[T](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+          .thenReturn(Future.successful(data))
+
+        mockStateService
+      }
 
       lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
+      val service = createMockKeyStore(Some(1))
+      val target= new HomeController(mockConfig, messages, service, mockValidatedSession)
       lazy val result = target.pageOne(request)
 
       "return 200 " in {
         status(result) shouldBe Status.OK
       }
-
     }
-
   }
 
 
