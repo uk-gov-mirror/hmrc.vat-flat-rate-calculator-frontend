@@ -16,16 +16,22 @@
 
 package controllers
 
+import java.util.UUID
+
 import config.AppConfig
 import connectors.KeystoreConnector
+import controllers.predicates.ValidatedSession
+import helpers.FakeRequestTo
 import org.scalatest.mock.MockitoSugar
-import play.api.http.Status
+import play.api.http.{HttpEntity, Status}
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentType, _}
+import play.api.test.Helpers._
 import services.StateService
+import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 
 class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar{
@@ -33,27 +39,49 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
   lazy val injector: Injector = fakeApplication.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
 
-  val fakeRequest = FakeRequest("GET", "/")
   val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   val mockStateService: StateService = injector.instanceOf[StateService]
   val mockKeystore: KeystoreConnector = injector.instanceOf[KeystoreConnector]
+  val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
 
-  val target = new HomeController(mockConfig, messages, mockStateService)
+  val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
 
-  "GET /" should {
-    "return 200" in {
-      val result = target.welcome(fakeRequest)
-      status(result) shouldBe Status.OK
+  "Navigating to the landing page" when {
+
+    val sessionId =  UUID.randomUUID().toString
+
+    "there is no sessionId" should {
+      "generate a sessionId and continue" in {
+        object DataItem extends FakeRequestTo("/", target.welcome, None)
+        status(DataItem.result) shouldBe Status.OK
+      }
     }
-
-    "return HTML" in {
-      val result = target.welcome(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+    "there is a sessionId" should {
+      "return 200 " in {
+        object DataItem extends FakeRequestTo("/", target.welcome, Some(sessionId))
+        status(DataItem.result) shouldBe Status.OK
+      }
     }
+  }
 
+  "Navigating to page 1" when {
+    val sessionId =  UUID.randomUUID().toString
+
+    "there is no sessionId" should {
+      "generate a sessionId and go back to the landing page" in {
+        object DataItem extends FakeRequestTo("/", target.welcome, None)
+        status(DataItem.result) shouldBe Status.OK
+      }
+    }
+    "there is a sessionId" should {
+      "return 200 " in {
+        object DataItem extends FakeRequestTo("/", target.pageOne, Some(sessionId))
+        status(DataItem.result) shouldBe Status.OK
+      }
+    }
 
   }
+
 
 
 }
