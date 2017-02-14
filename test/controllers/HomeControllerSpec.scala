@@ -50,6 +50,16 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
   val mockKeyStoreConnector: KeystoreConnector = injector.instanceOf[KeystoreConnector]
   val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
 
+  def createMockKeyStore[T](data: Option[T]): StateService = {
+
+    val mockStateService = mock[StateService]
+
+    when(mockStateService.fetchData[T](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(data))
+
+    mockStateService
+  }
+
 
   val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
 
@@ -94,20 +104,6 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     }
 
     "there is an item in keystore" should {
-
-      //TODO mock a keystore/stateService response here and check that its routing through HomeController correctly
-//      when(mockStateService.fetchData[Int](ArgumentMatchers.any())(ArgumentMatchers.any(),ArgumentMatchers.any()))
-//        .thenReturn(Future.successful(Some(1)))
-
-      def createMockKeyStore[T](data: Option[T]) = {
-
-        val mockStateService = mock[StateService]
-
-        when(mockStateService.fetchData[T](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-          .thenReturn(Future.successful(data))
-
-        mockStateService
-      }
 
       lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
       val service = createMockKeyStore(Some(1))
