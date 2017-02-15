@@ -21,20 +21,16 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class RoutesSpec extends UnitSpec with WithFakeApplication {
   val baseUrl = "/check-your-vat-flat-rate"
 
-  "The route for the welcome action on the home controller" should {
-    "be /check-your-vat-flat-rate" in {
-      controllers.routes.HomeController.welcome().url shouldBe s"$baseUrl"
+  val vatReturnPeriod: String = baseUrl+"/vat-return-period"
+
+  "The route for the vatReturnPeriod action on the vatReturnPeriod controller" should {
+    "be /check-your-vat-flat-rate/vat-return-period" in {
+      controllers.routes.VatReturnPeriodController.vatReturnPeriod().url shouldBe s"$vatReturnPeriod"
     }
 
-    "The route for the page one action on the home controller" should {
+    "The route for the submitVatReturnPeriod action on the vatReturnPeriod controller" should {
       " be /check-your-vat-flat-rate/page-one" in {
-        controllers.routes.HomeController.pageOne().url shouldBe s"$baseUrl/page-1/"
-      }
-    }
-
-    "The route for the page two action on the home controller" should {
-      "be /check-your-vat-flat-rate/page-two" in {
-        controllers.routes.HomeController.pageTwo().url shouldBe s"$baseUrl/page-2/"
+        controllers.routes.VatReturnPeriodController.submitVatReturnPeriod().url shouldBe s"$vatReturnPeriod"
       }
     }
   }

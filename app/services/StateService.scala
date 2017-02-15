@@ -19,6 +19,7 @@ package services
 import javax.inject.{Inject, Singleton}
 
 import connectors.KeystoreConnector
+import models.VatReturnPeriodModel
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -28,11 +29,11 @@ import scala.concurrent.Future
 @Singleton
 class StateService @Inject()(keystore: KeystoreConnector) {
 
-  def saveData[T](key: String, data: T)(implicit hc: HeaderCarrier, format: Format[T]): Future[CacheMap] = {
-    keystore.saveFormData(key,data)
+  def saveVatReturnPeriod[VatReturnPeriodModel](data: VatReturnPeriodModel)(implicit hc: HeaderCarrier, format: Format[VatReturnPeriodModel]): Future[CacheMap] = {
+    keystore.saveFormData(common.CacheKeys.vatReturnPeriod.toString, data)
   }
 
-  def fetchData[T](key: String)(implicit hc: HeaderCarrier, format: Format[T]): Future[Option[T]] = {
-    keystore.fetchAndGetFormData(key)
+  def fetchVatReturnPeriod()(implicit hc: HeaderCarrier, format: Format[VatReturnPeriodModel]): Future[Option[VatReturnPeriodModel]] = {
+    keystore.fetchAndGetFormData(common.CacheKeys.vatReturnPeriod.toString)
   }
 }

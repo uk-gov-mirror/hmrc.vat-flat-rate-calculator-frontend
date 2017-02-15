@@ -1,6 +1,12 @@
 #Base service messages
 service.title = Check your VAT flat rate
-service.base.url = check-your-vat-flat-rate
 
-## Base page ##
-home.welcome.title = VAT Flat Rate Calculator Frontend
+##  COMMON  ##
+common.continue = Continue
+
+## VAT return period page ##
+vatReturnPeriod.title               = Enter your VAT return details
+vatReturnPeriod.heading             = How often do you do your VAT returns?
+vatReturnPeriod.para.1              = If you''re not VAT registered or you''re just getting an estimate, you can choose either option.
+vatReturnPeriod.option.annual       = Annually
+vatReturnPeriod.option.quarter      = Quarterly

@@ -35,6 +35,7 @@ package controllers.predicates
 import javax.inject.Inject
 
 import config.AppConfig
+import forms.VatReturnPeriodForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -43,7 +44,9 @@ import views.html.{home => views}
 
 import scala.concurrent.Future
 
-class ValidatedSession @Inject()(config: AppConfig, val messagesApi: MessagesApi) extends FrontendController with I18nSupport{
+class ValidatedSession @Inject()(config: AppConfig,
+                                 val messagesApi: MessagesApi,
+                                 form: VatReturnPeriodForm) extends FrontendController with I18nSupport{
 
   private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]
@@ -51,7 +54,7 @@ class ValidatedSession @Inject()(config: AppConfig, val messagesApi: MessagesApi
   def async(action: AsyncRequest): Action[AnyContent] = {
     Action.async { implicit request =>
       if(request.session.get(SessionKeys.sessionId).isEmpty) {
-        Future.successful(Ok(views.welcome(config)))
+        Future.successful(Ok(views.vatReturnPeriod(config, form.vatReturnPeriodForm)))
       } else {
        action(request)
       }
