@@ -18,35 +18,33 @@ package controllers
 
 import java.util.UUID
 
-import config.{AppConfig, VfrSessionCache}
-import connectors.KeystoreConnector
+import config.{AppConfig}
 import controllers.predicates.ValidatedSession
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
+import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.{UnitSpec}
 
 import scala.concurrent.Future
 
 
-class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
+class HomeControllerSpec extends UnitSpec with OneAppPerSuite with MockitoSugar {
 
-  val injector: Injector = fakeApplication.injector
+  val injector: Injector = app.injector
+
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
+  lazy val mockStateService = createMockStateService(Some(1))
 
-  val mockSessionCache: VfrSessionCache = injector.instanceOf[VfrSessionCache]
-  val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  val mockStateService: StateService = injector.instanceOf[StateService]
-  val mockKeyStoreConnector: KeystoreConnector = injector.instanceOf[KeystoreConnector]
-  val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-
-  def createMockKeyStore[T](data: Option[T]): StateService = {
+  def createMockStateService[T](data: Option[T]): StateService = {
 
     val mockStateService = mock[StateService]
 
@@ -56,14 +54,13 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     mockStateService
   }
 
-
-  val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
+  val homeController = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
 
     "Navigating to the landing page" when {
 
     "there is no sessionId" should {
       lazy val request = FakeRequest("GET", "/")
-      lazy val result = target.welcome(request)
+      lazy val result = homeController.welcome(request)
 
       "generate a sessionId and continue" in {
         status(result) shouldBe Status.OK
@@ -72,7 +69,7 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     "there is a sessionId" should {
       val sessionId =  UUID.randomUUID().toString
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"sessionId-$sessionId")
-      lazy val result = target.welcome(request)
+      lazy val result = homeController.welcome(request)
 
       "return 200 " in {
         status(result) shouldBe Status.OK
@@ -85,7 +82,7 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
 
     "there is no sessionId" should {
       lazy val request = FakeRequest("GET", "/")
-      lazy val result = target.pageOne(request)
+      lazy val result = homeController.pageOne(request)
       "generate a sessionId and go back to the landing page" in {
 
         status(result) shouldBe Status.OK
@@ -93,7 +90,8 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     }
     "there is a sessionId" should {
       lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
-      lazy val result = target.pageOne(request)
+      lazy val result = homeController.pageOne(request)
+
       "return 200 " in {
         status(result) shouldBe Status.OK
       }
@@ -102,9 +100,7 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
     "there is an item in keystore" should {
 
       lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
-      val service = createMockKeyStore(Some(1))
-      val target= new HomeController(mockConfig, messages, service, mockValidatedSession)
-      lazy val result = target.pageOne(request)
+      lazy val result = homeController.pageOne(request)
 
       "return 200 " in {
         status(result) shouldBe Status.OK
