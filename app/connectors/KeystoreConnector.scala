@@ -18,18 +18,16 @@ package connectors
 
 import javax.inject.{Inject, Singleton}
 
-import config.{AppConfig, VfrSessionCache, WSHttp}
+import config.{AppConfig, VfrSessionCache}
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.HeaderCarrier
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
 class KeystoreConnector @Inject()(appConfig: AppConfig,
-                                  sessionCache: VfrSessionCache,
-                                  http: WSHttp) extends ServicesConfig {
+                                  sessionCache: VfrSessionCache) extends ServicesConfig {
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "applications/vnd.hmrc.1.0+json")
 

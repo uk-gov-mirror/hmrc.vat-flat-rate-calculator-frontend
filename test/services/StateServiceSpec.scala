@@ -17,6 +17,7 @@
 package services
 
 import connectors.KeystoreConnector
+import models.VatReturnPeriodModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
@@ -31,33 +32,38 @@ class StateServiceSpec extends UnitSpec with MockitoSugar{
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
-  def mockedStateService(response: Option[String]): StateService = {
+  def mockedStateService(): StateService = {
     val mockConnector: KeystoreConnector = mock[KeystoreConnector]
-    val testData: Option[String] = response
-    val returnedCacheMap = CacheMap("test", Map("data" -> Json.toJson(testData)))
+    val testData: Option[VatReturnPeriodModel] = Some(VatReturnPeriodModel("annual"))
+    val returnedCacheMap = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
 
-    when(mockConnector.fetchAndGetFormData[String](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some("test")))
+    when(mockConnector.fetchAndGetFormData[VatReturnPeriodModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(testData))
 
-    when(mockConnector.saveFormData[String](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.saveFormData[VatReturnPeriodModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(returnedCacheMap))
 
     new StateService(mockConnector)
   }
 
-  "Calling StateService .saveData" should {
-    "return a Cachemap when supplied with valid data" in {
-      val service = mockedStateService(Some("testData"))
-      val result = service.fetchData[String]("test")
+  "Calling StateService .fetchData" should {
+    "return a VatReturnPeriodModel when there is one in Keystore" in {
+      val saveData: Option[VatReturnPeriodModel] = Some(VatReturnPeriodModel("annual"))
+      val service = mockedStateService()
+      val result: Future[Option[VatReturnPeriodModel]] = service.fetchVatReturnPeriod()
 
-      await(result) shouldBe Some("test")
+      await(result) shouldBe Some(VatReturnPeriodModel("annual"))
     }
+  }
+  "Calling StateService .saveData" should {
 
-    "return a String with a valid response" in {
-      val service = mockedStateService(Some("test"))
-      val result = service.saveData("test", "doesNotMatter")
+    "return a Cachemap with a valid response" in {
+      val testData = VatReturnPeriodModel("annual")
+      val returnedData = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
+      val service = mockedStateService()
+      val result = service.saveVatReturnPeriod[VatReturnPeriodModel](testData)
 
-      await(result) shouldBe CacheMap("test", Map("data" -> Json.toJson(Some("test"))))
+      await(result) shouldBe returnedData
     }
   }
 

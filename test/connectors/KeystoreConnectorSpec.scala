@@ -18,7 +18,7 @@ package connectors
 
 import java.util.UUID
 
-import config.{AppConfig, VfrSessionCache, WSHttp}
+import config.{AppConfig, VfrSessionCache}
 import helpers.ControllerTestSpec
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -32,13 +32,12 @@ import scala.concurrent.Future
 class KeystoreConnectorSpec extends ControllerTestSpec {
 
   lazy val sessionId: String = UUID.randomUUID.toString
-  lazy val http: WSHttp = mock[WSHttp]
   lazy val config: AppConfig = mock[AppConfig]
   lazy val vfrSessionCache: VfrSessionCache = mock[VfrSessionCache]
 
   lazy implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
 
-  lazy val target = new KeystoreConnector(config, vfrSessionCache, http)
+  lazy val target = new KeystoreConnector(config, vfrSessionCache)
 
   "KeystoreConnector .fetchFormData" should {
 
