@@ -28,7 +28,7 @@ class VatReturnPeriodForm @Inject()(val messagesApi: MessagesApi)extends I18nSup
   val vatReturnPeriodForm = Form(
     //TODO: Add validation to the form
     mapping(
-      "vatReturnType" -> text
+      "vatReturnPeriod" -> text
     )(VatReturnPeriodModel.apply)(VatReturnPeriodModel.unapply)
   )
 

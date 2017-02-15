@@ -18,9 +18,10 @@ package controllers
 
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
-import forms.VatReturnPeriodForm
+
 import config.AppConfig
 import controllers.predicates.ValidatedSession
+import forms.VatReturnPeriodForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.StateService
@@ -34,7 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class VatReturnPeriodController @Inject()(config: AppConfig,
                                           val messagesApi: MessagesApi,
-                                          keyStore: StateService,
+                                          stateService: StateService,
                                           session: ValidatedSession,
                                           form: VatReturnPeriodForm) extends FrontendController with I18nSupport{
 
@@ -50,30 +51,15 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
 
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
 
-    //TODO: replace with redirect
-    Future.successful(Ok)
+    println(s"\n\n${common.CacheKeys.vatReturnPeriod.toString}\n\n")
+
+    form.vatReturnPeriodForm.bindFromRequest.fold(
+      errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
+      success => {
+        stateService.saveVatReturnPeriod(success)
+        //TODO: Redirect to turnover page
+        Future.successful(Ok(""))
+      }
+    )
   }
-
-
-
-//  def pageOne: Action[AnyContent] = session.async { implicit request =>
-//
-//    keyStore.fetchData[Int]("test").flatMap {
-//      case Some(s) =>
-//        val num = s + 1
-//        keyStore.saveData("test", num)
-//        Future.successful(Ok(views.pageOne(config, num)))
-//      case None    => Future.successful(Ok(views.pageOne(config, 0)))
-//    }
-//  }
-//
-//  def pageTwo: Action[AnyContent] = session.async { implicit request =>
-//    keyStore.fetchData[Int]("test").flatMap {
-//      case Some(p) =>
-//        val num = p + 1
-//        keyStore.saveData("test", num)
-//        Future.successful(Ok(views.pageTwo(config, num)))
-//      case None    => Future.successful(Ok(views.pageTwo(config, 0)))
-//    }
-//  }
 }

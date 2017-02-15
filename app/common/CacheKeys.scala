@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package common
 
-import play.api.libs.json._
+object CacheKeys extends Enumeration {
 
-case class VatReturnPeriodModel(vatReturnPeriod: String)
+  val vatReturnPeriod = Value
 
-object VatReturnPeriodModel {
-  implicit val format: OFormat[VatReturnPeriodModel] = Json.format[VatReturnPeriodModel]
 }

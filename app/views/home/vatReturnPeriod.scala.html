@@ -1,11 +1,15 @@
 @import views.html.main_template
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
 @(appConfig: config.AppConfig, vatReturnPeriodForm: Form[VatReturnPeriodModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("vatReturnPeriod.title"), bodyClasses = None, appConfig = appConfig) {
 
+@govHelpers.errorSummary(
+Messages("base.errorSummary"), vatReturnPeriodForm
+)
 <h1>@messages("vatReturnPeriod.heading")</h1>
 
 <p>@messages("vatReturnPeriod.para.1")</p>
@@ -15,16 +19,15 @@
     @formInputRadioGroup(
         field = vatReturnPeriodForm("vatReturnPeriod"),
         Seq(
-            "annually" -> Messages("vatReturnPeriod.annually"),
-            "quarterly" -> Messages("vatReturnPeriod.quarterly")
+            "annually" -> Messages("vatReturnPeriod.option.annual"),
+            "quarterly" -> Messages("vatReturnPeriod.option.quarter")
         ),
-        '_legend -> Messages("vatReturnPeriod.question"),
+        '_legend -> Messages("vatReturnPeriod.heading"),
         '_legendID -> "vatReturnPeriod",
         '_legendClass -> "visuallyhidden",
         '_labelAfter -> true,
-        '_labelClass -> "block-label selection-button-radio",
-        '_groupClass -> "form-group inline radio-list",
-        '_fieldsetAttributes -> "aria-details = help"
+        '_labelClass -> "block-label",
+        '_groupClass -> "inline"
     )
 
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
