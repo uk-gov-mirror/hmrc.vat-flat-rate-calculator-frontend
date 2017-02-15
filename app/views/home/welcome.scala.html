@@ -1,6 +1,9 @@
 @import views.html.main_template
-@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages))
+@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("service.title"), bodyClasses = None, appConfig = appConfig) {
     <h1>@messages("home.welcome.title")</h1>
+
+    <a href ='@controllers.routes.HomeController.pageOne'>Page 1</a>
+
 }

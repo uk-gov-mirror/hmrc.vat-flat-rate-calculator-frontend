@@ -16,10 +16,13 @@
 
 package config
 
-import com.google.inject.AbstractModule
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.play.audit.http.HttpAuditing
+import uk.gov.hmrc.play.config.{AppName, RunMode}
+import uk.gov.hmrc.play.http.ws.{WSDelete, WSGet, WSPost, WSPut}
 
-class DIModule extends AbstractModule{
-  def configure(): Unit = {
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
-  }
+@Singleton
+class WSHttp @Inject()(override val auditConnector: FrontendAuditConnector)
+  extends WSGet with WSPut with WSPost with WSDelete with AppName with RunMode with HttpAuditing {
+  override val hooks = Seq(AuditingHook)
 }

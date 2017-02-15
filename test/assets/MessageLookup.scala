@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package config
+package assets
 
-import com.google.inject.AbstractModule
+object MessageLookup {
 
-class DIModule extends AbstractModule{
-  def configure(): Unit = {
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
+  object Error {
+    val dummyError = "Dummy error message"
   }
+
 }

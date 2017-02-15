@@ -16,25 +16,55 @@
 
 package controllers
 
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
-import views.html.{home => views}
-import com.google.inject.Inject
+import controllers.predicates.ValidatedSession
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.SessionKeys
+import views.html.{home => views}
 
 import scala.concurrent.Future
 
-class HomeController @Inject()(configuration: AppConfig,
-                     val messagesApi: MessagesApi)
-  extends HomeControllerT {
-  override val config: AppConfig = configuration
-}
 
-trait HomeControllerT extends FrontendController with I18nSupport {
-  val config: AppConfig
+@Singleton
+class HomeController @Inject()(config: AppConfig,
+                               val messagesApi: MessagesApi,
+                               keyStore: StateService,
+                               session: ValidatedSession) extends FrontendController with I18nSupport{
 
   def welcome: Action[AnyContent] = Action.async { implicit request =>
-		Future.successful(Ok(views.welcome(config)))
+    keyStore.saveData("test", 0)
+    if (request.session.get(SessionKeys.sessionId).isEmpty) {
+      val sessionId = UUID.randomUUID().toString
+      Future.successful(Ok(views.welcome(config)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
+    } else {
+      Future.successful(Ok(views.welcome(config)))
+    }
+  }
+
+  def pageOne: Action[AnyContent] = session.async { implicit request =>
+
+    keyStore.fetchData[Int]("test").flatMap {
+      case Some(s) =>
+        val num = s + 1
+        keyStore.saveData("test", num)
+        Future.successful(Ok(views.pageOne(config, num)))
+      case None    => Future.successful(Ok(views.pageOne(config, 0)))
+    }
+  }
+
+  def pageTwo: Action[AnyContent] = session.async { implicit request =>
+    keyStore.fetchData[Int]("test").flatMap {
+      case Some(p) =>
+        val num = p + 1
+        keyStore.saveData("test", num)
+        Future.successful(Ok(views.pageTwo(config, num)))
+      case None    => Future.successful(Ok(views.pageTwo(config, 0)))
+    }
   }
 }

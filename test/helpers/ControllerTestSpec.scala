@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package config
+package helpers
 
-import com.google.inject.AbstractModule
+import akka.stream.Materializer
+import config.AppConfig
+import org.scalatest.mock.MockitoSugar
+import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.OneAppPerSuite
+import play.api.i18n.MessagesApi
 
-class DIModule extends AbstractModule{
-  def configure(): Unit = {
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
-  }
+trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite{
+
+  val mockConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+
+  implicit val mat: Materializer = app.injector.instanceOf[Materializer]
+
 }

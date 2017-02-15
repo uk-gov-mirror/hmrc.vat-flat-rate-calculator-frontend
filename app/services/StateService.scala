@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package config
+package services
 
-import com.google.inject.AbstractModule
+import javax.inject.{Inject, Singleton}
 
-class DIModule extends AbstractModule{
-  def configure(): Unit = {
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
+import connectors.KeystoreConnector
+import play.api.libs.json.Format
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.play.http.HeaderCarrier
+
+import scala.concurrent.Future
+
+@Singleton
+class StateService @Inject()(keystore: KeystoreConnector) {
+
+  def saveData[T](key: String, data: T)(implicit hc: HeaderCarrier, format: Format[T]): Future[CacheMap] = {
+    keystore.saveFormData(key,data)
+  }
+
+  def fetchData[T](key: String)(implicit hc: HeaderCarrier, format: Format[T]): Future[Option[T]] = {
+    keystore.fetchAndGetFormData(key)
   }
 }

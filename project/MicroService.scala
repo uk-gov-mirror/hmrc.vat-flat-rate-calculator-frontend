@@ -1,7 +1,8 @@
 import sbt.Keys._
-import sbt.Tests.{SubProcess, Group}
+import sbt.Tests.{Group, SubProcess}
 import sbt._
-import play.routes.compiler.StaticRoutesGenerator
+import play.routes.compiler.{InjectedRoutesGenerator, StaticRoutesGenerator}
+import scoverage.ScoverageKeys
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 
@@ -23,9 +24,21 @@ trait MicroService {
   lazy val plugins : Seq[Plugins] = Seq.empty
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
+  lazy val scoverageSettings = {
+    import scoverage.ScoverageKeys
+    Seq(
+      ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;models/.data/..*;" +
+        "filters.*;.handlers.*;components.*;.*BuildInfo.*;.*FrontendAuditConnector.*;.*Routes.*;views.html.helpers.*;config.*;",
+      ScoverageKeys.coverageMinimum := 90,
+      ScoverageKeys.coverageFailOnMinimum := false,
+      ScoverageKeys.coverageHighlighting := true
+    )
+  }
+
   lazy val microservice: Project = Project(appName, file("."))
     .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
     .settings(playSettings : _*)
+    .settings(scoverageSettings: _*)
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
@@ -33,7 +46,7 @@ trait MicroService {
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-      routesGenerator := StaticRoutesGenerator
+      routesGenerator := InjectedRoutesGenerator
     )
     .configs(IntegrationTest)
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)

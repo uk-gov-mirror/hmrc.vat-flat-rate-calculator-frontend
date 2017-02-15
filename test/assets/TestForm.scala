@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package config
+package assets
 
-import com.google.inject.AbstractModule
+import play.api.data.Form
+import play.api.data.Forms.{mapping, text}
 
-class DIModule extends AbstractModule{
-  def configure(): Unit = {
-    bind(classOf[AppConfig]) to classOf[ApplicationConfig]
-  }
+object TestForm {
+
+  private val bindingError: TestModel => Boolean = model => model.anotherField == ""
+
+  val nonEmptyCheck: String => Boolean = input => !input.isEmpty
+
+  val testForm = Form(
+    mapping (
+      "response" -> text
+        .verifying(MessageLookup.Error.dummyError, nonEmptyCheck),
+      "anotherField" -> text
+    )(TestModel.apply)(TestModel.unapply)
+      .verifying(MessageLookup.Error.dummyError, model => bindingError(model))
+  )
 }
+
+case class TestModel(response: String, anotherField: String)

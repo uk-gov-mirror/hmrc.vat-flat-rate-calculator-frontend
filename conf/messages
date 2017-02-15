@@ -1,5 +1,6 @@
 #Base service messages
 service.title = Check your VAT flat rate
+service.base.url = check-your-vat-flat-rate
 
 ## Base page ##
 home.welcome.title = VAT Flat Rate Calculator Frontend
