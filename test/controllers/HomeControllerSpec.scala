@@ -18,24 +18,20 @@ package controllers
 
 import java.util.UUID
 
-import config.{AppConfig, VfrSessionCache, WSHttp}
+import config.{AppConfig, VfrSessionCache}
 import connectors.KeystoreConnector
 import controllers.predicates.ValidatedSession
-import helpers.{ControllerTestSpec, FakeRequestHelper}
-import org.mockito.{ArgumentMatchers, Matchers}
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import play.api.http.{HttpEntity, Status}
+import play.api.http.Status
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-import scala.collection.immutable.Iterable
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
