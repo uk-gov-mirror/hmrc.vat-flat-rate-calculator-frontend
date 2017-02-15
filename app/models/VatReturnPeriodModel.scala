@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object Links {
+import play.api.libs.json.{Json, OFormat}
 
-  final val baseGovUrl = "http://www.gov.uk/"
+case class VatReturnPeriodModel(vatReturnPeriod: String)
 
+object VatReturnPeriodModel {
+  implicit val format: OFormat[VatReturnPeriodModel] = Json.format[VatReturnPeriodModel]
 }

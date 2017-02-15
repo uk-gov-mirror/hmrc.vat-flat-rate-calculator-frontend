@@ -1,8 +1,7 @@
 # microservice specific routes
 GET        /assets/*file              controllers.Assets.at(path="/public", file)
 
-GET        /                          controllers.HomeController.welcome
+GET        /vat-return-period         controllers.VatReturnPeriodController.vatReturnPeriod
+POST       /vat-return-period         controllers.VatReturnPeriodController.submitVatReturnPeriod
 
-GET        /page-1/                   controllers.HomeController.pageOne
-GET        /page-2/                   controllers.HomeController.pageTwo
 

@@ -1,0 +1,33 @@
+@import views.html.main_template
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(appConfig: config.AppConfig, vatReturnPeriodForm: Form[VatReturnPeriodModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(title = messages("vatReturnPeriod.title"), bodyClasses = None, appConfig = appConfig) {
+
+<h1>@messages("vatReturnPeriod.heading")</h1>
+
+<p>@messages("vatReturnPeriod.para.1")</p>
+
+@form(action = controllers.routes.VatReturnPeriodController.submitVatReturnPeriod) {
+
+    @formInputRadioGroup(
+        field = vatReturnPeriodForm("vatReturnPeriod"),
+        Seq(
+            "annually" -> Messages("vatReturnPeriod.annually"),
+            "quarterly" -> Messages("vatReturnPeriod.quarterly")
+        ),
+        '_legend -> Messages("vatReturnPeriod.question"),
+        '_legendID -> "vatReturnPeriod",
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label selection-button-radio",
+        '_groupClass -> "form-group inline radio-list",
+        '_fieldsetAttributes -> "aria-details = help"
+    )
+
+    <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
+}
+
+}

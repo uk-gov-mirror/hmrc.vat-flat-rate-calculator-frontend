@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-package common
+package forms
 
-object Links {
+import javax.inject.Inject
 
-  final val baseGovUrl = "http://www.gov.uk/"
+import models.VatReturnPeriodModel
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.i18n.{I18nSupport, MessagesApi}
+
+class VatReturnPeriodForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport{
+
+  val vatReturnPeriodForm = Form(
+    //TODO: Add validation to the form
+    mapping(
+      "vatReturnType" -> text
+    )(VatReturnPeriodModel.apply)(VatReturnPeriodModel.unapply)
+  )
 
 }

@@ -57,7 +57,7 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
   }
 
 
-  val target = new HomeController(mockConfig, messages, mockStateService, mockValidatedSession)
+  val target = new VatReturnPeriodController(mockConfig, messages, mockStateService, mockValidatedSession)
 
     "Navigating to the landing page" when {
 
@@ -103,7 +103,7 @@ class HomeControllerSpec extends UnitSpec with WithFakeApplication with MockitoS
 
       lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
       val service = createMockKeyStore(Some(1))
-      val target= new HomeController(mockConfig, messages, service, mockValidatedSession)
+      val target= new VatReturnPeriodController(mockConfig, messages, service, mockValidatedSession)
       lazy val result = target.pageOne(request)
 
       "return 200 " in {
