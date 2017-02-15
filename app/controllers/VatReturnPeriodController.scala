@@ -51,8 +51,6 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
 
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
 
-    println(s"\n\n${common.CacheKeys.vatReturnPeriod.toString}\n\n")
-
     form.vatReturnPeriodForm.bindFromRequest.fold(
       errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
       success => {
