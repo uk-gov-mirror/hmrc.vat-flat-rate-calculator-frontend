@@ -1,10 +1,16 @@
 #Base service messages
-service.title = Check your VAT flat rate
+base.service.title     = Check your VAT flat rate
+base.errorSummary      = There are errors on this page
 
 ##  COMMON  ##
 common.continue = Continue
-common.year     = year
-common.quarter  = quarter
+
+## Errors ##
+error.required                     = This field is required
+error.real                         = Enter a number without commas, for example 10000.00
+error.twoDecimalPlaces             = The amount you''ve entered has too many decimal places
+error.negative                     = Enter an amount that''s £0 or more
+error.moreThanMaximumTurnover      = Enter an amount less than £9,999,999,999.98
 
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
@@ -17,3 +23,5 @@ vatReturnPeriod.option.quarter      = Quarterly
 turnover.title                      = Enter your turnover
 turnover.heading                    = Enter your turnover for the {0} including VAT
 turnover.para.1                     = This is the total sales of all goods and services. If you’re estimating, give realistic figures.
+turnover.year                       = year
+turnover.quarter                    = quarter

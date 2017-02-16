@@ -49,7 +49,7 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
         vatReturnPeriod <- stateService.fetchVatFlateRate()
       } yield vatReturnPeriod match {
         case Some(model) => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm.fill(model)))
-        case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())//TODO: is this right?
+        case _           => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm))//TODO: is this right?
       }
     }
   }

@@ -39,7 +39,7 @@ class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport
     //TODO: Add validation to the form
     mapping(
       "vatReturnPeriod" -> text,
-      "turnover" -> optional(bigDecimal.verifying(isLessThanMaximumTurnover, isMoneyFormat)).verifying("errors.required", _.isDefined),
+      "turnover" -> optional(bigDecimal.verifying(isLessThanMaximumTurnover, isPositive, isTwoDecimalPlaces)).verifying("error.required", _.isDefined),
       "costOfGoods" -> optional(bigDecimal)
     )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
