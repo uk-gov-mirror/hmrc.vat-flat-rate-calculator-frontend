@@ -59,11 +59,10 @@ class TurnoverController @Inject()(config: AppConfig,
         } yield vatReturnPeriod match {
           case Some(model) =>
             model.vatReturnPeriod match {
-              case s  if s.eq(Messages("common.year"))    => BadRequest(views.turnover(config, errors, s))
-              case s  if s.eq(Messages("common.quarter")) => BadRequest(views.turnover(config, errors, s))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.turnover(config, errors, Messages("common.year")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.turnover(config, errors, Messages("common.year")))
             }
         }
-
       },
       success => {
         stateService.saveVatFlateRate(success)
