@@ -20,8 +20,8 @@ import java.util.UUID
 
 import config.AppConfig
 import controllers.predicates.ValidatedSession
-import forms.VatFlatRateModel
-import models.VatReturnPeriodModel
+import forms.VatFlatRateForm
+import models.VatFlatRateModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
@@ -44,16 +44,16 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-  lazy val mockForm: VatFlatRateModel = app.injector.instanceOf[VatFlatRateModel]
+  lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
   lazy val mockStateService: StateService = createMockStateService(mockVatReturnPeriodModel)
 
-  val mockVatReturnPeriodModel = Some(VatReturnPeriodModel("test"))
+  val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", None, None))
 
-  def createMockStateService(data: Option[VatReturnPeriodModel]): StateService = {
+  def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatReturnPeriod()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService
