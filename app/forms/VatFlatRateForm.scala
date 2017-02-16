@@ -22,6 +22,7 @@ import models.VatFlatRateModel
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
+import utils.Validation._
 
 class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport{
 
@@ -38,7 +39,7 @@ class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport
     //TODO: Add validation to the form
     mapping(
       "vatReturnPeriod" -> text,
-      "turnover" -> optional(bigDecimal).verifying("bad", _.isDefined),
+      "turnover" -> optional(bigDecimal.verifying(isLessThanMaximumTurnover, isMoneyFormat)).verifying("errors.required", _.isDefined),
       "costOfGoods" -> optional(bigDecimal)
     )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
@@ -52,4 +53,3 @@ class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport
     )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
 }
-

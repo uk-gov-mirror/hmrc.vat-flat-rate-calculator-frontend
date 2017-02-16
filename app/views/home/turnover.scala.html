@@ -3,14 +3,14 @@
 @import views.html.helpers._
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, turnoverForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, turnoverForm: Form[VatFlatRateModel], turnoverPeriodString: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("turnover.title"), bodyClasses = None, appConfig = appConfig) {
 
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), turnoverForm
 )
-<h1>@messages("turnover.heading")</h1>
+<h1>@messages("turnover.heading", turnoverPeriodString)</h1>
 
 <p>@messages("turnover.para.1")</p>
 
@@ -20,14 +20,15 @@ Messages("base.errorSummary"), turnoverForm
     <div class="form-group">
         @moneyInputFormat(
         turnoverForm("turnover"),
-        '_legend -> Messages("turnover.title")
+        '_legend -> Messages("turnover.heading"),
+        '_legendClass -> "visually-hidden"
         )
     </div>
 
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
 
-    <div class="">
-        @helper.inputText(turnoverForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "form-hidden")
+    <div class="form-hidden">
+        @helper.inputText(turnoverForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "visually-hidden")
     </div>
 }
 

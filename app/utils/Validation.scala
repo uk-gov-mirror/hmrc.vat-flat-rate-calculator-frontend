@@ -16,8 +16,27 @@
 
 package utils
 
+import common.Constants
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+
 object Validation {
 
-  def currencyValidation = {}
+  def isMoneyFormat: Constraint[BigDecimal] = Constraint("constraints.isMoneyFormat")({
+    value =>
+      val errors = value match {
+        case n if n.scale <= 2 & n > 0 => Nil
+        case _ => Seq(ValidationError("errors.isMoneyFormat"))
+      }
+      if (errors.isEmpty) Valid else Invalid(errors)
+  })
 
-}
+  def isLessThanMaximumTurnover: Constraint[BigDecimal] = Constraint("constraints.lessThanMaximumTurnover")({
+    amount =>
+      val errors = amount match {
+        case am if am < Constants.maximumTurnover => Nil
+        case _ => Seq(ValidationError("errors.moreThanMaximumTurnover"))
+      }
+      if (errors.isEmpty) Valid else Invalid(errors)
+  })
+
+  }
