@@ -42,10 +42,8 @@ class TurnoverController @Inject()(config: AppConfig,
     } yield vatReturnPeriod match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.contentEquals(Messages("vatReturnPeriod.option.annual").toLowerCase())    =>
-            Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.year")))
-          case s  if s.contentEquals(Messages("vatReturnPeriod.option.quarter").toLowerCase())   =>
-            Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.quarter")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.quarter")))
       }
       case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod()) /*TODO: Is this correct?*/
     }
