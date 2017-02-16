@@ -21,13 +21,15 @@ import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import models.VatFlatRateModel
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{Messages, I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{home => views}
 
 import scala.concurrent.Future
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class CostOfGoodsController @Inject()(config: AppConfig,
@@ -38,43 +40,58 @@ class CostOfGoodsController @Inject()(config: AppConfig,
 
   val costOfGoods: Action[AnyContent] = session.async{ implicit request =>
     for {
-      vatReturnPeriod <- stateService.fetchVatFlateRate()
-    } yield vatReturnPeriod match {
-      case Some(model) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model)))
+      vfrModel <- stateService.fetchVatFlateRate()
+    } yield vfrModel match {
+      case Some(model) =>
+        model.vatReturnPeriod match {
+          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("costOfGoods.year")))
+          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("costOfGoods.quarter")))
+        }
       case _ => /*Todo handle No Model response**/Ok("")
     }
   }
 
   val submitCostOfGoods: Action[AnyContent] = session.async { implicit request =>
-    forms.turnoverForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(views.costOfGoods(config, errors))),
+    forms.costOfGoodsForm.bindFromRequest.fold(
+      errors => {
+
+        //TODO: Do we want to do this again?
+        for {
+          vfrModel <- stateService.fetchVatFlateRate()
+        } yield vfrModel match {
+          case Some(model) =>
+            model.vatReturnPeriod match {
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("costOfGoods.year")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("costOfGoods.quarter")))
+            }
+        }
+      },
       success => {
         for {
-          vatReturnPeriod <- stateService.fetchVatFlateRate()
-        } yield vatReturnPeriod match {
-          case Some(model) => stateService.saveVatFlateRate(success)
-            println(s"\n\n${whichResult(model)}\n\n")
-            Future.successful(Ok("")) //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
-          case _ => /*Todo handle No Model response**/Ok("")
-        }
-        stateService.saveVatFlateRate(success)
-        Future.successful(Ok(""))
+          saveToKeyStore <- stateService.saveVatFlateRate(success)
+          result <- whichResult(success)
+          response <- Future.successful(Ok(s"${result}"))
+        } yield response //match {
+//          case Some(model) => stateService.saveVatFlateRate(model); Thread.sleep(2000)
+//            Ok(s"${whichResult(model)}") //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
+//          case _ => /*Todo handle No Model response**/Ok("")
+//        }
       }
     )
   }
 
-  def whichResult(model: VatFlatRateModel): Int = {
-    if(model.vatReturnPeriod == "annually"){
-      model.turnover match {
-        case Some(x) if x <= 1000 => 1
-        case Some(x) if x*0.02 >= model.costOfGoods.getOrElse(0) => 2 //TODO what the get or else should be
-        case _ => 3
+  def whichResult(model: VatFlatRateModel): Future[Int] = {
+    if(model.vatReturnPeriod.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))){
+      model match {
+        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 1000 => Future(1)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(2) //TODO what the get or else should be
+        case _ => Future(3)
       }
     } else {
-      model.turnover match {
-        case Some(x) if x <= 250 => 4
-        case Some(x) if x*0.02 >= model.costOfGoods.getOrElse(0) => 5 //TODO what the get or else should be
-        case _ => 6
+      model match {
+        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 250 => Future(4)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => println("\n\n" + turnover + " " + model.costOfGoods.get + "\n\n");Future(5) //TODO what the get or else should be
+        case _ => Future(6)
       }
     }
   }

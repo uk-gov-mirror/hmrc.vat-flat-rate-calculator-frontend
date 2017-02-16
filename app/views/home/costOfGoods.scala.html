@@ -3,38 +3,43 @@
 @import views.html.helpers._
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig) {
 
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), costOfGoodsForm
 )
-<h1>@messages("costOfGoods.heading")</h1>
+<h1>@messages("costOfGoods.heading", costOfGoodsPeriodString)</h1>
 
 <p>@messages("costOfGoods.para.1")</p>
 
-<h2>@messages("costOfGoods")</h2>
+<h2>@messages("costOfGoods.doNotInclude")</h2>
 
-<ol>
+<ul class="list list-bullet">
     <li>@messages("costOfGoods.bullet.1")</li>
     <li>@messages("costOfGoods.bullet.2")</li>
     <li>@messages("costOfGoods.bullet.3")</li>
     <li>@messages("costOfGoods.bullet.4")</li>
     <li>@messages("costOfGoods.bullet.5")</li>
     <li>@messages("costOfGoods.bullet.6")</li>
-</ol>
+</ul>
 
 @form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
 
     <div class="form-group">
         @moneyInputFormat(
         costOfGoodsForm("costOfGoods"),
-        '_legend -> Messages("turnover.title")
+        '_legend -> Messages("costOfGoods.title")
         )
     </div>
 
 <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
+
+<div class="form-hidden">
+    @helper.inputText(costOfGoodsForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "visually-hidden")
+    @helper.inputText(costOfGoodsForm("turnover"), 'type -> "hidden", 'class -> "visually-hidden")
+</div>
 }
 
 }
