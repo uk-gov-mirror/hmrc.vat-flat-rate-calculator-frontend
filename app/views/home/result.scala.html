@@ -1,0 +1,23 @@
+@import views.html.main_template
+@import views.html.helpers._
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+
+@(appConfig: config.AppConfig, resultCode: Int)(implicit request: Request[_], messages: Messages)
+
+@main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig) {
+
+
+    <div class="transaction-banner--complete">
+        <span class="heading-large" id="resultOutcome">@Messages(s"resultCode.${resultCode}.heading")</span>
+    </div>
+
+
+
+
+
+
+
+
+
+
+}

@@ -19,7 +19,7 @@ package services
 import javax.inject.{Inject, Singleton}
 
 import connectors.KeystoreConnector
-import models.VatFlatRateModel
+import models.{ResultModel, VatFlatRateModel}
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -35,5 +35,13 @@ class StateService @Inject()(keystore: KeystoreConnector) {
 
   def fetchVatFlateRate()(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[Option[VatFlatRateModel]] = {
     keystore.fetchAndGetFormData(common.CacheKeys.vatFlatRate.toString)
+  }
+
+  def saveResultModel[ResultModel](data: ResultModel)(implicit hc: HeaderCarrier, format: Format[ResultModel]): Future[CacheMap] = {
+    keystore.saveFormData(common.CacheKeys.vfrResult.toString, data)
+  }
+
+  def fetchResultModel()(implicit hc: HeaderCarrier, format: Format[ResultModel]): Future[Option[ResultModel]] = {
+    keystore.fetchAndGetFormData(common.CacheKeys.vfrResult.toString)
   }
 }

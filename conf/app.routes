@@ -9,3 +9,5 @@ POST       /turnover                  controllers.TurnoverController.submitTurno
 
 GET        /cost-of-goods             controllers.CostOfGoodsController.costOfGoods
 POST       /cost-of-goods             controllers.CostOfGoodsController.submitCostOfGoods
+
+GET        /vat-flat-rate-result      controllers.ResultController.result

@@ -16,7 +16,13 @@
 
 package common
 
-object CacheKeys extends Enumeration {
-  val vatFlatRate = Value
-  val vfrResult   = Value
+object ResultCodes extends Enumeration {
+
+  val one   = Value(1)
+  val two   = Value(2)
+  val three = Value(3)
+  val four  = Value(4)
+  val five  = Value(5)
+  val six   = Value(6)
+
 }

@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object CacheKeys extends Enumeration {
-  val vatFlatRate = Value
-  val vfrResult   = Value
+import play.api.libs.json.{Json, OFormat}
+
+case class ResultModel(model: VatFlatRateModel, result: Int)
+
+object ResultModel {
+  implicit val vfrFormat: OFormat[VatFlatRateModel] = VatFlatRateModel.format
+  implicit val format: OFormat[ResultModel] = Json.format[ResultModel]
 }

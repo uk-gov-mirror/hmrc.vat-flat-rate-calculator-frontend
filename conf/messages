@@ -4,6 +4,8 @@ base.errorSummary      = There are errors on this page
 
 ##  COMMON  ##
 common.continue = Continue
+common.year                       = year
+common.quarter                    = quarter
 
 ## Errors ##
 error.required                     = This field is required
@@ -23,8 +25,6 @@ vatReturnPeriod.option.quarter      = Quarterly
 turnover.title                      = Enter your turnover
 turnover.heading                    = Enter your turnover for the {0} including VAT
 turnover.para.1                     = This is the total sales of all goods and services. If you''re estimating, give realistic figures.
-turnover.year                       = year
-turnover.quarter                    = quarter
 
 ## Cost of goods page ##
 costOfGoods.title                   = Cost of goods
@@ -37,5 +37,3 @@ costOfGoods.bullet.3                = internet and phone bills
 costOfGoods.bullet.4                = services like training, memberships and subscriptions
 costOfGoods.bullet.5                = software unless it''s on a disc
 costOfGoods.bullet.6                = capital items like office equipment and machinery
-costOfGoods.year                    = year
-costOfGoods.quarter                 = quarter

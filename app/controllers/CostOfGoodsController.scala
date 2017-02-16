@@ -17,18 +17,18 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
-import models.VatFlatRateModel
-import play.api.i18n.{Messages, I18nSupport, MessagesApi}
+import models.{ResultModel, VatFlatRateModel}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{home => views}
 
 import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
@@ -44,8 +44,8 @@ class CostOfGoodsController @Inject()(config: AppConfig,
     } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("costOfGoods.year")))
-          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("costOfGoods.quarter")))
+          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.year")))
+          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.quarter")))
         }
       case _ => /*Todo handle No Model response**/Ok("")
     }
@@ -61,8 +61,8 @@ class CostOfGoodsController @Inject()(config: AppConfig,
         } yield vfrModel match {
           case Some(model) =>
             model.vatReturnPeriod match {
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("costOfGoods.year")))
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("costOfGoods.quarter")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("common.year")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("common.quarter")))
             }
         }
       },
@@ -70,7 +70,8 @@ class CostOfGoodsController @Inject()(config: AppConfig,
         for {
           saveToKeyStore <- stateService.saveVatFlateRate(success)
           result <- whichResult(success)
-          response <- Future.successful(Ok(s"${result}"))
+          saveResult <- stateService.saveResultModel(createResultModel(success,result))
+          response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
         } yield response //match {
 //          case Some(model) => stateService.saveVatFlateRate(model); Thread.sleep(2000)
 //            Ok(s"${whichResult(model)}") //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
@@ -94,6 +95,10 @@ class CostOfGoodsController @Inject()(config: AppConfig,
         case _ => Future(6)
       }
     }
+  }
+
+  def createResultModel(model: VatFlatRateModel, resultCode: Int): ResultModel = {
+    ResultModel(model, resultCode)
   }
 
 }

@@ -42,25 +42,24 @@ class TurnoverController @Inject()(config: AppConfig,
     } yield vatReturnPeriod match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("turnover.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("turnover.quarter")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.quarter")))
       }
-      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod()) /*TODO: Is this correct?*/
+      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
     forms.turnoverForm.bindFromRequest.fold(
       errors => {
-
         //TODO: Do we want to do this again?
         for {
           vatReturnPeriod <- stateService.fetchVatFlateRate()
         } yield vatReturnPeriod match {
           case Some(model) =>
             model.vatReturnPeriod match {
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.turnover(config, errors, Messages("turnover.year")))
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.turnover(config, errors, Messages("turnover.year")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.turnover(config, errors, Messages("common.year")))
+              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.turnover(config, errors, Messages("common.year")))
             }
         }
       },
