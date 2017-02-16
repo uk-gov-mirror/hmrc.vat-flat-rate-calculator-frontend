@@ -6,3 +6,6 @@ POST       /vat-return-period         controllers.VatReturnPeriodController.subm
 
 GET        /turnover                  controllers.TurnoverController.turnover
 POST       /turnover                  controllers.TurnoverController.submitTurnover
+
+GET        /cost-of-goods             controllers.CostOfGoodsController.costOfGoods
+POST       /cost-of-goods             controllers.CostOfGoodsController.submitCostOfGoods

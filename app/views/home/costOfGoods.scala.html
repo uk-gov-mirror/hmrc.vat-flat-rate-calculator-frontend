@@ -1,0 +1,40 @@
+@import views.html.main_template
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+
+@(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig) {
+
+@govHelpers.errorSummary(
+Messages("base.errorSummary"), costOfGoodsForm
+)
+<h1>@messages("costOfGoods.heading")</h1>
+
+<p>@messages("costOfGoods.para.1")</p>
+
+<h2>@messages("costOfGoods")</h2>
+
+<ol>
+    <li>@messages("costOfGoods.bullet.1")</li>
+    <li>@messages("costOfGoods.bullet.2")</li>
+    <li>@messages("costOfGoods.bullet.3")</li>
+    <li>@messages("costOfGoods.bullet.4")</li>
+    <li>@messages("costOfGoods.bullet.5")</li>
+    <li>@messages("costOfGoods.bullet.6")</li>
+</ol>
+
+@form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
+
+    <div class="form-group">
+        @moneyInputFormat(
+        costOfGoodsForm("costOfGoods"),
+        '_legend -> Messages("turnover.title")
+        )
+    </div>
+
+<button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
+}
+
+}
