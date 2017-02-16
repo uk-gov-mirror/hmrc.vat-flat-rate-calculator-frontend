@@ -31,7 +31,7 @@ class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport
     mapping(
       "vatReturnPeriod" -> text,
       "turnover" -> optional(bigDecimal),
-      "val3" -> optional(bigDecimal)
+      "costOfGoods" -> optional(bigDecimal)
     )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
 
@@ -40,7 +40,16 @@ class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport
     mapping(
       "vatReturnPeriod" -> text,
       "turnover" -> optional(bigDecimal.verifying(isLessThanMaximumTurnover, isPositive, isTwoDecimalPlaces)).verifying("error.required", _.isDefined),
-      "val3" -> optional(bigDecimal)
+      "costOfGoods" -> optional(bigDecimal)
+    )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
+  )
+
+  val costOfGoodsForm = Form(
+    //TODO: Add validation to the form
+    mapping(
+      "vatReturnPeriod" -> text,
+      "turnover" -> optional(bigDecimal),
+      "costOfGoods" -> optional(bigDecimal)
     )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
 }

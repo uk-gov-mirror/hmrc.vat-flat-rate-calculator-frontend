@@ -66,7 +66,7 @@ class TurnoverController @Inject()(config: AppConfig,
       },
       success => {
         stateService.saveVatFlateRate(success)
-        Future.successful(Ok(s"$success"))
+        Future.successful(Redirect(controllers.routes.CostOfGoodsController.costOfGoods()))
       }
     )
   }
