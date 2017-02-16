@@ -3,6 +3,8 @@ service.title = Check your VAT flat rate
 
 ##  COMMON  ##
 common.continue = Continue
+common.year     = year
+common.quarter  = quarter
 
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
@@ -10,3 +12,8 @@ vatReturnPeriod.heading             = How often do you do your VAT returns?
 vatReturnPeriod.para.1              = If you''re not VAT registered or you''re just getting an estimate, you can choose either option.
 vatReturnPeriod.option.annual       = Annually
 vatReturnPeriod.option.quarter      = Quarterly
+
+## Turnover page  ##
+turnover.title                      = Enter your turnover
+turnover.heading                    = Enter your turnover for the {0} including VAT
+turnover.para.1                     = This is the total sales of all goods and services. If you’re estimating, give realistic figures.

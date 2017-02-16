@@ -17,10 +17,11 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -39,17 +40,36 @@ class TurnoverController @Inject()(config: AppConfig,
     for {
       vatReturnPeriod <- stateService.fetchVatFlateRate()
     } yield vatReturnPeriod match {
-      case Some(model) => Ok(views.turnover(config, forms.turnoverForm.fill(model)))
-      case _ => /*Todo handle No Model response**/Ok("")
+      case Some(model) =>
+        model.vatReturnPeriod match {
+          case s  if s.contentEquals(Messages("vatReturnPeriod.option.annual").toLowerCase())    =>
+            Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.year")))
+          case s  if s.contentEquals(Messages("vatReturnPeriod.option.quarter").toLowerCase())   =>
+            Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.quarter")))
+      }
+      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod()) /*TODO: Is this correct?*/
     }
   }
 
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
     forms.turnoverForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(views.turnover(config, errors))),
+      errors => {
+
+        //TODO: Do we want to do this again?
+        for {
+          vatReturnPeriod <- stateService.fetchVatFlateRate()
+        } yield vatReturnPeriod match {
+          case Some(model) =>
+            model.vatReturnPeriod match {
+              case s  if s.eq(Messages("common.year"))    => BadRequest(views.turnover(config, errors, s))
+              case s  if s.eq(Messages("common.quarter")) => BadRequest(views.turnover(config, errors, s))
+            }
+        }
+
+      },
       success => {
         stateService.saveVatFlateRate(success)
-        Future.successful(Ok(""))
+        Future.successful(Ok(s"$success"))
       }
     )
   }
