@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json._
 
-case class VatReturnPeriodModel(vatReturnPeriod: String)
+case class VatFlatRateModel(vatReturnPeriod: String, turnover: Option[BigDecimal], costOfGoods: Option[BigDecimal])
 
-object VatReturnPeriodModel {
-  implicit val format: OFormat[VatReturnPeriodModel] = Json.format[VatReturnPeriodModel]
+object VatFlatRateModel {
+  implicit val format: OFormat[VatFlatRateModel] = Json.format[VatFlatRateModel]
 }

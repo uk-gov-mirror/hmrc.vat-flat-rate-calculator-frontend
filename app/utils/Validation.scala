@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package common
+package utils
 
-object CacheKeys extends Enumeration {
-  val vatFlatRate = Value
+object Validation {
+
+  def currencyValidation = {}
+
 }

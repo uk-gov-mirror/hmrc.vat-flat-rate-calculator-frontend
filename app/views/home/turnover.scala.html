@@ -1,0 +1,34 @@
+@import views.html.main_template
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+
+@(appConfig: config.AppConfig, turnoverForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(title = messages("turnover.title"), bodyClasses = None, appConfig = appConfig) {
+
+@govHelpers.errorSummary(
+Messages("base.errorSummary"), turnoverForm
+)
+<h1>@messages("turnover.heading")</h1>
+
+<p>@messages("turnover.para.1")</p>
+
+
+@form(action = controllers.routes.TurnoverController.submitTurnover) {
+
+    <div class="form-group">
+        @moneyInputFormat(
+        turnoverForm("turnover"),
+        '_legend -> Messages("turnover.title")
+        )
+    </div>
+
+    <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
+
+    <div class="">
+        @helper.inputText(turnoverForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "form-hidden")
+    </div>
+}
+
+}

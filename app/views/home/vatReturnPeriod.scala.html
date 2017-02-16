@@ -3,7 +3,7 @@
 @import views.html.helpers._
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, vatReturnPeriodForm: Form[VatReturnPeriodModel])(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, vatReturnPeriodForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("vatReturnPeriod.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -26,7 +26,7 @@ Messages("base.errorSummary"), vatReturnPeriodForm
         '_legendID -> "vatReturnPeriod",
         '_legendClass -> "visuallyhidden",
         '_labelAfter -> true,
-        '_labelClass -> "block-label",
+        '_labelClass -> "block-label selection-button-radio",
         '_groupClass -> "inline"
     )
 
