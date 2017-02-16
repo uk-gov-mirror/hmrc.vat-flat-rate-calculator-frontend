@@ -4,4 +4,5 @@ GET        /assets/*file              controllers.Assets.at(path="/public", file
 GET        /vat-return-period         controllers.VatReturnPeriodController.vatReturnPeriod
 POST       /vat-return-period         controllers.VatReturnPeriodController.submitVatReturnPeriod
 
-
+GET        /turnover                  controllers.TurnoverController.turnover
+POST       /turnover                  controllers.TurnoverController.submitTurnover

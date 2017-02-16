@@ -35,7 +35,7 @@ package controllers.predicates
 import javax.inject.Inject
 
 import config.AppConfig
-import forms.VatReturnPeriodForm
+import forms.VatFlatRateForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -46,7 +46,7 @@ import scala.concurrent.Future
 
 class ValidatedSession @Inject()(config: AppConfig,
                                  val messagesApi: MessagesApi,
-                                 form: VatReturnPeriodForm) extends FrontendController with I18nSupport{
+                                 form: VatFlatRateForm) extends FrontendController with I18nSupport{
 
   private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]

@@ -18,18 +18,29 @@ package forms
 
 import javax.inject.Inject
 
-import models.VatReturnPeriodModel
+import models.VatFlatRateModel
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 
-class VatReturnPeriodForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport{
+class VatFlatRateForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport{
 
   val vatReturnPeriodForm = Form(
     //TODO: Add validation to the form
     mapping(
-      "vatReturnPeriod" -> text
-    )(VatReturnPeriodModel.apply)(VatReturnPeriodModel.unapply)
+      "vatReturnPeriod" -> text,
+      "turnover" -> optional(bigDecimal),
+      "val3" -> optional(bigDecimal)
+    )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
   )
 
+  val turnoverForm = Form(
+    //TODO: Add validation to the form
+    mapping(
+      "vatReturnPeriod" -> text,
+      "turnover" -> optional(bigDecimal).verifying("bad", _.isDefined),
+      "val3" -> optional(bigDecimal)
+    )(VatFlatRateModel.apply)(VatFlatRateModel.unapply)
+  )
 }
+
