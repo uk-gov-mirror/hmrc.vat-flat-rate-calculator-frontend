@@ -24,9 +24,10 @@ import forms.VatFlatRateForm
 import models.VatFlatRateModel
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Request}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.{errors, home => views}
 
 import scala.concurrent.Future
@@ -54,7 +55,7 @@ class TurnoverController @Inject()(config: AppConfig,
     )
   }
 
-  def route(res: Status, form: Form[VatFlatRateModel]) = {
+  def route(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier) = {
     for {
       vatReturnPeriod <- stateService.fetchVatFlatRate()
     } yield vatReturnPeriod match {
