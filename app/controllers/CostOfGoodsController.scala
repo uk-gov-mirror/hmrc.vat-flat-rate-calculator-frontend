@@ -26,7 +26,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{home => views}
+import views.html.{home => views, errors => errs}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -47,7 +47,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.year")))
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.quarter")))
         }
-      case _ => /*Todo handle No Model response**/Ok("")
+      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
@@ -64,6 +64,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("common.year")))
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("common.quarter")))
             }
+          case _ => InternalServerError("Could not retrieve Vat Flat Rate Model", errs.technicalError(config))
         }
       },
       success => {
@@ -84,7 +85,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
   def whichResult(model: VatFlatRateModel): Future[Int] = {
     if(model.vatReturnPeriod.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))){
       model match {
-        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 1000 => Future(1)
+        case VatFlatRateModel(_,_,Some(cost)) if cost <= 1000 => Future(1)
         case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(2) //TODO what the get or else should be
         case _ => Future(3)
       }
