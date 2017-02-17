@@ -34,11 +34,13 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.Helpers._
+import views.html.home.result
 
 import scala.concurrent.Future
 
@@ -52,9 +54,6 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
   lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
 
-  val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", Some(999.99), None))
-  val mockNoVatReturnPeriodModel = None
-
   def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
 
     val mockStateService = mock[StateService]
@@ -64,40 +63,15 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
 
     mockStateService
   }
-//
-//  private def fixture = new {
-//    val mockMessages: MessagesApi = mock[MessagesApi]
-//    val mockConfig: AppConfig     = mock[AppConfig]
-//    val mockStateService: StateService = mock[StateService]
-//    val mockValidatedSession: ValidatedSession = mock[ValidatedSession]
-//    val mockForm: VatFlatRateForm = mock[VatFlatRateForm]
-//
-//    val controller = new TurnoverController(mockConfig, mockMessages, mockStateService, mockValidatedSession, mockForm)
-//
-//  }
+
 
   "Calling the .turnover action" when {
 
-    "there is no session ID" should {
-      lazy val mockStateService = createMockStateService(mockVatReturnPeriodModel)
-      lazy val request = FakeRequest("GET", "/")
-
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
-      lazy val result = controller.turnover(request)
-
-      "return 303" in {
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to the landing page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
-      }
-    }
-
     "there is no model in keystore" should {
-      lazy val mockStateService = createMockStateService(mockNoVatReturnPeriodModel)
-      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val noVatReturnModel = None
 
+      lazy val mockStateService = createMockStateService(noVatReturnModel)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
       val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.turnover(request)
 
@@ -110,14 +84,21 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       }
     }
 
-    "for an annual vat return period" should {
+    "there is an annual model in keystore" should {
+
+      val annualVatReturnPeriodModel = Some(VatFlatRateModel("annuallygit stat", None, None))
+
+      lazy val mockStateService = createMockStateService(annualVatReturnPeriodModel)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
 
       "return 200" in {
-
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the annual turnover page" in {
-
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
 
     }

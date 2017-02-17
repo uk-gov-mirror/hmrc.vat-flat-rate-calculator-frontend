@@ -63,7 +63,7 @@ class TurnoverController @Inject()(config: AppConfig,
         model.vatReturnPeriod match {
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), Messages("common.year")))
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), Messages("common.quarter")))
-          case _ => InternalServerError("Could not retrieve Vat Flat Rate Model", errors.technicalError(config))
+          case _ => InternalServerError(errors.technicalError(config))
         }
       case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }

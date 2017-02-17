@@ -64,7 +64,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("common.year")))
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("common.quarter")))
             }
-          case _ => InternalServerError("Could not retrieve Vat Flat Rate Model", errs.technicalError(config))
+          case _ => InternalServerError(errs.technicalError(config))
         }
       },
       success => {
