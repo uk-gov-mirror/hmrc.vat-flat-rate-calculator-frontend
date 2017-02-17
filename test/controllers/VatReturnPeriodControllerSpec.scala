@@ -53,7 +53,7 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService

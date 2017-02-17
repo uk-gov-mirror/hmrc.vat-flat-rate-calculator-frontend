@@ -51,7 +51,7 @@ class StateServiceSpec extends UnitSpec with MockitoSugar{
     "return a VatReturnPeriodModel when there is one in Keystore" in {
       val saveData: Option[VatFlatRateModel] = mockVatFlatRateModel
       val service = mockedStateService()
-      val result: Future[Option[VatFlatRateModel]] = service.fetchVatFlateRate()
+      val result: Future[Option[VatFlatRateModel]] = service.fetchVatFlatRate()
 
       await(result) shouldBe Some(VatFlatRateModel("annual", Some(99.99), Some(9.99)))
     }
@@ -62,7 +62,7 @@ class StateServiceSpec extends UnitSpec with MockitoSugar{
       val testData = VatFlatRateModel("annual", Some(99.99), Some(9.99))
       val returnedData = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
       val service = mockedStateService()
-      val result = service.saveVatFlateRate[VatFlatRateModel](testData)
+      val result = service.saveVatFlatRate[VatFlatRateModel](testData)
 
       await(result) shouldBe returnedData
     }

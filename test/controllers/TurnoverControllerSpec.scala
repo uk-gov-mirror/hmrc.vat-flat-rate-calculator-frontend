@@ -58,7 +58,7 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSu
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService
@@ -73,13 +73,12 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSu
       val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.turnover(request)
 
-      "return 200" in {
+      "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      "navigate to the landing page" in {
-        //TODO
-//        Jsoup.parse(bodyOf(result)).title shouldBe messages("vatReturnPeriod.title")
+      "redirect to the landing page" in {
+        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
       }
     }
 

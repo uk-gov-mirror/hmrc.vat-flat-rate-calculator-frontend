@@ -40,7 +40,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
 
   val costOfGoods: Action[AnyContent] = session.async{ implicit request =>
     for {
-      vfrModel <- stateService.fetchVatFlateRate()
+      vfrModel <- stateService.fetchVatFlatRate()
     } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
@@ -57,7 +57,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
 
         //TODO: Do we want to do this again?
         for {
-          vfrModel <- stateService.fetchVatFlateRate()
+          vfrModel <- stateService.fetchVatFlatRate()
         } yield vfrModel match {
           case Some(model) =>
             model.vatReturnPeriod match {
@@ -68,12 +68,12 @@ class CostOfGoodsController @Inject()(config: AppConfig,
       },
       success => {
         for {
-          saveToKeyStore <- stateService.saveVatFlateRate(success)
+          saveToKeyStore <- stateService.saveVatFlatRate(success)
           result <- whichResult(success)
           saveResult <- stateService.saveResultModel(createResultModel(success,result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
         } yield response //match {
-//          case Some(model) => stateService.saveVatFlateRate(model); Thread.sleep(2000)
+//          case Some(model) => stateService.saveVatFlatRate(model); Thread.sleep(2000)
 //            Ok(s"${whichResult(model)}") //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
 //          case _ => /*Todo handle No Model response**/Ok("")
 //        }

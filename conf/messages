@@ -14,6 +14,12 @@ error.twoDecimalPlaces             = The amount you''ve entered has too many dec
 error.negative                     = Enter an amount that''s £0 or more
 error.moreThanMaximumTurnover      = Enter an amount less than £9,999,999,999.98
 
+## Technical Errors ##
+techError.title                    = Technical Error
+techError.heading                  = Sorry, there''s been a problem
+techError.para.1                   = You''ll need to start your calculation again.
+techError.startAgain               = Start again
+
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
 vatReturnPeriod.heading             = How often do you do your VAT returns?

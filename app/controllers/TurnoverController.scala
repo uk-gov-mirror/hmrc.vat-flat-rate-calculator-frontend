@@ -38,7 +38,7 @@ class TurnoverController @Inject()(config: AppConfig,
 
   val turnover: Action[AnyContent] = session.async{ implicit request =>
     for {
-      vatReturnPeriod <- stateService.fetchVatFlateRate()
+      vatReturnPeriod <- stateService.fetchVatFlatRate()
     } yield vatReturnPeriod match {
       case Some(model) =>
         model.vatReturnPeriod match {
@@ -54,7 +54,7 @@ class TurnoverController @Inject()(config: AppConfig,
       errors => {
         //TODO: Do we want to do this again?
         for {
-          vatReturnPeriod <- stateService.fetchVatFlateRate()
+          vatReturnPeriod <- stateService.fetchVatFlatRate()
         } yield vatReturnPeriod match {
           case Some(model) =>
             model.vatReturnPeriod match {
@@ -64,7 +64,7 @@ class TurnoverController @Inject()(config: AppConfig,
         }
       },
       success => {
-        stateService.saveVatFlateRate(success)
+        stateService.saveVatFlatRate(success)
         Future.successful(Redirect(controllers.routes.CostOfGoodsController.costOfGoods()))
       }
     )
