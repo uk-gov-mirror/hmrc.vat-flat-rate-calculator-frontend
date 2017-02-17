@@ -24,7 +24,7 @@ import forms.VatFlatRateForm
 import models.VatFlatRateModel
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -40,13 +40,13 @@ class TurnoverController @Inject()(config: AppConfig,
                                    forms: VatFlatRateForm) extends FrontendController with I18nSupport{
 
   val turnover: Action[AnyContent] = session.async{ implicit request =>
-    route(Ok, forms.turnoverForm)
+    routeRequest(Ok, forms.turnoverForm)
   }
 
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
     forms.turnoverForm.bindFromRequest.fold(
       errors => {
-        route(BadRequest, errors)
+        routeRequest(BadRequest, errors)
       },
       success => {
         stateService.saveVatFlatRate(success)
@@ -55,7 +55,7 @@ class TurnoverController @Inject()(config: AppConfig,
     )
   }
 
-  def route(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier) = {
+  def routeRequest(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
     for {
       vatReturnPeriod <- stateService.fetchVatFlatRate()
     } yield vatReturnPeriod match {
@@ -68,11 +68,5 @@ class TurnoverController @Inject()(config: AppConfig,
       case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
-
-//  def fetch(res: Status, form: Form[VatFlatRateModel])(makeRequest: VatFlatRateModel => )={
-//    for {
-//      vatReturnPeriod <- stateService.fetchVatFlatRate()
-//    } yield vatReturnPeriod
-//  }
 
 }
