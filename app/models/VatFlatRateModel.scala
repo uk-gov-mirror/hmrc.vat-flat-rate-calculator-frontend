@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import javax.inject.Inject
+import play.api.libs.json._
 
-import models.VatReturnPeriodModel
-import play.api.data.Form
-import play.api.data.Forms._
-import play.api.i18n.{I18nSupport, MessagesApi}
+case class VatFlatRateModel(vatReturnPeriod: String, turnover: Option[BigDecimal], costOfGoods: Option[BigDecimal])
 
-class VatReturnPeriodForm @Inject()(val messagesApi: MessagesApi)extends I18nSupport{
-
-  val vatReturnPeriodForm = Form(
-    //TODO: Add validation to the form
-    mapping(
-      "vatReturnPeriod" -> text
-    )(VatReturnPeriodModel.apply)(VatReturnPeriodModel.unapply)
-  )
-
+object VatFlatRateModel {
+  implicit val format: OFormat[VatFlatRateModel] = Json.format[VatFlatRateModel]
 }

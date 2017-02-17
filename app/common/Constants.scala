@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package common
 
-import play.api.libs.json._
+object Constants {
 
-case class VatReturnPeriodModel(vatReturnPeriod: String)
+  final val maximumTurnover : BigDecimal     = BigDecimal(9999999999.99)
+  final val maximumCostOfGoods : BigDecimal  = BigDecimal(9999999999.99)
 
-object VatReturnPeriodModel {
-  implicit val format: OFormat[VatReturnPeriodModel] = Json.format[VatReturnPeriodModel]
 }

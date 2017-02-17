@@ -20,8 +20,8 @@ import java.util.UUID
 
 import config.AppConfig
 import controllers.predicates.ValidatedSession
-import forms.VatReturnPeriodForm
-import models.VatReturnPeriodModel
+import forms.VatFlatRateForm
+import models.VatFlatRateModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
@@ -44,16 +44,16 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-  lazy val mockForm = app.injector.instanceOf[VatReturnPeriodForm]
-  lazy val mockStateService = createMockStateService(mockVatReturnPeriodModel)
+  lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
+  lazy val mockStateService: StateService = createMockStateService(mockVatReturnPeriodModel)
 
-  val mockVatReturnPeriodModel = Some(VatReturnPeriodModel("test"))
+  val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", None, None))
 
-  def createMockStateService(data: Option[VatReturnPeriodModel]): StateService = {
+  def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatReturnPeriod()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService
@@ -81,40 +81,4 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
       }
     }
   }
-
-//  "Navigating to page 1" when {
-//    val sessionId =  UUID.randomUUID().toString
-//
-//    "there is no sessionId" should {
-//      lazy val request = FakeRequest("GET", "/")
-//      lazy val result = controller.pageOne(request)
-//      "generate a sessionId and go back to the landing page" in {
-//
-//        status(result) shouldBe Status.OK
-//      }
-//    }
-//    "there is a sessionId" should {
-//      lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
-//      lazy val result = controller.pageOne(request)
-//
-//      "return 200 " in {
-//        status(result) shouldBe Status.OK
-//      }
-//    }
-//
-//    "there is an item in keystore" should {
-//
-//      lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/page-1").withSession(SessionKeys.sessionId -> s"$sessionId")
-//      val service = createMockKeyStore(Some(1))
-//      val target= new VatReturnPeriodController(mockConfig, messages, service, mockValidatedSession)
-//      lazy val result = controller.pageOne(request)
-//
-//      "return 200 " in {
-//        status(result) shouldBe Status.OK
-//      }
-//    }
-//  }
-
-
-
 }

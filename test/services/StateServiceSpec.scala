@@ -17,7 +17,7 @@
 package services
 
 import connectors.KeystoreConnector
-import models.VatReturnPeriodModel
+import models.VatFlatRateModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
@@ -31,16 +31,17 @@ import scala.concurrent.Future
 class StateServiceSpec extends UnitSpec with MockitoSugar{
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  val mockVatFlatRateModel: Option[VatFlatRateModel] = Some(VatFlatRateModel("annual", Some(99.99), Some(9.99)))
 
   def mockedStateService(): StateService = {
     val mockConnector: KeystoreConnector = mock[KeystoreConnector]
-    val testData: Option[VatReturnPeriodModel] = Some(VatReturnPeriodModel("annual"))
+    val testData: Option[VatFlatRateModel] = mockVatFlatRateModel
     val returnedCacheMap = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
 
-    when(mockConnector.fetchAndGetFormData[VatReturnPeriodModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.fetchAndGetFormData[VatFlatRateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(testData))
 
-    when(mockConnector.saveFormData[VatReturnPeriodModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.saveFormData[VatFlatRateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(returnedCacheMap))
 
     new StateService(mockConnector)
@@ -48,20 +49,20 @@ class StateServiceSpec extends UnitSpec with MockitoSugar{
 
   "Calling StateService .fetchData" should {
     "return a VatReturnPeriodModel when there is one in Keystore" in {
-      val saveData: Option[VatReturnPeriodModel] = Some(VatReturnPeriodModel("annual"))
+      val saveData: Option[VatFlatRateModel] = mockVatFlatRateModel
       val service = mockedStateService()
-      val result: Future[Option[VatReturnPeriodModel]] = service.fetchVatReturnPeriod()
+      val result: Future[Option[VatFlatRateModel]] = service.fetchVatFlatRate()
 
-      await(result) shouldBe Some(VatReturnPeriodModel("annual"))
+      await(result) shouldBe Some(VatFlatRateModel("annual", Some(99.99), Some(9.99)))
     }
   }
   "Calling StateService .saveData" should {
 
     "return a Cachemap with a valid response" in {
-      val testData = VatReturnPeriodModel("annual")
+      val testData = VatFlatRateModel("annual", Some(99.99), Some(9.99))
       val returnedData = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
       val service = mockedStateService()
-      val result = service.saveVatReturnPeriod[VatReturnPeriodModel](testData)
+      val result = service.saveVatFlatRate[VatFlatRateModel](testData)
 
       await(result) shouldBe returnedData
     }

@@ -22,4 +22,8 @@ object MessageLookup {
     val dummyError = "Dummy error message"
   }
 
+  object VatReturnPeriod {
+    val title = "Enter your VAT return details"
+  }
+
 }

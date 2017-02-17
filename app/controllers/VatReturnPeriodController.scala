@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import controllers.predicates.ValidatedSession
-import forms.VatReturnPeriodForm
+import forms.VatFlatRateForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.StateService
@@ -37,26 +37,30 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
                                           val messagesApi: MessagesApi,
                                           stateService: StateService,
                                           session: ValidatedSession,
-                                          form: VatReturnPeriodForm) extends FrontendController with I18nSupport{
+                                          forms: VatFlatRateForm) extends FrontendController with I18nSupport{
 
   val vatReturnPeriod: Action[AnyContent] = Action.async { implicit request =>
 
     if(request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID().toString
-      Future.successful(Ok(views.vatReturnPeriod(config, form.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
+      Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
     } else {
-      Future.successful(Ok(views.vatReturnPeriod(config, form.vatReturnPeriodForm)))
+      for {
+        vatReturnPeriod <- stateService.fetchVatFlatRate()
+      } yield vatReturnPeriod match {
+        case Some(model) => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm.fill(model)))
+        case _           => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm))//TODO: is this right?
+      }
     }
   }
 
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
 
-    form.vatReturnPeriodForm.bindFromRequest.fold(
+    forms.vatReturnPeriodForm.bindFromRequest.fold(
       errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
       success => {
-        stateService.saveVatReturnPeriod(success)
-        //TODO: Redirect to turnover page
-        Future.successful(Ok(""))
+        stateService.saveVatFlatRate(success)
+        Future.successful(Redirect(controllers.routes.TurnoverController.turnover()))
       }
     )
   }
