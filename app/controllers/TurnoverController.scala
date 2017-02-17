@@ -44,9 +44,9 @@ class TurnoverController @Inject()(config: AppConfig,
   }
 
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
-    forms.turnoverForm.bindFromRequest.fold(
+  forms.turnoverForm.bindFromRequest.fold(
       errors => {
-        routeRequest(BadRequest, errors)
+            routeRequest(BadRequest, errors)
       },
       success => {
         stateService.saveVatFlatRate(success)
@@ -61,8 +61,8 @@ class TurnoverController @Inject()(config: AppConfig,
     } yield vatReturnPeriod match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form, Messages("common.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form, Messages("common.quarter")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), Messages("common.quarter")))
           case _ => InternalServerError(errors.technicalError(config))
         }
       case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())

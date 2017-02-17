@@ -28,6 +28,7 @@ import models.VatFlatRateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
@@ -36,37 +37,52 @@ import play.api.inject.Injector
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
-import uk.gov.hmrc.play.test.{UnitSpec}
+import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSuite{
+class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with OneAppPerSuite{
 
   val injector: Injector = app.injector
   implicit val mat: Materializer = app.injector.instanceOf[Materializer]
 
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-  lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
+//  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
+//  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+//  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
+//  lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
 
   val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", Some(999.99), None))
   val mockNoVatReturnPeriodModel = None
 
-  def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
+//  def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
+//
+//    val mockStateService = mock[StateService]
+//
+//    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+//      .thenReturn(Future.successful(data))
+//
+//    mockStateService
+//  }
 
-    val mockStateService = mock[StateService]
+  private def fixture = new {
+    val mockMessages: MessagesApi = mock[MessagesApi]
+    val mockConfig: AppConfig     = mock[AppConfig]
+    val mockStateService: StateService = mock[StateService]
+    val mockValidatedSession: ValidatedSession = mock[ValidatedSession]
+    val mockForm: VatFlatRateForm = mock[VatFlatRateForm]
 
-    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(data))
+    val controller = new TurnoverController(mockConfig, mockMessages, mockStateService, mockValidatedSession, mockForm)
 
-    mockStateService
   }
+
+
+
 
   "Calling the .turnover action" when {
 
     "there is no session ID" should {
+      val f = fixture
       lazy val mockStateService = createMockStateService(mockVatReturnPeriodModel)
       lazy val request = FakeRequest("GET", "/")
 
