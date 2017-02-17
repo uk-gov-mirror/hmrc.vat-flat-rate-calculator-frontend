@@ -22,7 +22,7 @@ import common.ResultCodes
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{home => views, errors}
@@ -33,13 +33,10 @@ class ResultController @Inject()(config: AppConfig,
                                 session: ValidatedSession) extends FrontendController with I18nSupport {
 
   val result: Action[AnyContent] = session.async { implicit request =>
-    stateService.fetchResultModel.map {
-      case Some(model) => routeResult(model.result)
-      case None => InternalServerError(errors.technicalError(config))
-    }
-  }
 
-  def routeResult(code: Int): Result = {
-    Ok(s"Result Code: $code")
+    stateService.fetchResultModel.map {
+      case Some(model)  => Ok(views.result(config, model.result))
+      case None         => InternalServerError(errors.technicalError(config))
+    }
   }
 }

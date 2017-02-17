@@ -21,11 +21,13 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import models.VatFlatRateModel
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{home => views}
+import views.html.{errors, home => views}
 
 import scala.concurrent.Future
 
@@ -37,31 +39,13 @@ class TurnoverController @Inject()(config: AppConfig,
                                    forms: VatFlatRateForm) extends FrontendController with I18nSupport{
 
   val turnover: Action[AnyContent] = session.async{ implicit request =>
-    for {
-      vatReturnPeriod <- stateService.fetchVatFlatRate()
-    } yield vatReturnPeriod match {
-      case Some(model) =>
-        model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => Ok(views.turnover(config, forms.turnoverForm.fill(model), Messages("common.quarter")))
-      }
-      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
-    }
+    route(Ok, forms.turnoverForm)
   }
 
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
     forms.turnoverForm.bindFromRequest.fold(
       errors => {
-        //TODO: Do we want to do this again?
-        for {
-          vatReturnPeriod <- stateService.fetchVatFlatRate()
-        } yield vatReturnPeriod match {
-          case Some(model) =>
-            model.vatReturnPeriod match {
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.turnover(config, errors, Messages("common.year")))
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.turnover(config, errors, Messages("common.year")))
-            }
-        }
+        route(BadRequest, errors)
       },
       success => {
         stateService.saveVatFlatRate(success)
@@ -69,5 +53,25 @@ class TurnoverController @Inject()(config: AppConfig,
       }
     )
   }
+
+  def route(res: Status, form: Form[VatFlatRateModel]) = {
+    for {
+      vatReturnPeriod <- stateService.fetchVatFlatRate()
+    } yield vatReturnPeriod match {
+      case Some(model) =>
+        model.vatReturnPeriod match {
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form, Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form, Messages("common.quarter")))
+          case _ => InternalServerError(errors.technicalError(config))
+        }
+      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+    }
+  }
+
+//  def fetch(res: Status, form: Form[VatFlatRateModel])(makeRequest: VatFlatRateModel => )={
+//    for {
+//      vatReturnPeriod <- stateService.fetchVatFlatRate()
+//    } yield vatReturnPeriod
+//  }
 
 }
