@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2017 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
-import java.util.UUID
-
-import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
-import assets.MessageLookup
+import akka.stream.Materializer
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
@@ -32,16 +44,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
-import play.api.i18n
+import play.api.i18n.Messages.Implicits._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.test.Helpers._
-import views.html.home.result
 
 import scala.concurrent.Future
 
@@ -99,7 +109,7 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       }
 
       "navigate to the annual turnover page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe Messages("turnover.title")
       }
 
     }
@@ -135,14 +145,14 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       }
 
       "show the technical error page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages("techError.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe Messages("techError.title")
       }
     }
   }
 
   "Calling the .submitTurnover action" when {
 
-    "without entering any data" should {
+    "not entering any data" should {
       val data = Some(VatFlatRateModel("annually", None, None))
       lazy val request = FakeRequest()
           .withSession(SessionKeys.sessionId -> s"any-old-id")
@@ -179,5 +189,4 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
     }
 
   }
-
 }
