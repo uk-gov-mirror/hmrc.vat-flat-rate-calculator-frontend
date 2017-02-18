@@ -86,7 +86,7 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
 
     "there is an annual model in keystore" should {
 
-      val annualVatReturnPeriodModel = Some(VatFlatRateModel("annuallygit stat", None, None))
+      val annualVatReturnPeriodModel = Some(VatFlatRateModel("annually", None, None))
 
       lazy val mockStateService = createMockStateService(annualVatReturnPeriodModel)
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
@@ -103,14 +103,20 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
 
     }
 
-    "navigate to the turnover page or a quarterly vat return period" should {
+    "there is a quarterly model in keystsore" should {
 
+      val data = Some(VatFlatRateModel("quarterly", None, None))
+
+      lazy val mockStateService = createMockStateService(data)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
       "return 200" in {
-
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the quarterly turnover page" in {
-
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
     }
   }//end turnover action
