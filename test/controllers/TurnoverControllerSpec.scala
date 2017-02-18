@@ -32,6 +32,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
+import play.api.i18n
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
@@ -119,14 +120,61 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
         Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
     }
-  }//end turnover action
+
+    "there is an incorrect model in keystore" should {
+
+      val data = Some(VatFlatRateModel("wrong-model", None, None))
+
+      lazy val mockStateService = createMockStateService(data)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
+
+      "return 500" in {
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "show the technical error page" in {
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("techError.title")
+      }
+    }
+  }
 
   "Calling the .submitTurnover action" when {
 
-    "there is an error with the form" should {
+    "without entering any data" should {
+      val data = Some(VatFlatRateModel("annually", None, None))
+      lazy val request = FakeRequest()
+          .withSession(SessionKeys.sessionId -> s"any-old-id")
+        .withFormUrlEncodedBody(("turnover", ""))
+      lazy val mockStateService = createMockStateService(data)
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.submitTurnover(request)
 
-      "" in {
+      "return 400" in {
+        status(result) shouldBe Status.BAD_REQUEST
+      }
+      "fail with the correct error message" in {
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.required"))
+      }
+    }
 
+    "submitting a valid turnover" should {
+      val data = Some(VatFlatRateModel("annually", None, None))
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"any-old-id")
+        .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "10000"))
+      lazy val mockStateService = createMockStateService(data)
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.submitTurnover(request)
+
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the cost of goods page" in {
+        redirectLocation(result) shouldBe Some(s"${routes.CostOfGoodsController.costOfGoods()}")
       }
     }
 
