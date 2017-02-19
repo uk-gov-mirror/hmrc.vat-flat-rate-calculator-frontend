@@ -28,6 +28,7 @@ import models.VatFlatRateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
@@ -36,12 +37,12 @@ import play.api.inject.Injector
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
-import uk.gov.hmrc.play.test.{UnitSpec}
+import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSuite{
+class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with OneAppPerSuite{
 
   val injector: Injector = app.injector
   implicit val mat: Materializer = app.injector.instanceOf[Materializer]
@@ -58,11 +59,22 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSu
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService
   }
+//
+//  private def fixture = new {
+//    val mockMessages: MessagesApi = mock[MessagesApi]
+//    val mockConfig: AppConfig     = mock[AppConfig]
+//    val mockStateService: StateService = mock[StateService]
+//    val mockValidatedSession: ValidatedSession = mock[ValidatedSession]
+//    val mockForm: VatFlatRateForm = mock[VatFlatRateForm]
+//
+//    val controller = new TurnoverController(mockConfig, mockMessages, mockStateService, mockValidatedSession, mockForm)
+//
+//  }
 
   "Calling the .turnover action" when {
 
@@ -73,13 +85,12 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSu
       val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.turnover(request)
 
-      "return 200" in {
+      "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      "navigate to the landing page" in {
-        //TODO
-//        Jsoup.parse(bodyOf(result)).title shouldBe messages("vatReturnPeriod.title")
+      "redirect to the landing page" in {
+        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
       }
     }
 

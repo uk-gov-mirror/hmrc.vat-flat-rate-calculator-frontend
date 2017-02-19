@@ -29,11 +29,11 @@ import scala.concurrent.Future
 @Singleton
 class StateService @Inject()(keystore: KeystoreConnector) {
 
-  def saveVatFlateRate[VatFlatRateModel](data: VatFlatRateModel)(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[CacheMap] = {
+  def saveVatFlatRate[VatFlatRateModel](data: VatFlatRateModel)(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[CacheMap] = {
     keystore.saveFormData(common.CacheKeys.vatFlatRate.toString, data)
   }
 
-  def fetchVatFlateRate()(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[Option[VatFlatRateModel]] = {
+  def fetchVatFlatRate()(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[Option[VatFlatRateModel]] = {
     keystore.fetchAndGetFormData(common.CacheKeys.vatFlatRate.toString)
   }
 

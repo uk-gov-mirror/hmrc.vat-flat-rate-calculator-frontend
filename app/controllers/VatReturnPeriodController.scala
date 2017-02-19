@@ -46,7 +46,7 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
       Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
     } else {
       for {
-        vatReturnPeriod <- stateService.fetchVatFlateRate()
+        vatReturnPeriod <- stateService.fetchVatFlatRate()
       } yield vatReturnPeriod match {
         case Some(model) => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm.fill(model)))
         case _           => Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm))//TODO: is this right?
@@ -59,7 +59,7 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
     forms.vatReturnPeriodForm.bindFromRequest.fold(
       errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
       success => {
-        stateService.saveVatFlateRate(success)
+        stateService.saveVatFlatRate(success)
         Future.successful(Redirect(controllers.routes.TurnoverController.turnover()))
       }
     )
