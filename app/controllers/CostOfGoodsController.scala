@@ -47,7 +47,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.year")))
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.quarter")))
         }
-      case _ => /*Todo handle No Model response**/Ok("")
+      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
@@ -72,11 +72,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
           result <- whichResult(success)
           saveResult <- stateService.saveResultModel(createResultModel(success,result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
-        } yield response //match {
-//          case Some(model) => stateService.saveVatFlateRate(model); Thread.sleep(2000)
-//            Ok(s"${whichResult(model)}") //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
-//          case _ => /*Todo handle No Model response**/Ok("")
-//        }
+        } yield response
       }
     )
   }
@@ -84,14 +80,14 @@ class CostOfGoodsController @Inject()(config: AppConfig,
   def whichResult(model: VatFlatRateModel): Future[Int] = {
     if(model.vatReturnPeriod.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))){
       model match {
-        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 1000 => Future(1)
+        case VatFlatRateModel(_,_, Some(cost)) if cost <= 1000 => Future(1)
         case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(2) //TODO what the get or else should be
         case _ => Future(3)
       }
     } else {
       model match {
-        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 250 => Future(4)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => println("\n\n" + turnover + " " + model.costOfGoods.get + "\n\n");Future(5) //TODO what the get or else should be
+        case VatFlatRateModel(_,_, Some(cost)) if cost <= 250 => Future(4)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(5) //TODO what the get or else should be
         case _ => Future(6)
       }
     }
