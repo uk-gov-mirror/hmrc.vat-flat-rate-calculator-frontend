@@ -74,7 +74,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService
@@ -83,10 +83,10 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
   def createMockStateServiceSubmit(data: Option[VatFlatRateModel]) = {
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlateRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
-    when(mockStateService.saveVatFlateRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.saveVatFlatRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(null))
 
     when(mockStateService.saveResultModel(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -100,7 +100,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
 
     "there is no session ID" should {
       lazy val mockStateService = createMockStateService(mockVatReturnPeriodModel)
-      lazy val request = FakeRequest("GET", "/check-your-vat-flat-rate/vat-return-period")
+      lazy val request = FakeRequest("GET", "/")
 
       val controller = new CostOfGoodsController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.costOfGoods(request)
@@ -110,8 +110,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       }
 
       "navigate to the landing page" in {
-        //TODO
-        //        Jsoup.parse(bodyOf(result)).title shouldBe messages("vatReturnPeriod.title")
+        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
       }
     }
 
@@ -250,7 +249,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       }
     }
 
-    "there is an error for an annual model" should {
+    "there is an error with the form for an annual model" should {
 
       lazy val mockStateService = createMockStateServiceSubmit(mockAnnuallyLessThan1000Model)
       lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
@@ -264,7 +263,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
 
     }
 
-    "there is an error for a quarterly model" should {
+    "there is an error with the form for a quarterly model" should {
 
       lazy val mockStateService = createMockStateServiceSubmit(mockQuarterlyLessThan250Model)
       lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
@@ -274,6 +273,20 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
 
       "return 400" in {
         status(result) shouldBe 400
+      }
+
+    }
+
+    "there is an error with the form and no model" should {
+
+      lazy val mockStateService = createMockStateServiceSubmit(mockNoVatReturnPeriodModel)
+      lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+
+      val controller = new CostOfGoodsController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.submitCostOfGoods(request)
+
+      "return Internal Server Error" in {
+        status(result) shouldBe 500
       }
 
     }
