@@ -23,4 +23,8 @@ class SimpleAppConfig extends AppConfig{
   override val analyticsHost: String = ""
   override val reportAProblemNonJSUrl: String = ""
   override val reportAProblemPartialUrl: String = ""
+  override val betaFeedbackUnauthenticatedUrl: String = ""
+  override val betaFeedbackUrl: String = ""
+  override val contactFormServiceIdentifier: String = ""
+  override val contactFrontendPartialBaseUrl: String = ""
 }
