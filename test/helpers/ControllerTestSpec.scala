@@ -19,19 +19,21 @@ package helpers
 import akka.stream.Materializer
 import config.AppConfig
 import controllers.predicates.ValidatedSession
+import forms.VatFlatRateForm
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
+import uk.gov.hmrc.play.test.UnitSpec
 
-trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite{
+trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
 
   val injector: Injector = app.injector
-  implicit val mat: Materializer = app.injector.instanceOf[Materializer]
+  implicit val mat: Materializer = injector.instanceOf[Materializer]
 
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
+  lazy val mockForm: VatFlatRateForm = injector.instanceOf[VatFlatRateForm]
 
 }

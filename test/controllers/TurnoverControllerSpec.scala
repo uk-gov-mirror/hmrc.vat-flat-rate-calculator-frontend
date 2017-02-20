@@ -36,7 +36,8 @@ import akka.stream.Materializer
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
-import models.VatFlatRateModel
+import helpers.ControllerTestSpec
+import models.{ResultModel, VatFlatRateModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
@@ -55,35 +56,29 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with OneAppPerSuite{
+class TurnoverControllerSpec extends ControllerTestSpec {
 
-  val injector: Injector = app.injector
-  implicit val mat: Materializer = app.injector.instanceOf[Materializer]
+  def createTestController(data: Option[VatFlatRateModel]): TurnoverController = {
+    object TestController extends TurnoverController(mockConfig, messages, createMockStateService(), mockValidatedSession, mockForm)
 
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-  lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
+    def createMockStateService(): StateService = {
 
-  def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
+      val mockStateService = mock[StateService]
+      when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+        .thenReturn(Future.successful(data))
 
-    val mockStateService = mock[StateService]
-
-    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(data))
-
-    mockStateService
+      mockStateService
+    }
+    TestController
   }
 
 
   "Calling the .turnover action" when {
 
     "there is no model in keystore" should {
-      val noVatReturnModel = None
-
-      lazy val mockStateService = createMockStateService(noVatReturnModel)
+      val data = None
+      lazy val controller = createTestController(data)
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.turnover(request)
 
       "return 303" in {
@@ -97,11 +92,9 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
 
     "there is an annual model in keystore" should {
 
-      val annualVatReturnPeriodModel = Some(VatFlatRateModel("annually", None, None))
-
-      lazy val mockStateService = createMockStateService(annualVatReturnPeriodModel)
+      val data = Some(VatFlatRateModel("annually", None, None))
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val controller = createTestController(data)
       lazy val result = controller.turnover(request)
 
       "return 200" in {
@@ -117,10 +110,8 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
     "there is a quarterly model in keystsore" should {
 
       val data = Some(VatFlatRateModel("quarterly", None, None))
-
-      lazy val mockStateService = createMockStateService(data)
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val controller = createTestController(data)
       lazy val result = controller.turnover(request)
       "return 200" in {
         status(result) shouldBe Status.OK
@@ -134,10 +125,8 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
     "there is an incorrect model in keystore" should {
 
       val data = Some(VatFlatRateModel("wrong-model", None, None))
-
-      lazy val mockStateService = createMockStateService(data)
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val controller = createTestController(data)
       lazy val result = controller.turnover(request)
 
       "return 500" in {
@@ -157,8 +146,7 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       lazy val request = FakeRequest()
           .withSession(SessionKeys.sessionId -> s"any-old-id")
         .withFormUrlEncodedBody(("turnover", ""))
-      lazy val mockStateService = createMockStateService(data)
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val controller = createTestController(data)
       lazy val result = controller.submitTurnover(request)
 
       "return 400" in {
@@ -174,8 +162,7 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       lazy val request = FakeRequest()
         .withSession(SessionKeys.sessionId -> s"any-old-id")
         .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "10000"))
-      lazy val mockStateService = createMockStateService(data)
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val controller = createTestController(data)
       lazy val result = controller.submitTurnover(request)
 
 

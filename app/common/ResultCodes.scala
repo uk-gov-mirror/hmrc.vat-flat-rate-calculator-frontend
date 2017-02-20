@@ -16,13 +16,13 @@
 
 package common
 
-object ResultCodes extends Enumeration {
+object ResultCodes {
 
-  val one   = Value(1)
-  val two   = Value(2)
-  val three = Value(3)
-  val four  = Value(4)
-  val five  = Value(5)
-  val six   = Value(6)
+  final val ONE   = 1
+  final val TWO   = 2
+  final val THREE = 3
+  final val FOUR  = 4
+  final val FIVE  = 5
+  final val SIX   = 6
 
 }

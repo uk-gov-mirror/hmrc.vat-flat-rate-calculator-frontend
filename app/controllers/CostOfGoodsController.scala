@@ -18,6 +18,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
+import common.ResultCodes
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
@@ -81,15 +82,15 @@ class CostOfGoodsController @Inject()(config: AppConfig,
   def whichResult(model: VatFlatRateModel): Future[Int] = {
     if(model.vatReturnPeriod.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))){
       model match {
-        case VatFlatRateModel(_,_,Some(cost)) if cost <= 1000 => Future(1)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(2) //TODO what the get or else should be
-        case _ => Future(3)
+        case VatFlatRateModel(_,_,Some(cost)) if cost <= 1000 => Future(ResultCodes.ONE)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(ResultCodes.TWO) //TODO what the get or else should be
+        case _ => Future(ResultCodes.THREE)
       }
     } else {
       model match {
-        case VatFlatRateModel(_,_,Some(cost)) if cost <= 250 => Future(4)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(5) //TODO what the get or else should be
-        case _ => Future(6)
+        case VatFlatRateModel(_,_,Some(cost)) if cost <= 250 => Future(ResultCodes.FOUR)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(ResultCodes.FIVE) //TODO what the get or else should be
+        case _ => Future(ResultCodes.SIX)
       }
     }
   }

@@ -16,28 +16,39 @@
 
 package config
 
-import com.google.inject.{Inject,Singleton}
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig
 
-trait AppConfig extends ServicesConfig{
+trait AppConfig {
   val analyticsToken: String
   val analyticsHost: String
+  val contactFormServiceIdentifier: String
+  val contactFrontendPartialBaseUrl: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
+  val betaFeedbackUrl: String
+  val betaFeedbackUnauthenticatedUrl: String
 }
 
-class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig {
-
-  private val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier = "MyService"
+@Singleton
+class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig with ServicesConfig {
 
   private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-  private def constructUrl(key: String) = baseUrl(key) + configuration.getString(s"microservice.services.$key.path").getOrElse("")
 
+  private val baseUrl = "check-your-vat-flat-rate"
+
+  // Feedback Config
+  private val contactFrontendService = baseUrl("contact-frontend")
+  override lazy val contactFormServiceIdentifier = "VFR"
+  override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
+  override lazy val reportAProblemPartialUrl: String = s"$contactFrontendPartialBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  override lazy val reportAProblemNonJSUrl: String = s"$contactFrontendPartialBaseUrl/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  override lazy val betaFeedbackUrl = s"$baseUrl/feedback"
+  override lazy val betaFeedbackUnauthenticatedUrl = betaFeedbackUrl
+
+  // GA
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
-  override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+
 }
