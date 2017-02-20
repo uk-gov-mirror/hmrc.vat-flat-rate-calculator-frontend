@@ -36,10 +36,10 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
 
   private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private val baseUrl = "check-your-vat-flat-rate"
+  private lazy val baseUrl = "check-your-vat-flat-rate"
 
   // Feedback Config
-  private val contactFrontendService = baseUrl("contact-frontend")
+  private lazy val contactFrontendService = baseUrl("contact-frontend")
   override lazy val contactFormServiceIdentifier = "VFR"
   override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
   override lazy val reportAProblemPartialUrl: String = s"$contactFrontendPartialBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
