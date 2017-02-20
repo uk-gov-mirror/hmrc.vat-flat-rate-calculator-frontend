@@ -106,7 +106,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.costOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
 
       "navigate to the landing page" in {
@@ -122,7 +122,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.costOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
 
       "redirect to the landing page" in {
@@ -138,7 +138,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.costOfGoods(request)
 
       "return 200" in {
-        status(result) shouldBe 200
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the quarterly turnover page" in {
@@ -154,7 +154,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.costOfGoods(request)
 
       "return 200" in {
-        status(result) shouldBe 200
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the quarterly turnover page" in {
@@ -175,7 +175,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -189,7 +189,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -203,7 +203,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -217,7 +217,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -231,7 +231,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -245,7 +245,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 303" in {
-        status(result) shouldBe 303
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 
@@ -258,7 +258,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 400" in {
-        status(result) shouldBe 400
+        status(result) shouldBe Status.BAD_REQUEST
       }
 
     }
@@ -272,7 +272,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return 400" in {
-        status(result) shouldBe 400
+        status(result) shouldBe Status.BAD_REQUEST
       }
 
     }
@@ -286,7 +286,7 @@ class CostOfGoodsControllerSpec extends UnitSpec with MockitoSugar with OneAppPe
       lazy val result = controller.submitCostOfGoods(request)
 
       "return Internal Server Error" in {
-        status(result) shouldBe 500
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
     }
