@@ -24,5 +24,6 @@ object Links {
   val businessTaxAccount: String  = taxServiceUrl + "gg/sign-in?continue=https%3A%2F%2Fcustoms.hmrc.gov.uk%2Feprompt%2Fhttpssl%2FaddGeneralEmailAddress.do"
   val flatRateScheme: String      = baseGovUrl + "vat-flat-rate-scheme/join-or-leave-the-scheme"
   val vatRegistration: String     = baseGovUrl + "vat-registration/cancel-registration"
+  val howMuchYouPay: String       = baseGovUrl + "vat-flat-rate-scheme/how-much-you-pay"
 
 }
