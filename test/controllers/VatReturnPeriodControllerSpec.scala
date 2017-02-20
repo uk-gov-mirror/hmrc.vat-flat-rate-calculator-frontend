@@ -22,6 +22,7 @@ import akka.stream.Materializer
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import helpers.ControllerTestSpec
 import models.VatFlatRateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
@@ -42,14 +43,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 import scala.concurrent.Future
 
 
-class VatReturnPeriodControllerSpec extends UnitSpec with MockitoSugar with ScalaFutures with OneAppPerSuite{
+class VatReturnPeriodControllerSpec extends ControllerTestSpec with ScalaFutures {
 
-  val injector: Injector = app.injector
-  implicit val mat: Materializer = app.injector.instanceOf[Materializer]
-
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
   lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
 
   def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
