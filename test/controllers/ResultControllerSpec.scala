@@ -33,12 +33,12 @@ import scala.concurrent.Future
 
 class ResultControllerSpec extends ControllerTestSpec {
 
-  def createTestMethod(data: Option[ResultModel]) = {
+  def createTestController(data: Option[ResultModel]) = {
     object TestResultController extends ResultController(mockConfig, messages, createMockStateService(data:Option[ResultModel]), mockValidatedSession)
     TestResultController
   }
-  val data = None
-  object TestResultController extends ResultController(mockConfig, messages, createMockStateService(data:Option[ResultModel]), mockValidatedSession)
+
+//  object TestResultController extends ResultController(mockConfig, messages, createMockStateService(data:Option[ResultModel]), mockValidatedSession)
 
   def createMockStateService(data: Option[ResultModel]): StateService = {
 
@@ -51,11 +51,12 @@ class ResultControllerSpec extends ControllerTestSpec {
   }
 
   "Navigating to the result page without a model in keystore" should {
-
+    val data = None
+    lazy val controller = createTestController(data)
     lazy val request = FakeRequest()
       .withSession(SessionKeys.sessionId -> s"any-old-id")
 
-    lazy val result = TestResultController.result(request)
+    lazy val result = controller.result(request)
 
     "return 500" in {
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -66,21 +67,20 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
   }
 
-//  "Navigating to the result page with a model in keystore" should {
-//    val data = Some(ResultModel(VatFlatRateModel("annually", Some(2000), Some(500)), 1))
-//    lazy val request = FakeRequest()
-//      .withSession(SessionKeys.sessionId -> s"any-old-id")
-//    lazy val mockStateService = createMockStateService(data)
-//    val controller = new ResultController(mockConfig, messages, mockStateService, mockValidatedSession)
-//    lazy val result = controller.result(request)
-//
-//    "return 500" in {
-//      status(result) shouldBe Status.OK
-//    }
-//
-//    "navigate to the technical error page" in {
-//      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
-//    }
-//  }
+  "Navigating to the result page with a model in keystore" should {
+    val data = Some(ResultModel(VatFlatRateModel("annually", Some(2000), Some(500)), 1))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 500" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the technical error page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
 
 }
