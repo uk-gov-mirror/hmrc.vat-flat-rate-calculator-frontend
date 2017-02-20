@@ -16,9 +16,8 @@
 
 package config
 
-import com.google.inject.{Inject,Singleton}
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait AppConfig {

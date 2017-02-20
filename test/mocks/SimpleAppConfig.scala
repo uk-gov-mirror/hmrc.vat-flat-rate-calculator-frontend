@@ -18,7 +18,7 @@ package mocks
 
 import config.AppConfig
 
-class SimpleAppConfig extends AppConfig{
+class MockConfig extends AppConfig {
   override val analyticsToken: String = ""
   override val analyticsHost: String = ""
   override val reportAProblemNonJSUrl: String = ""

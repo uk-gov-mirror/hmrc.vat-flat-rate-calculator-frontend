@@ -18,33 +18,23 @@ package controllers
 
 import java.util.UUID
 
-import config.AppConfig
-import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import helpers.ControllerTestSpec
 import models.VatFlatRateModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
 import play.api.test.FakeRequest
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
 
-class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with MockitoSugar {
+class VatReturnPeriodControllerSpec extends ControllerTestSpec {
 
-  val injector: Injector = app.injector
-
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
   lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
+
   lazy val mockStateService: StateService = createMockStateService(mockVatReturnPeriodModel)
 
   val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", None, None))
@@ -59,13 +49,13 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
     mockStateService
   }
 
-  val controller = new VatReturnPeriodController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+object TestVatReturnPeriodController extends VatReturnPeriodController (mockConfig, messagesApi, mockStateService, mockValidatedSession, mockForm)
 
-    "Navigating to the landing page" when {
+  "Navigating to the landing page" when {
 
     "there is no sessionId" should {
       lazy val request = FakeRequest("GET", "/")
-      lazy val result = controller.vatReturnPeriod(request)
+      lazy val result = TestVatReturnPeriodController.vatReturnPeriod(request)
 
       "generate a sessionId and continue" in {
         status(result) shouldBe Status.OK
@@ -74,7 +64,7 @@ class VatReturnPeriodControllerSpec extends UnitSpec with OneAppPerSuite with Mo
     "there is a sessionId" should {
       val sessionId =  UUID.randomUUID().toString
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"sessionId-$sessionId")
-      lazy val result = controller.vatReturnPeriod(request)
+      lazy val result = TestVatReturnPeriodController.vatReturnPeriod(request)
 
       "return 200 " in {
         status(result) shouldBe Status.OK
