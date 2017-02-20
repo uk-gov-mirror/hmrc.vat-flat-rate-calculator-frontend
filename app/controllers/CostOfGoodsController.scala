@@ -73,11 +73,7 @@ class CostOfGoodsController @Inject()(config: AppConfig,
           result <- whichResult(success)
           saveResult <- stateService.saveResultModel(createResultModel(success,result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
-        } yield response //match {
-//          case Some(model) => stateService.saveVatFlatRate(model); Thread.sleep(2000)
-//            Ok(s"${whichResult(model)}") //Future.successful(Redirect(controllers.routes.ResultController.result(whichResult(model))))
-//          case _ => /*Todo handle No Model response**/Ok("")
-//        }
+        } yield response
       }
     )
   }
@@ -91,8 +87,8 @@ class CostOfGoodsController @Inject()(config: AppConfig,
       }
     } else {
       model match {
-        case VatFlatRateModel(_,Some(turnover),_) if turnover <= 250 => Future(4)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => println("\n\n" + turnover + " " + model.costOfGoods.get + "\n\n");Future(5) //TODO what the get or else should be
+        case VatFlatRateModel(_,_,Some(cost)) if cost <= 250 => Future(4)
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 >= cost => Future(5) //TODO what the get or else should be
         case _ => Future(6)
       }
     }
