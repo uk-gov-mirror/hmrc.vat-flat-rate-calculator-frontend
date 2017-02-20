@@ -24,6 +24,7 @@ techError.startAgain               = Start again
 vatReturnPeriod.title               = Enter your VAT return details
 vatReturnPeriod.heading             = How often do you do your VAT returns?
 vatReturnPeriod.para.1              = If you''re not VAT registered or you''re just getting an estimate, you can choose either option.
+vatReturnPeriod.para.2              = If you''re thinking of joining the Flat Rate scheme, select annually.
 vatReturnPeriod.option.annual       = Annually
 vatReturnPeriod.option.quarter      = Quarterly
 
@@ -56,10 +57,10 @@ result.6.heading                    = Use the VAT flat rate for your business ty
 
 result.1.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods was under £1,000.
 result.2.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.3.summary                    = Based on your answers, your costs are more than 2% of your turnover so use the VAT flat rate for your business type. You don''t need to use the new 16.5% flat rate for a limited cost business.
+result.3.summary                    = Based on your answers, your costs are more than 2% of your turnover so use the <a href = {0}>VAT flat rate for your business type.</a> You don''t need to use the new 16.5% flat rate for a limited cost business.
 result.4.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods was under £1,000.
 result.5.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.6.summary                    = Based on your answers, your costs are more than 2% of your turnover so use the VAT flat rate for your business type. You don''t need to use the new 16.5% flat rate for a limited cost business.
+result.6.summary                    = Based on your answers, your costs are more than 2% of your turnover so use the <a href = {0}>VAT flat rate for your business type.</a> You don''t need to use the new 16.5% flat rate for a limited cost business.
 
 result.para.1                       = You may need to do this calculation for every VAT period
 result.accordion.question           = Are you in your first year of VAT registration?
