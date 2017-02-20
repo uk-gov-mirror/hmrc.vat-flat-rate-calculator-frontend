@@ -35,14 +35,16 @@ turnover.para.1                     = This is the total sales of all goods and s
 ## Cost of goods page ##
 costOfGoods.title                   = Cost of goods
 costOfGoods.heading                 = Enter your cost of goods for the {0} including VAT
-costOfGoods.para.1                  = Goods are moveable items or materials exclusively used in your business. You can also include gas, electricity and water. If you''re estimating, give realistic figures.
+costOfGoods.para.1                  = Goods are moveable items or materials exclusively used in your business. You can also include gas and electricity. If you''re estimating, give realistic figures.
 costOfGoods.doNotInclude            = Don''t include:
 costOfGoods.bullet.1                = business expenses like travel, accommodation and food
 costOfGoods.bullet.2                = rent
 costOfGoods.bullet.3                = internet and phone bills
-costOfGoods.bullet.4                = services like training, memberships and subscriptions
-costOfGoods.bullet.5                = software unless it''s on a disc
-costOfGoods.bullet.6                = capital items like office equipment and machinery
+costOfGoods.bullet.4                = accountancy fees
+costOfGoods.bullet.5                = training, memberships and subscriptions
+costOfGoods.bullet.6                = software unless it''s on a disc
+costOfGoods.bullet.7                = capital items like office equipment such as laptops, mobile phones and tablets
+costOfGoods.bullet.8                = other services like solicitors or agents fees
 
 ## Result Page ##
 result.title                        = Your VAT calculation
