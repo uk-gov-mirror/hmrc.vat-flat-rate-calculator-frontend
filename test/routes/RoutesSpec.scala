@@ -24,7 +24,7 @@ class RoutesSpec extends UnitSpec with WithFakeApplication {
   val vatReturnPeriod: String = baseUrl+"/vat-return-period"
   val turnover: String = baseUrl+"/turnover"
   val costOfGoods: String = baseUrl+"/cost-of-goods"
-  val result: String = baseUrl+"/vat-flat-rate-result"
+  val result: String = baseUrl+"/result"
 
   "The route for the vatReturnPeriod action on the vatReturnPeriod controller" should {
     "be /check-your-vat-flat-rate/vat-return-period" in {

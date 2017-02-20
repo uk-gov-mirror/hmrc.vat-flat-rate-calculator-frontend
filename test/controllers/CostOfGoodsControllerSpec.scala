@@ -69,7 +69,7 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
   "Calling the .costOfGoods action" when {
 
     "there is no session ID" should {
-      val data = (mockVatReturnPeriodModel)
+      val data = mockVatReturnPeriodModel
       lazy val request = FakeRequest("GET", "/")
 
       lazy val controller = createTestController(data)

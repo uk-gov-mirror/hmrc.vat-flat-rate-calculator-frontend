@@ -33,22 +33,20 @@ import scala.concurrent.Future
 
 class ResultControllerSpec extends ControllerTestSpec {
 
-  def createTestController(data: Option[ResultModel]) = {
-    object TestResultController extends ResultController(mockConfig, messages, createMockStateService(data:Option[ResultModel]), mockValidatedSession)
+  def createTestController(data: Option[ResultModel]): ResultController = {
+    object TestResultController extends ResultController(mockConfig, messages, createMockStateService(), mockValidatedSession)
+    def createMockStateService(): StateService = {
+      val mockStateService = mock[StateService]
+
+      when(mockStateService.fetchResultModel()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+        .thenReturn(Future.successful(data))
+
+      mockStateService
+    }
     TestResultController
   }
 
-//  object TestResultController extends ResultController(mockConfig, messages, createMockStateService(data:Option[ResultModel]), mockValidatedSession)
 
-  def createMockStateService(data: Option[ResultModel]): StateService = {
-
-    val mockStateService = mock[StateService]
-
-    when(mockStateService.fetchResultModel()(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(data))
-
-    mockStateService
-  }
 
   "Navigating to the result page without a model in keystore" should {
     val data = None
