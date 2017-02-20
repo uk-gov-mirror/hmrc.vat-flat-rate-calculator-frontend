@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2017 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
-import java.util.UUID
-
-import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
-import assets.MessageLookup
+import akka.stream.Materializer
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
@@ -32,13 +44,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.http.Status
+import play.api.i18n.Messages.Implicits._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
@@ -52,9 +65,6 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
   lazy val mockForm: VatFlatRateForm = app.injector.instanceOf[VatFlatRateForm]
 
-  val mockVatReturnPeriodModel = Some(VatFlatRateModel("annual", Some(999.99), None))
-  val mockNoVatReturnPeriodModel = None
-
   def createMockStateService(data: Option[VatFlatRateModel]): StateService = {
 
     val mockStateService = mock[StateService]
@@ -64,40 +74,15 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
 
     mockStateService
   }
-//
-//  private def fixture = new {
-//    val mockMessages: MessagesApi = mock[MessagesApi]
-//    val mockConfig: AppConfig     = mock[AppConfig]
-//    val mockStateService: StateService = mock[StateService]
-//    val mockValidatedSession: ValidatedSession = mock[ValidatedSession]
-//    val mockForm: VatFlatRateForm = mock[VatFlatRateForm]
-//
-//    val controller = new TurnoverController(mockConfig, mockMessages, mockStateService, mockValidatedSession, mockForm)
-//
-//  }
+
 
   "Calling the .turnover action" when {
 
-    "there is no session ID" should {
-      lazy val mockStateService = createMockStateService(mockVatReturnPeriodModel)
-      lazy val request = FakeRequest("GET", "/")
-
-      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
-      lazy val result = controller.turnover(request)
-
-      "return 303" in {
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to the landing page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
-      }
-    }
-
     "there is no model in keystore" should {
-      lazy val mockStateService = createMockStateService(mockNoVatReturnPeriodModel)
-      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val noVatReturnModel = None
 
+      lazy val mockStateService = createMockStateService(noVatReturnModel)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
       val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
       lazy val result = controller.turnover(request)
 
@@ -110,39 +95,98 @@ class TurnoverControllerSpec extends UnitSpec with MockitoSugar with ScalaFuture
       }
     }
 
-    "for an annual vat return period" should {
+    "there is an annual model in keystore" should {
+
+      val annualVatReturnPeriodModel = Some(VatFlatRateModel("annually", None, None))
+
+      lazy val mockStateService = createMockStateService(annualVatReturnPeriodModel)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
 
       "return 200" in {
-
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the annual turnover page" in {
-
+        Jsoup.parse(bodyOf(result)).title shouldBe Messages("turnover.title")
       }
 
     }
 
-    "navigate to the turnover page or a quarterly vat return period" should {
+    "there is a quarterly model in keystsore" should {
 
+      val data = Some(VatFlatRateModel("quarterly", None, None))
+
+      lazy val mockStateService = createMockStateService(data)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
       "return 200" in {
-
+        status(result) shouldBe Status.OK
       }
 
       "navigate to the quarterly turnover page" in {
-
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
     }
-  }//end turnover action
+
+    "there is an incorrect model in keystore" should {
+
+      val data = Some(VatFlatRateModel("wrong-model", None, None))
+
+      lazy val mockStateService = createMockStateService(data)
+      lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.turnover(request)
+
+      "return 500" in {
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "show the technical error page" in {
+        Jsoup.parse(bodyOf(result)).title shouldBe Messages("techError.title")
+      }
+    }
+  }
 
   "Calling the .submitTurnover action" when {
 
-    "there is an error with the form" should {
+    "not entering any data" should {
+      val data = Some(VatFlatRateModel("annually", None, None))
+      lazy val request = FakeRequest()
+          .withSession(SessionKeys.sessionId -> s"any-old-id")
+        .withFormUrlEncodedBody(("turnover", ""))
+      lazy val mockStateService = createMockStateService(data)
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.submitTurnover(request)
 
-      "" in {
+      "return 400" in {
+        status(result) shouldBe Status.BAD_REQUEST
+      }
+      "fail with the correct error message" in {
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.required"))
+      }
+    }
 
+    "submitting a valid turnover" should {
+      val data = Some(VatFlatRateModel("annually", None, None))
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"any-old-id")
+        .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "10000"))
+      lazy val mockStateService = createMockStateService(data)
+      val controller = new TurnoverController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+      lazy val result = controller.submitTurnover(request)
+
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the cost of goods page" in {
+        redirectLocation(result) shouldBe Some(s"${routes.CostOfGoodsController.costOfGoods()}")
       }
     }
 
   }
-
 }
