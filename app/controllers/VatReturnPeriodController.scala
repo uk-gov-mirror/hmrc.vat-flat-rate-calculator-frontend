@@ -41,9 +41,10 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
 
   val vatReturnPeriod: Action[AnyContent] = Action.async { implicit request =>
 
-    if(request.session.get(SessionKeys.sessionId).isEmpty) {
+    if(request.session.get(SessionKeys.sessionId).isEmpty){
       val sessionId = UUID.randomUUID().toString
-      Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
+      Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm))
+        .withSession(request.session + (SessionKeys.sessionId -> s"session-$sessionId")))
     } else {
       for {
         vatReturnPeriod <- stateService.fetchVatFlatRate()

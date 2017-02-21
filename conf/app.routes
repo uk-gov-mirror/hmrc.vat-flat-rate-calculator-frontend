@@ -12,6 +12,8 @@ POST       /cost-of-goods             controllers.CostOfGoodsController.submitCo
 
 GET        /result                    controllers.ResultController.result
 
+GET        /timeout                   controllers.TimeoutController.timeout
+
 # Feedback Routes
 GET        /feedback                  controllers.FeedbackController.show
 POST       /feedback                  controllers.FeedbackController.submit

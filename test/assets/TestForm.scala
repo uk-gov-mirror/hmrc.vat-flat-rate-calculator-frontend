@@ -17,22 +17,19 @@
 package assets
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, text}
+import play.api.data.Forms.{bigDecimal, mapping, optional}
+import utils.Validation.{isLessThanMaximumTurnover, isPositive, isTwoDecimalPlaces}
 
 object TestForm {
 
-  private val bindingError: TestModel => Boolean = model => model.anotherField == ""
 
   val nonEmptyCheck: String => Boolean = input => !input.isEmpty
 
   val testForm = Form(
     mapping (
-      "response" -> text
-        .verifying(MessageLookup.Error.dummyError, nonEmptyCheck),
-      "anotherField" -> text
+      "turnover" -> optional(bigDecimal.verifying(isLessThanMaximumTurnover, isPositive, isTwoDecimalPlaces)).verifying("error.required", _.isDefined)
     )(TestModel.apply)(TestModel.unapply)
-      .verifying(MessageLookup.Error.dummyError, model => bindingError(model))
   )
 }
 
-case class TestModel(response: String, anotherField: String)
+case class TestModel(data: Option[BigDecimal])

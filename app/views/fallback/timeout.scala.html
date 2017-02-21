@@ -1,0 +1,9 @@
+@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
+
+@views.html.main_template(title = Messages("timeout.title"), bodyClasses = None, appConfig = appConfig) {
+
+<h1 class="heading-large">@Messages("timeout.heading")</h1>
+
+<p>@Html(Messages("timeout.para.1", controllers.routes.VatReturnPeriodController.vatReturnPeriod()))</p>
+
+}
