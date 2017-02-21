@@ -2,8 +2,8 @@
 
 @views.html.main_template(title = Messages("timeout.title"), bodyClasses = None, appConfig = appConfig) {
 
-<h1 class="heading-large">@Messages("timeout.message")</h1>
+<h1 class="heading-large">@Messages("timeout.heading")</h1>
 
-<a id="startAgain" href="@controllers.routes.VatReturnPeriodController.vatReturnPeriod">@Messages("common.startAgain")</a>
+<p>@Html(Messages("timeout.para.1", controllers.routes.VatReturnPeriodController.vatReturnPeriod()))</p>
 
 }

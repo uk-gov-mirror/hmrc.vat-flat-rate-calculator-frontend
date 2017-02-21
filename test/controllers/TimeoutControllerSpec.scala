@@ -25,7 +25,7 @@ class TimeoutControllerSpec extends ControllerTestSpec {
 
   "Calling the .timeout action" should {
     lazy val request = FakeRequest("GET", "/")
-    lazy val controller = new TimeoutController(mockConfig, messages, mockStateService, mockValidatedSession, mockForm)
+    lazy val controller = new TimeoutController(mockConfig, messages, mockStateService, mockValidatedSession)
     lazy val result = controller.timeout(request)
 
     "return 200" in {

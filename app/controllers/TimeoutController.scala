@@ -16,11 +16,9 @@
 
 package controllers
 
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
-import forms.VatFlatRateForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
@@ -29,11 +27,11 @@ import views.html.fallback
 
 import scala.concurrent.Future
 
+@Singleton
 class TimeoutController @Inject()(config: AppConfig,
                                   val messagesApi: MessagesApi,
                                   stateService: StateService,
-                                  session: ValidatedSession,
-                                  forms: VatFlatRateForm) extends FrontendController with I18nSupport {
+                                  session: ValidatedSession) extends FrontendController with I18nSupport {
 
   val timeout: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(fallback.timeout(config)))

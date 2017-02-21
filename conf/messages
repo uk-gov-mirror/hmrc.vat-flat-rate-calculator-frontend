@@ -20,6 +20,11 @@ techError.title                    = Technical Error
 techError.heading                  = Sorry, there''s been a problem
 techError.para.1                   = You''ll need to start your calculation again.
 
+## Timeout ##
+timeout.title                      = Session closed due to inactivity
+timeout.heading                    = Your session has timed out
+timeout.para.1                     = You can <a href={0}>click here</a> to start again.
+
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
 vatReturnPeriod.heading             = How often do you do your VAT returns?
