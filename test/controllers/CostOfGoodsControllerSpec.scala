@@ -61,11 +61,11 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
   val mockQuarterly1000NoneModel = Some(VatFlatRateModel("Quarterly", Some(1000.00), None))
 
   val mockAnnuallyLessThan1000Model = Some(VatFlatRateModel("Annually", Some(50000.00), Some(500.00)))
-  val mockAnnuallyLessThan2PercentModel = Some(VatFlatRateModel("Annually", Some(50050.00), Some(1001.00)))
+  val mockAnnuallyLessThan2PercentModel = Some(VatFlatRateModel("Annually", Some(500000.00), Some(1001.00)))
   val mockAnnuallyBaseModel = Some(VatFlatRateModel("Annually", Some(50049.00), Some(1001.00)))
 
   val mockQuarterlyLessThan250Model = Some(VatFlatRateModel("Quarterly", Some(10000.00), Some(125.00)))
-  val mockQuarterlyLessThan2PercentModel = Some(VatFlatRateModel("Quarterly", Some(12550.00), Some(251.00)))
+  val mockQuarterlyLessThan2PercentModel = Some(VatFlatRateModel("Quarterly", Some(100000.00), Some(250.00)))
   val mockQuarterlyBaseModel = Some(VatFlatRateModel("Quarterly", Some(12249.00), Some(251.00)))
 
   
@@ -156,10 +156,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
       }
     }
 
-    "submitting with a correct model for annual, cost>1000, cost<=0.02t" should {
+    "submitting with a correct model for annual, cost>=1000, cost<0.02t" should {
       val data = mockAnnuallyLessThan2PercentModel
       lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id").withFormUrlEncodedBody(("vatReturnPeriod", "Annually"),
-        ("turnover", "50050.00"),
+        ("turnover", "500000.00"),
         ("costOfGoods", "1001.00"))
 
       lazy val controller = createTestController(data)
@@ -210,11 +210,11 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
       }
     }
 
-    "submitting with a correct model for quarterly, cost>250, cost<=0.02t" should {
+    "submitting with a correct model for quarterly, cost>250, cost<0.02t" should {
       val data = mockQuarterlyLessThan2PercentModel
       lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id").withFormUrlEncodedBody(("vatReturnPeriod", "Quarterly"),
-        ("turnover", "12550.00"),
-        ("costOfGoods", "251.00"))
+        ("turnover", "100000.00"),
+        ("costOfGoods", "250.00"))
 
       lazy val controller = createTestController(data)
       lazy val result = controller.submitCostOfGoods(request)
