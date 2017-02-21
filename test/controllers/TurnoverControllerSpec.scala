@@ -174,6 +174,6 @@ class TurnoverControllerSpec extends ControllerTestSpec {
         redirectLocation(result) shouldBe Some(s"${routes.CostOfGoodsController.costOfGoods()}")
       }
     }
-
+    
   }
 }

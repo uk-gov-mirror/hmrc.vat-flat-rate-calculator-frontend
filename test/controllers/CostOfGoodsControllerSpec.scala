@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.ResultCodes
 import helpers.ControllerTestSpec
 import models.VatFlatRateModel
 import org.jsoup.Jsoup
@@ -27,9 +28,11 @@ import play.api.test.Helpers._
 import services.StateService
 import uk.gov.hmrc.play.http.SessionKeys
 
+import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Future
 
-class CostOfGoodsControllerSpec extends ControllerTestSpec {
+class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
 
   def createTestController(data: Option[VatFlatRateModel]) = {
 
@@ -147,6 +150,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
       }
+
+      "return result code 1" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.ONE)}
+      }
     }
 
     "submitting with a correct model for annual, cost>1000, cost<=0.02t" should {
@@ -160,6 +167,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
 
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "return result code 2" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.TWO)}
       }
     }
 
@@ -175,6 +186,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
       }
+
+      "return result code 3" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.THREE)}
+      }
     }
 
     "submitting with a correct model for quarterly, cost<=250, cost>0.02t" should {
@@ -188,6 +203,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
 
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "return result code 4" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.FOUR)}
       }
     }
 
@@ -203,6 +222,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
       }
+
+      "return result code 5" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.FIVE)}
+      }
     }
 
     "submitting with a correct model for quarterly, cost>250, cost>0.02t" should {
@@ -216,6 +239,10 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec {
 
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "return result code 6" in {
+        whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.SIX)}
       }
     }
 
