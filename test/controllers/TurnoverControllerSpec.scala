@@ -175,5 +175,47 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
     }
 
+    "trying to submit too many decimal places" should {
+      val data = Some(VatFlatRateModel("annually", Some(1.001), None))
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"some-id")
+        .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "1.001"))
+      lazy val controller = createTestController(data)
+      lazy val result = controller.submitTurnover(request)
+
+      "return a too many decimal places error" in {
+        status(result) shouldBe Status.BAD_REQUEST
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.twoDecimalPlaces"))
+      }
+    }
+
+    "trying to submit a negative amount" should {
+      val data = Some(VatFlatRateModel("annually", Some(-1.00), None))
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"some-id")
+        .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "-1.00"))
+      lazy val controller = createTestController(data)
+      lazy val result = controller.submitTurnover(request)
+
+      "return a below zero error" in {
+        status(result) shouldBe Status.BAD_REQUEST
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.negative"))
+      }
+    }
+
+    "trying to submit an amount above the maximum" should {
+      val data = Some(VatFlatRateModel("annually", Some(10000000000.00), None))
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"some-id")
+        .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "10000000000.00"))
+      lazy val controller = createTestController(data)
+      lazy val result = controller.submitTurnover(request)
+
+      "return a greater than maximum error" in {
+        status(result) shouldBe Status.BAD_REQUEST
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.moreThanMaximumTurnover"))
+      }
+    }
+
   }
 }
