@@ -55,10 +55,7 @@ class ValidatedSession @Inject()(config: AppConfig,
   def async(action: AsyncRequest): Action[AnyContent] = {
     Action.async { implicit request =>
       if(request.session.get(SessionKeys.sessionId).isEmpty) {
-
-        val sessionId = UUID.randomUUID().toString
-        Future.successful(Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod()))
-//        Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
+        Future.successful(Redirect(controllers.routes.TimeoutController.timeout()))
       } else {
        action(request)
       }

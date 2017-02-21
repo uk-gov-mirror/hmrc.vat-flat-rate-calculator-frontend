@@ -3,9 +3,10 @@ base.service.title     = Check your VAT flat rate
 base.errorSummary      = There are errors on this page
 
 ##  COMMON  ##
-common.continue = Continue
+common.continue                   = Continue
 common.year                       = year
 common.quarter                    = quarter
+common.startAgain               = Start again
 
 ## Errors ##
 error.required                     = This field is required
@@ -18,7 +19,6 @@ error.moreThanMaximumTurnover      = Enter an amount less than £9,999,999,999.9
 techError.title                    = Technical Error
 techError.heading                  = Sorry, there''s been a problem
 techError.para.1                   = You''ll need to start your calculation again.
-techError.startAgain               = Start again
 
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
