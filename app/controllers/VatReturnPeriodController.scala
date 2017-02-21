@@ -41,10 +41,14 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
 
   val vatReturnPeriod: Action[AnyContent] = Action.async { implicit request =>
 
-    if(request.session.get(SessionKeys.sessionId).isEmpty) {
+    println(s"\n\n\nGET\n${request.session.data}\n\n\n\n")
+
+    if(request.session.get(SessionKeys.sessionId).isEmpty){
+      println(s"\n\nNO SESSION KEY\n\n")
       val sessionId = UUID.randomUUID().toString
       Future.successful(Ok(views.vatReturnPeriod(config, forms.vatReturnPeriodForm)).withSession(SessionKeys.sessionId -> s"session-$sessionId"))
     } else {
+      println(s"\n\nSESSION ID\n\n")
       for {
         vatReturnPeriod <- stateService.fetchVatFlatRate()
       } yield vatReturnPeriod match {
@@ -55,6 +59,8 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
   }
 
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
+
+    println(s"\n\nMADE IT TO POST\n${request.session.data}\n\n")
 
     forms.vatReturnPeriodForm.bindFromRequest.fold(
       errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),

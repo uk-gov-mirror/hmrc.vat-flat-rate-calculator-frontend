@@ -49,14 +49,19 @@ class ValidatedSession @Inject()(config: AppConfig,
                                  val messagesApi: MessagesApi,
                                  forms: VatFlatRateForm) extends FrontendController with I18nSupport{
 
+
+  println(s"\n\n;ALLKJDHFKASDGHFKKJSZDHFA\n\n")
+
   private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]
 
   def async(action: AsyncRequest): Action[AnyContent] = {
     Action.async { implicit request =>
       if(request.session.get(SessionKeys.sessionId).isEmpty) {
+        println(s"\n\nTIMEOUT ROUTE\n\n\n")
         Future.successful(Redirect(controllers.routes.TimeoutController.timeout()))
       } else {
+        println(s"\n\n\nVALID session: ${request.session.get(SessionKeys.sessionId)}\n\n\n")
        action(request)
       }
     }
