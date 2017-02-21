@@ -24,6 +24,7 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
+import services.StateService
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
@@ -34,6 +35,7 @@ trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite 
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
+  lazy val mockStateService: StateService = injector.instanceOf[StateService]
   lazy val mockForm: VatFlatRateForm = injector.instanceOf[VatFlatRateForm]
 
 }

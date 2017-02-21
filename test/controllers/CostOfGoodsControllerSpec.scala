@@ -82,8 +82,8 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      "navigate to the landing page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
+      "navigate to the timeout page" in {
+        redirectLocation(result) shouldBe Some(s"${routes.TimeoutController.timeout()}")
       }
     }
 
