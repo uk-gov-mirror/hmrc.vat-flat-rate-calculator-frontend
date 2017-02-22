@@ -22,6 +22,7 @@ import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import models.VatFlatRateModel
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -63,7 +64,12 @@ class TurnoverController @Inject()(config: AppConfig,
         model.vatReturnPeriod match {
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), Messages("common.year")))
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), Messages("common.quarter")))
-          case _ => InternalServerError(errors.technicalError(config))
+          case _ =>
+            Logger.warn(
+              s"""Incorrect value found for Vat Return Period;
+                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}]""".stripMargin
+            )
+            InternalServerError(errors.technicalError(config))
         }
       case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }

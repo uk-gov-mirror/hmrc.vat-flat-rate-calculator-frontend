@@ -23,11 +23,12 @@ import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import models.{ResultModel, VatFlatRateModel}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{home => views, errors => errs}
+import views.html.{errors => errs, home => views}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -58,19 +59,22 @@ class CostOfGoodsController @Inject()(config: AppConfig,
         for {
           vfrModel <- stateService.fetchVatFlatRate()
         } yield vfrModel match {
-          case Some(model) =>
+          case Some(model)  =>
             model.vatReturnPeriod match {
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("common.year")))
               case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("common.quarter")))
             }
-          case _ => InternalServerError(errs.technicalError(config))
+          case _ =>
+            Logger.warn("No VatFlatRateModel found in Keystore")
+            InternalServerError(errs.technicalError(config))
+
         }
       },
       success => {
         for {
-          saveToKeyStore <- stateService.saveVatFlatRate(success)
+          _ <- stateService.saveVatFlatRate(success)
           result <- whichResult(success)
-          saveResult <- stateService.saveResultModel(createResultModel(success,result))
+          _ <- stateService.saveResultModel(createResultModel(success,result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
         } yield response
       }

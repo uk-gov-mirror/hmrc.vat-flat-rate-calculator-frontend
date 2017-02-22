@@ -21,11 +21,12 @@ import javax.inject.Inject
 import common.ResultCodes
 import config.AppConfig
 import controllers.predicates.ValidatedSession
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{home => views, errors}
+import views.html.{errors, home => views}
 
 class ResultController @Inject()(config: AppConfig,
                                 val messagesApi: MessagesApi,
@@ -36,7 +37,9 @@ class ResultController @Inject()(config: AppConfig,
 
     stateService.fetchResultModel.map {
       case Some(model)  => Ok(views.result(config, model.result))
-      case None         => InternalServerError(errors.technicalError(config))
+      case None         =>
+        Logger.warn("ResultModel could not be retrieved from Keystore")
+        InternalServerError(errors.technicalError(config))
     }
   }
 }
