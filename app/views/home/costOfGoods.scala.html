@@ -29,19 +29,22 @@ Messages("base.errorSummary"), costOfGoodsForm
 
 @form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
 
-    <div class="form-group">
-        @moneyInputFormat(
-        costOfGoodsForm("costOfGoods"),
-        '_legend -> Messages("costOfGoods.title")
-        )
+        <div class="form-group">
+            <fieldset>
+            @moneyInputFormat(
+            costOfGoodsForm("costOfGoods"),
+            '_legend -> Messages("costOfGoods.heading", costOfGoodsPeriodString)
+            )
+            </fieldset>
+        </div>
+
+
+    <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
+
+    <div class="form-hidden">
+        @helper.inputText(costOfGoodsForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "visually-hidden")
+        @helper.inputText(costOfGoodsForm("turnover"), 'type -> "hidden", 'class -> "visually-hidden")
     </div>
-
-<button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
-
-<div class="form-hidden">
-    @helper.inputText(costOfGoodsForm("vatReturnPeriod"), 'type -> "hidden", 'class -> "visually-hidden")
-    @helper.inputText(costOfGoodsForm("turnover"), 'type -> "hidden", 'class -> "visually-hidden")
-</div>
 }
 
 }
