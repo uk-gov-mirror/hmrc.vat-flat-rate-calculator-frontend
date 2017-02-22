@@ -59,22 +59,28 @@ class TurnoverController @Inject()(config: AppConfig,
 
   def routeRequest(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
     for {
-      vatReturnPeriod <- stateService.fetchVatFlatRate()
-    } yield vatReturnPeriod match {
+      vfrModel <- stateService.fetchVatFlatRate()
+    } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), Messages("common.year")))
           case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), Messages("common.quarter")))
           case _ =>
             Logger.warn(
-              s"""Incorrect value found for Vat Return Period;
-                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}]""".stripMargin
+              s"""Incorrect value found for Vat Return Period:
+                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
             )
             InternalServerError(errors.technicalError(config))
         }
       case _ =>
-        Logger.warn("No model found in Keystore; redirecting back to landing page")
-        Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+        res match {
+          case Ok =>
+            Logger.warn("No model found in Keystore; redirecting back to landing page")
+            Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+          case BadRequest =>
+            Logger.warn("No VatFlatRate model found in Keystore")
+            InternalServerError(errors.technicalError(config))
+        }
     }
   }
 
