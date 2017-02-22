@@ -47,7 +47,8 @@ class TurnoverController @Inject()(config: AppConfig,
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
   forms.turnoverForm.bindFromRequest.fold(
       errors => {
-            routeRequest(BadRequest, errors)
+        Logger.warn("Turnover form could not be bound")
+        routeRequest(BadRequest, errors)
       },
       success => {
         stateService.saveVatFlatRate(success)
@@ -71,7 +72,9 @@ class TurnoverController @Inject()(config: AppConfig,
             )
             InternalServerError(errors.technicalError(config))
         }
-      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+      case _ =>
+        Logger.warn("No model found in Keystore; redirecting back to landing page")
+        Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 

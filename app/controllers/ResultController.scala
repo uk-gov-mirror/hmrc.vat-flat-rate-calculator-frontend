@@ -18,7 +18,6 @@ package controllers
 
 import javax.inject.Inject
 
-import common.ResultCodes
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import play.api.Logger

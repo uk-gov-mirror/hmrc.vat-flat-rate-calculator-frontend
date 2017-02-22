@@ -30,8 +30,8 @@ import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{errors => errs, home => views}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class CostOfGoodsController @Inject()(config: AppConfig,
@@ -49,7 +49,9 @@ class CostOfGoodsController @Inject()(config: AppConfig,
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.year")))
           case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.quarter")))
         }
-      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+      case _ =>
+        Logger.warn("No model found in Keystore; redirecting back to landing page")
+        Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
