@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.StateService
@@ -58,7 +59,10 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
 
     forms.vatReturnPeriodForm.bindFromRequest.fold(
-      errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
+      errors => {
+        Logger.warn("VatReturnPeriod form could not be bound")
+        Future.successful(BadRequest(views.vatReturnPeriod(config, errors)))
+      },
       success => {
         stateService.saveVatFlatRate(success)
         Future.successful(Redirect(controllers.routes.TurnoverController.turnover()))
