@@ -21,6 +21,7 @@ Messages("base.errorSummary"), turnoverForm
         <fieldset>
         @moneyInputFormat(
         turnoverForm("turnover"),
+        '_type -> "number",
         '_legend -> Messages("turnover.heading", turnoverPeriodString),
         '_legendClass -> "visually-hidden"
         )
