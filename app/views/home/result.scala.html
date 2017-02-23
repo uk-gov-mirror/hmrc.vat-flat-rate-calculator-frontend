@@ -7,6 +7,10 @@
 
 @main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig) {
 
+    <!-- Hidden heading to comply with DAC standards -->
+    <h1 class="visually-hidden">
+        @Messages("result.title")
+    </h1>
 
     <div class="transaction-banner--complete">
         <span class="heading-large" id="resultOutcome">@Messages(s"result.${resultCode}.heading")</span>
