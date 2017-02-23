@@ -65,18 +65,98 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
   }
 
-  "Navigating to the result page with a model in keystore" should {
+  "Navigating to the result page with a model in keystore, resultCode 1" should {
     val data = Some(ResultModel(VatFlatRateModel("annually", Some(2000), Some(500)), 1))
     lazy val request = FakeRequest()
       .withSession(SessionKeys.sessionId -> s"any-old-id")
     lazy val controller = createTestController(data)
     lazy val result = controller.result(request)
 
-    "return 500" in {
+    "return 200" in {
       status(result) shouldBe Status.OK
     }
 
-    "navigate to the technical error page" in {
+    "navigate to the result page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
+
+  "Navigating to the result page with a model in keystore, resultCode 2" should {
+    val data = Some(ResultModel(VatFlatRateModel("annually", Some(50001), Some(1000)), 2))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the result page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
+
+  "Navigating to the result page with a model in keystore, resultCode 3" should {
+    val data = Some(ResultModel(VatFlatRateModel("annually", Some(5000), Some(1000)), 3))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the result page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
+
+  "Navigating to the result page with a model in keystore, resultCode 4" should {
+    val data = Some(ResultModel(VatFlatRateModel("quarterly", Some(2000), Some(100)), 4))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the result page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
+
+  "Navigating to the result page with a model in keystore, resultCode 5" should {
+    val data = Some(ResultModel(VatFlatRateModel("quarterly", Some(12501), Some(250)), 5))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the result page" in {
+      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+    }
+  }
+
+  "Navigating to the result page with a model in keystore, resultCode 6" should {
+    val data = Some(ResultModel(VatFlatRateModel("quarterly", Some(12500), Some(250)), 6))
+    lazy val request = FakeRequest()
+      .withSession(SessionKeys.sessionId -> s"any-old-id")
+    lazy val controller = createTestController(data)
+    lazy val result = controller.result(request)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "navigate to the result page" in {
       Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
     }
   }

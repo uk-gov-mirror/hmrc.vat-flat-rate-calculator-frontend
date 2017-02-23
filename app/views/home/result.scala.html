@@ -12,6 +12,10 @@
 
 @main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
 
+    <!-- Hidden heading to comply with DAC standards -->
+    <h1 class="visually-hidden">
+        @Messages("result.title")
+    </h1>
 
     <div class="transaction-banner--complete">
         <span dataMetrics = "@gaData(0):@gaData(1):@gaData(2)"></span>

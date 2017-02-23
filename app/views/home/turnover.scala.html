@@ -18,11 +18,13 @@ Messages("base.errorSummary"), turnoverForm
 @form(action = controllers.routes.TurnoverController.submitTurnover) {
 
     <div class="form-group">
+        <fieldset>
         @moneyInputFormat(
         turnoverForm("turnover"),
-        '_legend -> Messages("turnover.heading"),
+        '_legend -> Messages("turnover.heading", turnoverPeriodString),
         '_legendClass -> "visually-hidden"
         )
+        </fieldset>
     </div>
 
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>

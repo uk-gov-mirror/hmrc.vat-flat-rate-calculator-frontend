@@ -23,14 +23,17 @@ import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import models.{ResultModel, VatFlatRateModel}
+import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{home => views, errors => errs}
+import uk.gov.hmrc.play.http.HeaderCarrier
+import views.html.{errors => errs, home => views}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class CostOfGoodsController @Inject()(config: AppConfig,
@@ -40,41 +43,51 @@ class CostOfGoodsController @Inject()(config: AppConfig,
                                    forms: VatFlatRateForm) extends FrontendController with I18nSupport{
 
   val costOfGoods: Action[AnyContent] = session.async{ implicit request =>
-    for {
-      vfrModel <- stateService.fetchVatFlatRate()
-    } yield vfrModel match {
-      case Some(model) =>
-        model.vatReturnPeriod match {
-          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.year")))
-          case s if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter")) => Ok(views.costOfGoods(config, forms.costOfGoodsForm.fill(model), Messages("common.quarter")))
-        }
-      case _ => Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
-    }
+    routeRequest(Ok, forms.costOfGoodsForm)
   }
 
   val submitCostOfGoods: Action[AnyContent] = session.async { implicit request =>
     forms.costOfGoodsForm.bindFromRequest.fold(
       errors => {
-        for {
-          vfrModel <- stateService.fetchVatFlatRate()
-        } yield vfrModel match {
-          case Some(model) =>
-            model.vatReturnPeriod match {
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => BadRequest(views.costOfGoods(config, errors, Messages("common.year")))
-              case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => BadRequest(views.costOfGoods(config, errors, Messages("common.quarter")))
-            }
-          case _ => InternalServerError(errs.technicalError(config))
-        }
+        Logger.warn("Cost of Goods form could not be bound")
+        routeRequest(BadRequest, errors)
       },
       success => {
         for {
-          saveToKeyStore <- stateService.saveVatFlatRate(success)
+          saveModel <- stateService.saveVatFlatRate(success)
           result <- whichResult(success)
           saveResult <- stateService.saveResultModel(createResultModel(success,result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
         } yield response
       }
     )
+  }
+
+  def routeRequest(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    for {
+      vfrModel <- stateService.fetchVatFlatRate()
+    } yield vfrModel match {
+      case Some(model) =>
+        model.vatReturnPeriod match {
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.costOfGoods(config, form.fill(model), Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.costOfGoods(config, form.fill(model), Messages("common.quarter")))
+          case _ =>
+            Logger.warn(
+              s"""Incorrect value found for Vat Return Period:
+                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
+            )
+            InternalServerError(errs.technicalError(config))
+        }
+      case _ =>
+        res match {
+          case Ok =>
+            Logger.warn("No model found in Keystore; redirecting back to landing page")
+            Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
+          case BadRequest =>
+            Logger.warn("No VatFlatRate model found in Keystore")
+            InternalServerError(errs.technicalError(config))
+        }
+    }
   }
 
   def whichResult(model: VatFlatRateModel): Future[Int] = {

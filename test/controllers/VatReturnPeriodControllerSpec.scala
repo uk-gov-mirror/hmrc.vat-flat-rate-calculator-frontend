@@ -111,7 +111,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
         status(result) shouldBe Status.BAD_REQUEST
       }
       "fail with the correct error message" in {
-        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(Messages("error.required"))
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(Messages("error.vatReturnPeriod.required"))
       }
     }
 

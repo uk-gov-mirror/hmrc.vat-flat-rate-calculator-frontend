@@ -22,7 +22,9 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.Logger
+import play.api.data.FormError
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
 import services.StateService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -58,7 +60,13 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
   val submitVatReturnPeriod: Action[AnyContent] = session.async{ implicit request =>
 
     forms.vatReturnPeriodForm.bindFromRequest.fold(
-      errors =>  Future.successful(BadRequest(views.vatReturnPeriod(config, errors))),
+      errors => {
+        Logger.warn("VatReturnPeriod form could not be bound")
+        val formWithErrors = errors.copy(errors = errors.errors.map {
+          errs => FormError(errs.key, if (errs.message.contains("error.required")) Messages("error.vatReturnPeriod.required") else errs.message)
+        })
+        Future.successful(BadRequest(views.vatReturnPeriod(config, formWithErrors)))
+      },
       success => {
         stateService.saveVatFlatRate(success)
         Future.successful(Redirect(controllers.routes.TurnoverController.turnover()))

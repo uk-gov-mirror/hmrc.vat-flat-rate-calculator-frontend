@@ -16,11 +16,11 @@
 
 package controllers.predicates
 
-import java.util.UUID
 import javax.inject.Inject
 
 import config.AppConfig
 import forms.VatFlatRateForm
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -39,6 +39,7 @@ class ValidatedSession @Inject()(config: AppConfig,
   def async(action: AsyncRequest): Action[AnyContent] = {
     Action.async { implicit request =>
       if(request.session.get(SessionKeys.sessionId).isEmpty) {
+        Logger.warn("No session ID found; timing out")
         Future.successful(Redirect(controllers.routes.TimeoutController.timeout()))
       } else {
        action(request)
