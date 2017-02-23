@@ -11,6 +11,9 @@ common.startAgain               = Start again
 
 ## Errors ##
 error.required                     = This field is required
+error.vatReturnPeriod.required     = Select a VAT return period
+error.turnover.required            = Enter an amount for turnover
+error.costOfGoods.required         = Enter an amount for costs
 error.real                         = Enter a number without commas, for example 10000.00
 error.twoDecimalPlaces             = The amount you''ve entered has too many decimal places
 error.negative                     = Enter an amount that''s £0 or more
