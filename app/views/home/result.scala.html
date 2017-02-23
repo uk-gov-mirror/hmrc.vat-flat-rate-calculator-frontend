@@ -2,13 +2,19 @@
 @import views.html.helpers._
 @import common.Links
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+@import controllers.ResultController
 
-@(appConfig: config.AppConfig, resultCode: Int)(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, resultCode: Int, gaData: Array[String])(implicit request: Request[_], messages: Messages)
 
-@main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig) {
+@scriptElement = {
+<script type="text/javascript" src='@controllers.routes.Assets.at("javascripts/vfr.js")'></script>
+}
+
+@main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
 
 
     <div class="transaction-banner--complete">
+        <span dataMetrics = "@gaData(0):@gaData(1):@gaData(2)"></span>
         <span class="heading-large" id="resultOutcome">@Messages(s"result.${resultCode}.heading")</span>
     </div>
 
@@ -30,17 +36,5 @@
         <p>@Html(Messages("result.para.4", Links.flatRateScheme))</p>
         <p>@Html(Messages("result.para.5", Links.vatRegistration))</p>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
