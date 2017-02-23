@@ -35,10 +35,21 @@ class ResultController @Inject()(config: AppConfig,
   val result: Action[AnyContent] = session.async { implicit request =>
 
     stateService.fetchResultModel.map {
-      case Some(model)  => Ok(views.result(config, model.result))
+      case Some(model)  => Ok(views.result(config, model.result, recordToGA(model.result)))
       case None         =>
         Logger.warn("ResultModel could not be retrieved from Keystore")
         InternalServerError(errors.technicalError(config))
+    }
+  }
+
+  def recordToGA(resultCode: Int): Array[String] = { // PASS THIS THROUGH IN PARAMETER OF VIEW
+    resultCode match {
+      case 1 => Array("Annual","use16.5%","under1000")
+      case 2 => Array("Annual","use16.5%","costs<2%")
+      case 3 => Array("Annual","useBFR","qualifyForBFR")
+      case 4 => Array("Quarter","use16.5%","under1000")
+      case 5 => Array("Quarter","use16.5%","costs<2%")
+      case 6 => Array("Quarter","useBFR","qualifyForBFR")
     }
   }
 }
