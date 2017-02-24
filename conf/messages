@@ -32,7 +32,7 @@ timeout.para.1                     = You can <a href={0}>click here</a> to start
 ## VAT return period page ##
 vatReturnPeriod.title               = Enter your VAT return details
 vatReturnPeriod.heading             = How often do you do your VAT returns?
-vatReturnPeriod.para.1              = If you''re not VAT registered or you''re just getting an estimate, you can choose either option.
+vatReturnPeriod.para.1              = If you''re using the Flat Rate Scheme, select the period that matches your VAT return.
 vatReturnPeriod.para.2              = If you''re thinking of joining the Flat Rate Scheme, select annually.
 vatReturnPeriod.option.annual       = Annually
 vatReturnPeriod.option.quarter      = Quarterly
@@ -47,14 +47,16 @@ costOfGoods.title                   = Cost of goods
 costOfGoods.heading                 = Enter your cost of goods for the {0} including VAT
 costOfGoods.para.1                  = Goods are moveable items or materials exclusively used in your business. You can also include gas and electricity. If you''re estimating, give realistic figures.
 costOfGoods.doNotInclude            = Don''t include:
-costOfGoods.bullet.1                = business expenses like travel, accommodation and food
-costOfGoods.bullet.2                = rent
-costOfGoods.bullet.3                = internet and phone bills
-costOfGoods.bullet.4                = accountancy fees
-costOfGoods.bullet.5                = training, memberships and subscriptions
-costOfGoods.bullet.6                = software unless it''s on a disc
-costOfGoods.bullet.7                = capital items like office equipment such as laptops, mobile phones and tablets
-costOfGoods.bullet.8                = other services like solicitors or agents fees
+costOfGoods.bullet.1                = any services - which is anything that isn't goods
+costOfGoods.bullet.2                = expenses like travel and accommodation
+costOfGoods.bullet.3                = food and drink eaten by yourself or your staff
+costOfGoods.bullet.4                = vehicle costs including fuel unless you're in the transport business using your own, or a leased vehicle
+costOfGoods.bullet.5                = rent, internet, phone bills and accountancy fees
+costOfGoods.bullet.6                = gifts, promotional items and donations
+costOfGoods.bullet.7                = goods you will resell or hire out unless this is your main business activity
+costOfGoods.bullet.8                = training and memberships
+costOfGoods.bullet.9                = capital items for example office equipment, laptops, mobile phones and tablets
+costOfGoods.para.2                  = You can find out more about the <a href={0}>VAT Flat Rate Scheme</a> including examples of goods, services and how often to use this tool.
 
 ## Result Page ##
 result.title                        = Your VAT calculation

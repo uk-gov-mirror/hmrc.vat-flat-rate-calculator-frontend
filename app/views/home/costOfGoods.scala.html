@@ -1,6 +1,7 @@
 @import views.html.main_template
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import common.Links
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
 @(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages)
@@ -25,7 +26,10 @@ Messages("base.errorSummary"), costOfGoodsForm
     <li>@messages("costOfGoods.bullet.6")</li>
     <li>@messages("costOfGoods.bullet.7")</li>
     <li>@messages("costOfGoods.bullet.8")</li>
+    <li>@messages("costOfGoods.bullet.9")</li>
 </ul>
+
+<p>@Html(messages("costOfGoods.para.2", Links.capitalExpenditureGoods))</p>
 
 @form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
 
