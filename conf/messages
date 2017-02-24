@@ -50,13 +50,13 @@ costOfGoods.doNotInclude            = Don''t include:
 costOfGoods.bullet.1                = any services - which is anything that isn't goods
 costOfGoods.bullet.2                = expenses like travel and accommodation
 costOfGoods.bullet.3                = food and drink eaten by yourself or your staff
-costOfGoods.bullet.4                = vehicle costs including fuel unless you're in the transport business using your own, or a leased vehicle
+costOfGoods.bullet.4                = vehicle costs including fuel unless you''re in the transport business using your own, or a leased vehicle
 costOfGoods.bullet.5                = rent, internet, phone bills and accountancy fees
 costOfGoods.bullet.6                = gifts, promotional items and donations
 costOfGoods.bullet.7                = goods you will resell or hire out unless this is your main business activity
 costOfGoods.bullet.8                = training and memberships
 costOfGoods.bullet.9                = capital items for example office equipment, laptops, mobile phones and tablets
-costOfGoods.para.2                  = You can find out more about the <a href={0}>VAT Flat Rate Scheme</a> including examples of goods, services and how often to use this tool.
+costOfGoods.para.2                  = You can find out more about the <a href={0} rel="external" target="_blank">VAT Flat Rate Scheme (opens in a new window)</a> including examples of goods, services and how often to use this tool.
 
 ## Result Page ##
 result.title                        = Your VAT calculation
