@@ -13,8 +13,9 @@ Messages("base.errorSummary"), costOfGoodsForm
 )
 <h1>@messages("costOfGoods.heading", costOfGoodsPeriodString)</h1>
 
-<p>@messages("costOfGoods.para.1")</p>
-
+<div class="form-group">
+    <p>@messages("costOfGoods.para.1")</p>
+</div>
 <h2>@messages("costOfGoods.doNotInclude")</h2>
 
 <ul class="list list-bullet">
@@ -29,7 +30,9 @@ Messages("base.errorSummary"), costOfGoodsForm
     <li>@messages("costOfGoods.bullet.9")</li>
 </ul>
 
-<p>@Html(messages("costOfGoods.para.2", Links.capitalExpenditureGoods))</p>
+<div class="form-group">
+    <p>@Html(messages("costOfGoods.para.2", Links.capitalExpenditureGoods))</p>
+</div>
 
 @form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
 
@@ -42,7 +45,6 @@ Messages("base.errorSummary"), costOfGoodsForm
             </fieldset>
         </div>
 
-
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
 
     <div class="form-hidden">
@@ -50,5 +52,6 @@ Messages("base.errorSummary"), costOfGoodsForm
         @helper.inputText(costOfGoodsForm("turnover"), 'type -> "hidden", 'class -> "visually-hidden")
     </div>
 }
+
 
 }

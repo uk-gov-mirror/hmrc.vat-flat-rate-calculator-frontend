@@ -12,12 +12,14 @@ Messages("base.errorSummary"), vatReturnPeriodForm
 )
 <h1>@messages("vatReturnPeriod.heading")</h1>
 
-<p>@messages("vatReturnPeriod.para.1")</p>
-
-<p>@messages("vatReturnPeriod.para.2")</p>
+<div class="form-group">
+    <p>@messages("vatReturnPeriod.para.1")</p>
+    <p>@messages("vatReturnPeriod.para.2")</p>
+</div>
 
 @form(action = controllers.routes.VatReturnPeriodController.submitVatReturnPeriod) {
 
+    <div class="form-group">
     @formInputRadioGroup(
         field = vatReturnPeriodForm("vatReturnPeriod"),
         Seq(
@@ -31,7 +33,7 @@ Messages("base.errorSummary"), vatReturnPeriodForm
         '_labelClass -> "block-label selection-button-radio",
         '_groupClass -> "inline"
     )
-
+    </div>
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
 }
 
