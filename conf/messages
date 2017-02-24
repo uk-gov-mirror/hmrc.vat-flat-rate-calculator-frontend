@@ -70,10 +70,10 @@ result.6.heading                    = Use the VAT flat rate for your business ty
 
 result.1.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods for this year was under £1,000.
 result.2.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.3.summary                    = Based on your answers, your costs are 2% or more than your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
+result.3.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
 result.4.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods for this quarter was under £250.
 result.5.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.6.summary                    = Based on your answers, your costs are 2% or more than your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
+result.6.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
 
 result.para.1                       = You may need to do this calculation for every VAT period
 result.accordion.question           = Are you in your first year of VAT registration?
