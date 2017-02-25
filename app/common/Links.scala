@@ -21,7 +21,6 @@ object Links {
   final val baseGovUrl    = "http://www.gov.uk/"
   final val taxServiceUrl = "https://www.tax.service.gov.uk/"
 
-  val businessTaxAccount: String  = taxServiceUrl + "business-account"
   val flatRateScheme: String      = baseGovUrl + "vat-flat-rate-scheme/join-or-leave-the-scheme"
   val vatRegistration: String     = baseGovUrl + "vat-registration/cancel-registration"
   val howMuchYouPay: String       = baseGovUrl + "vat-flat-rate-scheme/how-much-you-pay"
