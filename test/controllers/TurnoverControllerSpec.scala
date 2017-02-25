@@ -82,7 +82,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
 
     }
 
-    "there is a quarterly model in keystsore" should {
+    "there is a quarterly model in keystore" should {
 
       val data = Some(VatFlatRateModel("quarterly", None, None))
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")

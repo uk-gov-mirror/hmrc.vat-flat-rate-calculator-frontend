@@ -27,4 +27,5 @@ class MockConfig extends AppConfig {
   override val betaFeedbackUrl: String = ""
   override val contactFormServiceIdentifier: String = ""
   override val contactFrontendPartialBaseUrl: String = ""
+  override val businessTaxAccount: String = ""
 }

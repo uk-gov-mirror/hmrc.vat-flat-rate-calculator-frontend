@@ -12,8 +12,9 @@ Messages("base.errorSummary"), turnoverForm
 )
 <h1>@messages("turnover.heading", turnoverPeriodString)</h1>
 
-<p>@messages("turnover.para.1")</p>
-
+<div class="form-group">
+    <p>@messages("turnover.para.1")</p>
+</div>
 
 @form(action = controllers.routes.TurnoverController.submitTurnover) {
 
