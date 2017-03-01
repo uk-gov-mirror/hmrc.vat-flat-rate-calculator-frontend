@@ -29,6 +29,7 @@ object Validation {
       }
       if (errors.isEmpty) Valid else Invalid(errors)
   })
+
   def isPositive: Constraint[BigDecimal] = Constraint("constraints.isPositive")({
     value =>
       val errors = value match {
@@ -37,7 +38,6 @@ object Validation {
       }
       if (errors.isEmpty) Valid else Invalid(errors)
   })
-
 
   def isLessThanMaximumTurnover: Constraint[BigDecimal] = Constraint("constraints.lessThanMaximumTurnover")({
     amount =>

@@ -33,13 +33,12 @@ import views.html.{home => views}
 
 import scala.concurrent.Future
 
-
 @Singleton
 class VatReturnPeriodController @Inject()(config: AppConfig,
                                           val messagesApi: MessagesApi,
                                           stateService: StateService,
                                           session: ValidatedSession,
-                                          forms: VatFlatRateForm) extends FrontendController with I18nSupport{
+                                          forms: VatFlatRateForm) extends FrontendController with I18nSupport {
 
   val vatReturnPeriod: Action[AnyContent] = Action.async { implicit request =>
 
