@@ -70,19 +70,19 @@ result.6.heading                    = Use the VAT flat rate for your business ty
 
 result.1.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods for this year was under £1,000.
 result.2.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.3.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
+result.3.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0} onclick="ga('''send'', ''event'', ''link'', ''checkVFR'', ''checkVFR'');">VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
 result.4.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods for this quarter was under £250.
 result.5.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
-result.6.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0}>VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
+result.6.summary                    = Based on your answers, your costs are 2% or more of your turnover. Use the <a href = {0} onclick="ga('''send'', ''event'', ''link'', ''checkVFR'', ''checkVFR'');">VAT flat rate for your business type,</a> not the 16.5% flat rate for a limited cost business.
 
 result.para.1                       = You may need to do this calculation for every VAT period
 result.accordion.question           = Are you in your first year of VAT registration?
 result.accordion.summary            = Apply a 1% discount in your first year of VAT registration.
 result.heading.2                    = What happens next?
 result.para.2                       = Use this rate from 1 April 2017 when you do your VAT return.
-result.para.3                       = If you''re doing your VAT return <a href="{0}" rel="external" target="_blank">go to your business account (opens in a new window)</a>
-result.para.4                       = You may want to <a href="{0}" rel="external" target="_blank">join or leave the Flat Rate Scheme (opens in a new window)</a>
-result.para.5                       = You may want to <a href="{0}" rel="external" target="_blank">deregister from VAT (opens in a new window)</a>
+result.para.3                       = If you''re doing your VAT return <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''goToBTA'', ''goToBTA'')"";>go to your business account (opens in a new window)</a>
+result.para.4                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''join/leaveFRS'', ''join/leaveFRS'');">join or leave the Flat Rate Scheme (opens in a new window)</a>
+result.para.5                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''deregisterFromVAT'', ''deregister'');">deregister from VAT (opens in a new window)</a>
 
 ## Feedback Page ##
 feedback.title                      = Feedback
