@@ -56,7 +56,7 @@ costOfGoods.bullet.6                = gifts, promotional items and donations
 costOfGoods.bullet.7                = goods you will resell or hire out unless this is your main business activity
 costOfGoods.bullet.8                = training and memberships
 costOfGoods.bullet.9                = capital items for example office equipment, laptops, mobile phones and tablets
-costOfGoods.para.2                  = You can find out more about the <a href={0} rel="external" target="_blank">VAT Flat Rate Scheme (opens in a new window)</a> including examples of goods, services and how often to use this tool.
+costOfGoods.para.2                  = You can find out more about the <a href={0} rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''VATnotice'', ''VATnotice'');">VAT Flat Rate Scheme (opens in a new window)</a> including examples of goods, services and how often to use this tool.
 
 ## Result Page ##
 result.title                        = Your VAT calculation
@@ -80,7 +80,7 @@ result.accordion.question           = Are you in your first year of VAT registra
 result.accordion.summary            = Apply a 1% discount in your first year of VAT registration.
 result.heading.2                    = What happens next?
 result.para.2                       = Use this rate from 1 April 2017 when you do your VAT return.
-result.para.3                       = If you''re doing your VAT return <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''goToBTA'', ''goToBTA'')"";>go to your business account (opens in a new window)</a>
+result.para.3                       = If you''re doing your VAT return <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''goToBTA'', ''goToBTA'');">go to your business account (opens in a new window)</a>
 result.para.4                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''join/leaveFRS'', ''join/leaveFRS'');">join or leave the Flat Rate Scheme (opens in a new window)</a>
 result.para.5                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''deregisterFromVAT'', ''deregister'');">deregister from VAT (opens in a new window)</a>
 
