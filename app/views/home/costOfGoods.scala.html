@@ -6,7 +6,11 @@
 
 @(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig) {
+@scriptElement = {
+<script type="text/javascript" src='@controllers.routes.Assets.at("javascripts/vfr.js")'></script>
+}
+
+@main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
 
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), costOfGoodsForm
