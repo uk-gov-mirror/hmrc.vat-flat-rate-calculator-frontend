@@ -1,35 +1,46 @@
-#Base service messages
+############################################################################
+# Base service messages
+############################################################################
 base.service.title     = Check your VAT flat rate
 base.errorSummary      = There are errors on this page
 base.back              = Back
 
-##  COMMON  ##
+############################################################################
+# Common
+############################################################################
 common.continue                   = Continue
 common.year                       = year
 common.quarter                    = quarter
 common.startAgain                 = Start again
 
-## Errors ##
+############################################################################
+# Errors
+############################################################################
 error.required                     = This field is required
 error.vatReturnPeriod.required     = Select a VAT return period
 error.turnover.required            = Enter an amount for turnover
 error.costOfGoods.required         = Enter an amount for costs
-error.real                         = Enter a number without commas, for example 10000.00
 error.twoDecimalPlaces             = The amount you''ve entered has too many decimal places
 error.negative                     = Enter an amount that''s £0 or more
 error.moreThanMaximumTurnover      = Enter an amount less than £9,999,999,999.98
 
-## Technical Errors ##
+############################################################################
+# Technical errors
+############################################################################
 techError.title                    = Technical Error
 techError.heading                  = Sorry, there''s been a problem
 techError.para.1                   = You''ll need to start your calculation again.
 
-## Timeout ##
+############################################################################
+# Timeout
+############################################################################
 timeout.title                      = Session closed due to inactivity
 timeout.heading                    = Your session has timed out
 timeout.para.1                     = You can <a href={0}>click here</a> to start again.
 
-## VAT return period page ##
+############################################################################
+# VAT return period page
+############################################################################
 vatReturnPeriod.title               = Enter your VAT return details
 vatReturnPeriod.heading             = How often do you do your VAT returns?
 vatReturnPeriod.para.1              = If you''re using the Flat Rate Scheme, select the period that matches your VAT return.
@@ -37,12 +48,16 @@ vatReturnPeriod.para.2              = If you''re thinking of joining the Flat Ra
 vatReturnPeriod.option.annual       = Annually
 vatReturnPeriod.option.quarter      = Quarterly
 
-## Turnover page  ##
+############################################################################
+# Turnover page
+############################################################################
 turnover.title                      = Enter your turnover
 turnover.heading                    = Enter your turnover for the {0} including VAT
 turnover.para.1                     = This is the total sales of all goods and services. If you''re estimating, give realistic figures.
 
-## Cost of goods page ##
+############################################################################
+# Cost of goods page
+############################################################################
 costOfGoods.title                   = Enter your cost of goods
 costOfGoods.heading                 = Enter your cost of goods for the {0} including VAT
 costOfGoods.para.1                  = Goods are moveable items or materials exclusively used in your business. You can also include gas and electricity. If you''re estimating, give realistic figures.
@@ -58,7 +73,9 @@ costOfGoods.bullet.8                = training and memberships
 costOfGoods.bullet.9                = capital items for example office equipment, laptops, mobile phones and tablets
 costOfGoods.para.2                  = You can find out more about the <a href={0} rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''VATnotice'', ''VATnotice'');">VAT Flat Rate Scheme (opens in a new window)</a> including examples of goods, services and how often to use this tool.
 
-## Result Page ##
+############################################################################
+# Result page
+############################################################################
 result.title                        = Your VAT calculation
 
 result.1.heading                    = Use the 16.5% VAT flat rate
@@ -84,5 +101,7 @@ result.para.3                       = If you''re doing your VAT return <a href="
 result.para.4                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''join/leaveFRS'', ''join/leaveFRS'');">join or leave the Flat Rate Scheme (opens in a new window)</a>
 result.para.5                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''deregisterFromVAT'', ''deregister'');">deregister from VAT (opens in a new window)</a>
 
-## Feedback Page ##
+############################################################################
+# Feedback page
+############################################################################
 feedback.title                      = Feedback
