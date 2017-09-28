@@ -26,9 +26,9 @@ import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 import services.StateService
-import uk.gov.hmrc.play.http.SessionKeys
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.SessionKeys
 
 
 class ResultControllerSpec extends ControllerTestSpec {
@@ -38,7 +38,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     def createMockStateService(): StateService = {
       val mockStateService = mock[StateService]
 
-      when(mockStateService.fetchResultModel()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockStateService.fetchResultModel()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(data))
 
       mockStateService

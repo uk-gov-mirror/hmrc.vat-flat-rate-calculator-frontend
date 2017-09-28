@@ -24,10 +24,11 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.http.logging.SessionId
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class KeystoreConnectorSpec extends ControllerTestSpec {
 
@@ -43,7 +44,7 @@ class KeystoreConnectorSpec extends ControllerTestSpec {
 
     val testData = Some("hello")
 
-    when(vfrSessionCache.fetchAndGetEntry[String](ArgumentMatchers.eq("String"))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(vfrSessionCache.fetchAndGetEntry[String](ArgumentMatchers.eq("String"))(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(testData))
 
     "should be able to retrieve a String" in {
@@ -56,7 +57,7 @@ class KeystoreConnectorSpec extends ControllerTestSpec {
     val testData = "hello"
     val returnedCacheMap = CacheMap("key", Map("data" -> Json.toJson(testData)))
 
-    when(vfrSessionCache.cache[String](ArgumentMatchers.anyString(), ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(vfrSessionCache.cache[String](ArgumentMatchers.anyString(), ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(returnedCacheMap))
 
     "save data to keystore" in {

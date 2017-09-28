@@ -18,8 +18,9 @@ package config
 
 import com.google.inject.AbstractModule
 
-class DIModule extends AbstractModule{
+class DIModule extends AbstractModule {
   def configure(): Unit = {
     bind(classOf[AppConfig]) to classOf[ApplicationConfig]
+    bind(classOf[WSHttp]) to classOf[WSHttpImpl]
   }
 }
