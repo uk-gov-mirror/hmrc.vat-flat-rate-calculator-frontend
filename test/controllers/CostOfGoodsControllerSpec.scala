@@ -26,11 +26,11 @@ import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.StateService
-import uk.gov.hmrc.play.http.SessionKeys
 
 import org.scalatest.concurrent.ScalaFutures
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.SessionKeys
 
 class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
 
@@ -39,13 +39,13 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
     def createMockStateService(): StateService = {
       val mockStateService = mock[StateService]
 
-      when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(data))
 
-      when(mockStateService.saveVatFlatRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockStateService.saveVatFlatRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(null))
 
-      when(mockStateService.saveResultModel(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockStateService.saveResultModel(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(null))
 
       mockStateService

@@ -31,9 +31,9 @@ import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.StateService
-import uk.gov.hmrc.play.http.SessionKeys
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.SessionKeys
 
 
 class VatReturnPeriodControllerSpec extends ControllerTestSpec {
@@ -47,7 +47,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
 
     val mockStateService = mock[StateService]
 
-    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(data))
 
     mockStateService

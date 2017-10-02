@@ -22,26 +22,26 @@ import connectors.KeystoreConnector
 import models.{ResultModel, VatFlatRateModel}
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class StateService @Inject()(keystore: KeystoreConnector) {
 
-  def saveVatFlatRate[VatFlatRateModel](data: VatFlatRateModel)(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[CacheMap] = {
+  def saveVatFlatRate[T](data: T)(implicit hc: HeaderCarrier, format: Format[T], ec: ExecutionContext): Future[CacheMap] = {
     keystore.saveFormData(common.CacheKeys.vatFlatRate.toString, data)
   }
 
-  def fetchVatFlatRate()(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel]): Future[Option[VatFlatRateModel]] = {
+  def fetchVatFlatRate()(implicit hc: HeaderCarrier, format: Format[VatFlatRateModel], ec: ExecutionContext): Future[Option[VatFlatRateModel]] = {
     keystore.fetchAndGetFormData(common.CacheKeys.vatFlatRate.toString)
   }
 
-  def saveResultModel[ResultModel](data: ResultModel)(implicit hc: HeaderCarrier, format: Format[ResultModel]): Future[CacheMap] = {
+  def saveResultModel[T](data: T)(implicit hc: HeaderCarrier, format: Format[T], ec: ExecutionContext): Future[CacheMap] = {
     keystore.saveFormData(common.CacheKeys.vfrResult.toString, data)
   }
 
-  def fetchResultModel()(implicit hc: HeaderCarrier, format: Format[ResultModel]): Future[Option[ResultModel]] = {
+  def fetchResultModel()(implicit hc: HeaderCarrier, format: Format[ResultModel], ec: ExecutionContext): Future[Option[ResultModel]] = {
     keystore.fetchAndGetFormData(common.CacheKeys.vfrResult.toString)
   }
 }

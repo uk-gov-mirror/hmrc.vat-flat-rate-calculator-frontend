@@ -23,10 +23,11 @@ import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 class StateServiceSpec extends UnitSpec with MockitoSugar{
 
@@ -39,10 +40,10 @@ class StateServiceSpec extends UnitSpec with MockitoSugar{
     val testData: Option[VatFlatRateModel] = mockVatFlatRateModel
     val returnedCacheMap = CacheMap("vatReturnPeriod", Map("data" -> Json.toJson(testData)))
 
-    when(mockConnector.fetchAndGetFormData[VatFlatRateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.fetchAndGetFormData[VatFlatRateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(testData))
 
-    when(mockConnector.saveFormData[VatFlatRateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.saveFormData[VatFlatRateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(returnedCacheMap))
 
     new StateService(mockConnector)

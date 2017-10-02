@@ -24,10 +24,10 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.SessionKeys
 import views.html.{home => views}
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.SessionKeys
 
 class ValidatedSession @Inject()(config: AppConfig,
                                  val messagesApi: MessagesApi,

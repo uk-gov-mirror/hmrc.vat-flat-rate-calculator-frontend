@@ -22,8 +22,9 @@ import config.{AppConfig, VfrSessionCache}
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.HeaderCarrier
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class KeystoreConnector @Inject()(appConfig: AppConfig,
@@ -31,11 +32,11 @@ class KeystoreConnector @Inject()(appConfig: AppConfig,
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "applications/vnd.hmrc.1.0+json")
 
-  def saveFormData[T](key: String, data: T)(implicit hc: HeaderCarrier, formats: Format[T]): Future[CacheMap] = {
+  def saveFormData[T](key: String, data: T)(implicit hc: HeaderCarrier, ec: ExecutionContext, formats: Format[T]): Future[CacheMap] = {
     sessionCache.cache(key, data)
   }
 
-  def fetchAndGetFormData[T](key: String)(implicit hc: HeaderCarrier, formats: Format[T]): Future[Option[T]] = {
+  def fetchAndGetFormData[T](key: String)(implicit hc: HeaderCarrier, ec: ExecutionContext, formats: Format[T]): Future[Option[T]] = {
     sessionCache.fetchAndGetEntry(key)
   }
 }
