@@ -65,7 +65,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
     }
 
-    "Calling the .turnover action and getting a BadRequest" when {
+    "Calling the .turnover action with a badRequest and getting an Internal Server Error" when {
 
       "when there is no model in keystore" should {
         val data = None
