@@ -47,7 +47,7 @@ class TurnoverController @Inject()(config: AppConfig,
   val submitTurnover: Action[AnyContent] = session.async { implicit request =>
   forms.turnoverForm.bindFromRequest.fold(
       errors => {
-        Logger.warn("Turnover form could not be bound")
+        Logger.info("Turnover form could not be bound")
         routeRequest(BadRequest, errors)
       },
       success => {

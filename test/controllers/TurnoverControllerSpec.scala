@@ -65,6 +65,21 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
     }
 
+    "Calling the .turnover action with a badRequest and getting an Internal Server Error" when {
+
+      "when there is no model in keystore" should {
+        val data = None
+        lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+          .withFormUrlEncodedBody(("turnover", ""))
+        lazy val controller = createTestController(data)
+        lazy val result = controller.submitTurnover(request)
+
+        "return 500" in {
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+    }
+
     "there is an annual model in keystore" should {
 
       val data = Some(VatFlatRateModel("annually", None, None))

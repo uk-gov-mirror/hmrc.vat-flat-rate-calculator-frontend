@@ -15,7 +15,7 @@
  */
 
 package common
-
+// $COVERAGE-OFF$
 object ResultCodes {
 
   final val ONE   = 1
