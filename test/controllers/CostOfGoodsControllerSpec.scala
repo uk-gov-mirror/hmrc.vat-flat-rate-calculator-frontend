@@ -61,6 +61,7 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
   val mockQuarterly1000NoneModel = Some(VatFlatRateModel("Quarterly", Some(1000.00), None))
 
   val mockAnnuallyLessThan1000Model = Some(VatFlatRateModel("Annually", Some(50000.00), Some(500.00)))
+  val mockAnnuallyIncorrect = Some(VatFlatRateModel(".", Some(50000.00), Some(500.00)))
   val mockAnnuallyLessThan2PercentModel = Some(VatFlatRateModel("Annually", Some(500000.00), Some(1001.00)))
   val mockAnnuallyBaseModel = Some(VatFlatRateModel("Annually", Some(50049.00), Some(1001.00)))
 
@@ -155,6 +156,21 @@ class CostOfGoodsControllerSpec extends ControllerTestSpec with ScalaFutures {
         whenReady(controller.whichResult(data.get)) {result => assert(result == ResultCodes.ONE)}
       }
     }
+
+    "Calling the .submitCostOfGoods action (500 error)" when {
+
+      "submitting with a correct model but incorrect value" should {
+        val data = mockAnnuallyIncorrect
+        lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+        lazy val controller = createTestController(data)
+        lazy val result = controller.submitCostOfGoods(request)
+
+        "return 500" in {
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+      }
+
 
     "submitting with a correct model for annual, cost>=1000, cost<0.02t" should {
       val data = mockAnnuallyLessThan2PercentModel
