@@ -1,5 +1,5 @@
 @*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,18 @@
         @Messages("result.title")
     </h1>
 
+    <!--<div class="transaction-banner&#45;&#45;complete">-->
+        <!--<span dataMetrics = "@gaData(0):@gaData(1):@gaData(2)"></span>-->
+        <!--<span class="heading-large" id="resultOutcome">@Messages(s"result.${resultCode}.heading")</span>-->
+    <!--</div>-->
+
     <div class="transaction-banner--complete">
         <span dataMetrics = "@gaData(0):@gaData(1):@gaData(2)"></span>
-        <span class="heading-large" id="resultOutcome">@Messages(s"result.${resultCode}.heading")</span>
+            @if(resultCode == 1 || resultCode == 2 || resultCode == 4 || resultCode == 5){
+            <span class="heading-large" id="resultOutcome1">@Messages("result.1.heading")</span>
+            } else {
+            <span class="heading-large" id="resultOutcome2">@Messages("result.2.heading")</span>
+            }
     </div>
 
     <div class="form-group">

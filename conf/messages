@@ -79,11 +79,7 @@ costOfGoods.para.2                  = You can find out more about the <a href={0
 result.title                        = Your VAT calculation
 
 result.1.heading                    = Use the 16.5% VAT flat rate
-result.2.heading                    = Use the 16.5% VAT flat rate
-result.3.heading                    = Use the VAT flat rate for your business type
-result.4.heading                    = Use the 16.5% VAT flat rate
-result.5.heading                    = Use the 16.5% VAT flat rate
-result.6.heading                    = Use the VAT flat rate for your business type
+result.2.heading                    = Use the VAT flat rate for your business type
 
 result.1.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods for this year was under £1,000.
 result.2.summary                    = Based on your answers, you are a limited cost business. This is because the cost of your goods is less than 2% of your turnover.
