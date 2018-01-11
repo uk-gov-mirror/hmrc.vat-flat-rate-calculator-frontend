@@ -23,9 +23,12 @@
 
 @main_template(title = messages("vatReturnPeriod.title"), bodyClasses = None, appConfig = appConfig) {
 
+@if(vatReturnPeriodForm.hasErrors){
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), vatReturnPeriodForm
 )
+}
+
 <h1>@messages("vatReturnPeriod.heading")</h1>
 
 <div class="form-group">
