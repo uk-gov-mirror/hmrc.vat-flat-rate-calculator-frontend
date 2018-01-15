@@ -23,9 +23,12 @@
 
 @main_template(title = messages("turnover.title"), bodyClasses = None, appConfig = appConfig) {
 
+@if(turnoverForm.hasErrors){
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), turnoverForm
 )
+}
+
 <h1>@messages("turnover.heading", turnoverPeriodString)</h1>
 
 <div class="form-group">

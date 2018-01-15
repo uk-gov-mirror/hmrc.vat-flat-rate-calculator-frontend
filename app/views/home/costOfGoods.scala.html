@@ -28,9 +28,12 @@
 
 @main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
 
+@if(costOfGoodsForm.hasErrors){
 @govHelpers.errorSummary(
 Messages("base.errorSummary"), costOfGoodsForm
 )
+}
+
 <h1>@messages("costOfGoods.heading", costOfGoodsPeriodString)</h1>
 
 <div class="form-group">
