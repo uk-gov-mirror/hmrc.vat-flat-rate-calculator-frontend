@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 import services.StateService
-
+import play.api.test.Helpers._
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
 
@@ -56,12 +56,12 @@ class ResultControllerSpec extends ControllerTestSpec {
 
     lazy val result = controller.result(request)
 
-    "return 500" in {
-      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+    "redirect to beginning of journey" in {
+      status(result) shouldBe 303
     }
 
-    "navigate to the technical error page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("techError.title")
+    "navigate to the Enter VAT return page" in {
+      redirectLocation(result) shouldBe Some(routes.VatReturnPeriodController.vatReturnPeriod().url)
     }
   }
 

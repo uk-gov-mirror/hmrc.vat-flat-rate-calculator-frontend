@@ -38,7 +38,7 @@ class ResultController @Inject()(config: AppConfig,
       case Some(model)  => Ok(views.result(config, model.result, recordToGA(model.result)))
       case None         =>
         Logger.warn("ResultModel could not be retrieved from Keystore")
-        InternalServerError(errors.technicalError(config))
+        Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
