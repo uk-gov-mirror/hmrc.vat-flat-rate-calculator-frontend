@@ -21,6 +21,7 @@ import models.VatFlatRateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
+import org.mockito.stubbing.OngoingStubbing
 import play.api.http.Status
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
@@ -30,64 +31,69 @@ import services.StateService
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 class TurnoverControllerSpec extends ControllerTestSpec {
 
-  def createTestController(data: Option[VatFlatRateModel]): TurnoverController = {
-    object TestController extends TurnoverController(mockConfig, messages, createMockStateService(), mockValidatedSession, mockForm)
+  lazy val testMockStateService = mock[StateService]
 
-    def createMockStateService(): StateService = {
-
-      val mockStateService = mock[StateService]
-      when(mockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(data))
-
-      mockStateService
-    }
+  def createTestController(): TurnoverController = {
+    object TestController extends TurnoverController(mockConfig, messages, testMockStateService, mockValidatedSession, mockForm)
     TestController
+  }
+
+  def createMock(data: Option[VatFlatRateModel]): OngoingStubbing[Future[Option[VatFlatRateModel]]] ={
+    when(testMockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(data))
   }
 
 
   "Calling the .turnover action" when {
 
     "there is no model in keystore" should {
-      val data = None
-      lazy val controller = createTestController(data)
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
+      lazy val controller = createTestController()
+
       lazy val result = controller.turnover(request)
 
       "return 303" in {
+        createMock(None)
         status(result) shouldBe Status.SEE_OTHER
       }
 
       "redirect to the landing page" in {
+        createMock(None)
         redirectLocation(result) shouldBe Some(s"${routes.VatReturnPeriodController.vatReturnPeriod()}")
       }
     }
 
-    "Calling the .turnover action with a badRequest and getting an Internal Server Error" when {
+    "Calling the .submitTurnover action with a badRequest and getting an Internal Server Error" when {
 
-      "when there is no model in keystore" should {
-        val data = None
+      "there is no model in keystore" should {
         lazy val request = FakeRequest("POST", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
           .withFormUrlEncodedBody(("turnover", ""))
-        lazy val controller = createTestController(data)
+        lazy val controller = createTestController()
+
+
         lazy val result = controller.submitTurnover(request)
 
         "return 500" in {
+          createMock(None)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }
-
+//
     "there is an annual model in keystore" should {
 
       val data = Some(VatFlatRateModel("annually", None, None))
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      lazy val controller = createTestController(data)
+      lazy val controller = createTestController()
+
       lazy val result = controller.turnover(request)
 
       "return 200" in {
+        createMock(data)
         status(result) shouldBe Status.OK
       }
 
@@ -101,9 +107,11 @@ class TurnoverControllerSpec extends ControllerTestSpec {
 
       val data = Some(VatFlatRateModel("quarterly", None, None))
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      lazy val controller = createTestController(data)
+      lazy val controller = createTestController()
       lazy val result = controller.turnover(request)
+
       "return 200" in {
+        createMock(data)
         status(result) shouldBe Status.OK
       }
 
@@ -116,10 +124,11 @@ class TurnoverControllerSpec extends ControllerTestSpec {
 
       val data = Some(VatFlatRateModel("wrong-model", None, None))
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"any-old-id")
-      lazy val controller = createTestController(data)
+      lazy val controller = createTestController()
       lazy val result = controller.turnover(request)
 
       "return 500" in {
+        createMock(data)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
@@ -136,10 +145,11 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       lazy val request = FakeRequest()
           .withSession(SessionKeys.sessionId -> s"any-old-id")
         .withFormUrlEncodedBody(("turnover", ""))
-      lazy val controller = createTestController(data)
+      lazy val controller = createTestController()
       lazy val result = controller.submitTurnover(request)
 
       "return 400" in {
+        createMock(data)
         status(result) shouldBe Status.BAD_REQUEST
       }
       "fail with the correct error message" in {
@@ -148,15 +158,17 @@ class TurnoverControllerSpec extends ControllerTestSpec {
     }
 
     "submitting a valid turnover" should {
-      val data = Some(VatFlatRateModel("annually", None, None))
       lazy val request = FakeRequest()
         .withSession(SessionKeys.sessionId -> s"any-old-id")
         .withFormUrlEncodedBody(("vatReturnPeriod","annually"),("turnover", "10000"))
-      lazy val controller = createTestController(data)
+      lazy val controller = createTestController()
       lazy val result = controller.submitTurnover(request)
 
 
       "return 303" in {
+        when(testMockStateService.saveVatFlatRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+          .thenReturn(Future.successful(CacheMap("testId", Map())))
+
         status(result) shouldBe Status.SEE_OTHER
       }
 
@@ -164,6 +176,6 @@ class TurnoverControllerSpec extends ControllerTestSpec {
         redirectLocation(result) shouldBe Some(s"${routes.CostOfGoodsController.costOfGoods()}")
       }
     }
-    
+
   }
 }

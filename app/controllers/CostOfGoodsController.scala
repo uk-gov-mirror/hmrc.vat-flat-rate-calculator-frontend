@@ -69,8 +69,10 @@ class CostOfGoodsController @Inject()(config: AppConfig,
     } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.costOfGoods(config, form.fill(model), Messages("common.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.costOfGoods(config, form.fill(model), Messages("common.quarter")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    =>
+            res(views.costOfGoods(config, form.fill(model), Messages("common.year")))
+          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   =>
+            res(views.costOfGoods(config, form.fill(model), Messages("common.quarter")))
           case _ =>
             Logger.warn(
               s"""Incorrect value found for Vat Return Period:
@@ -81,10 +83,10 @@ class CostOfGoodsController @Inject()(config: AppConfig,
       case _ =>
         res match {
           case Ok =>
-            Logger.warn("No model found in Keystore; redirecting back to landing page")
+            Logger.warn("[CostOfGoods Controller]No model found in Keystore; redirecting back to landing page")
             Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
           case BadRequest =>
-            Logger.warn("No VatFlatRate model found in Keystore")
+            Logger.warn("[CostOfGoods Controller]No VatFlatRate model found in Keystore")
             InternalServerError(errs.technicalError(config))
         }
     }

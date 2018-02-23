@@ -67,8 +67,9 @@ class VatReturnPeriodController @Inject()(config: AppConfig,
         Future.successful(BadRequest(views.vatReturnPeriod(config, formWithErrors)))
       },
       success => {
-        stateService.saveVatFlatRate(success)
-        Future.successful(Redirect(controllers.routes.TurnoverController.turnover()))
+        stateService.saveVatFlatRate(success).map(
+          _ => Redirect(controllers.routes.TurnoverController.turnover())
+        )
       }
     )
   }
