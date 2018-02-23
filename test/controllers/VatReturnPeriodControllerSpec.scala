@@ -56,16 +56,17 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
         status(result) shouldBe Status.OK
       }
     }
+
     "there is no previous model in keystore" should {
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"sessionId-$sessionId")
-
-      when(testMockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(None))
 
       lazy val controller = createTestController()
       lazy val result = controller.vatReturnPeriod(request)
 
       "return 200 " in {
+        when(testMockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+          .thenReturn(Future.successful(None))
+
         status(result) shouldBe Status.OK
       }
 
@@ -79,12 +80,12 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
       lazy val request = FakeRequest("GET", "/").withSession(SessionKeys.sessionId -> s"sessionId-$sessionId")
       lazy val controller = createTestController()
 
-      when(testMockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(data))
-
       lazy val result = controller.vatReturnPeriod(request)
 
       "return 200 " in {
+        when(testMockStateService.fetchVatFlatRate()(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+          .thenReturn(Future.successful(data))
+        
         status(result) shouldBe Status.OK
       }
 
