@@ -111,6 +111,25 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
       }
     }
 
+    "entering invalid data" should {
+      lazy val request = FakeRequest()
+        .withSession(SessionKeys.sessionId -> s"any-old-id")
+        .withFormUrlEncodedBody(
+          "vatReturnPeriod" -> "annually",
+          "turnover" -> "x")
+
+      lazy val controller = createTestController()
+      lazy val result = controller.submitVatReturnPeriod(request)
+
+      "return 400" in {
+        status(result) shouldBe Status.BAD_REQUEST
+      }
+      "fail with the correct error message" in {
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(Messages(""))
+      }
+    }
+
+
     "submitting a valid Vat Return Period" should {
       when(testMockStateService.saveVatFlatRate(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(CacheMap("testId", Map())))
