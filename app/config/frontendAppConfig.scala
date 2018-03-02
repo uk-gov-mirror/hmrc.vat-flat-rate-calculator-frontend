@@ -27,8 +27,6 @@ trait AppConfig {
   val contactFrontendPartialBaseUrl: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
-  val betaFeedbackUrl: String
-  val betaFeedbackUnauthenticatedUrl: String
   val businessTaxAccount: String
 }
 
@@ -46,8 +44,6 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
   override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  override lazy val betaFeedbackUrl = s"$baseUrl/feedback"
-  override lazy val betaFeedbackUnauthenticatedUrl = betaFeedbackUrl
 
   //Business Tax Account
   override lazy val businessTaxAccount: String = configuration.getString("business-tax-account.url").getOrElse("")
