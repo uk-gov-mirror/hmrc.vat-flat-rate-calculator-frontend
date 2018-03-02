@@ -96,8 +96,3 @@ result.para.2                       = Use this rate from 1 April 2017 when you d
 result.para.3                       = If you''re doing your VAT return <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''goToBTA'', ''goToBTA'');">go to your business account (opens in a new window)</a>
 result.para.4                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''join/leaveFRS'', ''join/leaveFRS'');">join or leave the Flat Rate Scheme (opens in a new window)</a>
 result.para.5                       = You may want to <a href="{0}" rel="external" target="_blank" onclick="ga(''send'', ''event'', ''externalLink'', ''deregisterFromVAT'', ''deregister'');">deregister from VAT (opens in a new window)</a>
-
-############################################################################
-# Feedback page
-############################################################################
-feedback.title                      = Feedback
