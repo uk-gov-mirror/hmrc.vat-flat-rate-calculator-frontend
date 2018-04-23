@@ -19,13 +19,13 @@
 @import common.Links
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, resultCode: Int, gaData: Array[String])(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, resultCode: Int, gaData: Array[String], showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
 <script type="text/javascript" src='@controllers.routes.Assets.at("javascripts/vfr.js")'></script>
 }
 
-@main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
+@main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement), isUserResearchBannerVisible = showUserResearchPanel) {
 
     <!-- Hidden heading to comply with DAC standards -->
     <h1 class="visually-hidden">
