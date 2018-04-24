@@ -28,6 +28,7 @@ trait AppConfig {
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val businessTaxAccount: String
+  val urBannerLink: String
 }
 
 @Singleton
@@ -51,5 +52,8 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
   // GA
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
+
+  //Banner
+  override val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
 
 }

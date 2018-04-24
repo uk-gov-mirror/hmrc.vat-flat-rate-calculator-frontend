@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package mocks
+@(panelTitle: String,
+linkText: String,
+linkUrl: String,
+externalLinkWarning: Option[String]
+)(implicit messages: Messages)
 
-import config.AppConfig
-
-class MockConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val contactFormServiceIdentifier: String = ""
-  override val contactFrontendPartialBaseUrl: String = ""
-  override val businessTaxAccount: String = ""
-  override val urBannerLink: String = ""
-}
+<div class="banner-panel__title">@panelTitle</div>
+<a href="@linkUrl"
+       data-sso="false"
+       data-journey-click="link - click:UR Banner:Participate"
+       target="_blank"
+       onClick="ga('send', 'event', 'link - click', 'UR banner', 'Participate')"
+    >@linkText</a>

@@ -17,25 +17,26 @@
 package controllers
 
 import javax.inject.Inject
-
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{errors, home => views}
+
+import scala.util.Random
 
 class ResultController @Inject()(config: AppConfig,
                                 val messagesApi: MessagesApi,
                                 stateService: StateService,
                                 session: ValidatedSession) extends FrontendController with I18nSupport {
-
   val result: Action[AnyContent] = session.async { implicit request =>
-
+    val showUserResearchPanel = setURPanelFlag
     stateService.fetchResultModel.map {
-      case Some(model)  => Ok(views.result(config, model.result, recordToGA(model.result)))
+      case Some(model)  => Ok(views.result(config, model.result, recordToGA(model.result), showUserResearchPanel))
       case None         =>
         Logger.warn("ResultModel could not be retrieved from Keystore")
         Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
@@ -52,4 +53,20 @@ class ResultController @Inject()(config: AppConfig,
       case 6 => Array("Quarter","useBFR","qualifyForBFR")
     }
   }
+  private[controllers] def setURPanelFlag(implicit hc: HeaderCarrier): Boolean = {
+    val random = new Random()
+    val seed = getLongFromSessionID(hc)
+    random.setSeed(seed)
+    random.nextInt(3) == 0
+  }
+
+  private[controllers] def getLongFromSessionID(hc: HeaderCarrier): Long = {
+    val session = hc.sessionId.map(_.value).getOrElse("0")
+    val numericSessionValues = session.replaceAll("[^0-9]", "") match {
+      case "" => "0"
+      case num => num
+    }
+    numericSessionValues.takeRight(10).toLong
+  }
+
 }

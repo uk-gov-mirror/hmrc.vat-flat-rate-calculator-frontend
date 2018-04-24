@@ -15,12 +15,16 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.layouts
+@import views.html.helpers.two_thirds_banner_content_ur
+@import views.html.helpers.two_thirds_banner
+
 @(title: String,
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
+  isUserResearchBannerVisible:Boolean = false,
   appConfig: config.AppConfig)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @serviceInfoContent = {}
@@ -31,6 +35,21 @@
     }
 }
 
+@afterHeader = {
+@if(isUserResearchBannerVisible) {
+
+    @two_thirds_banner(Some(two_thirds_banner_content_ur(
+        messages("result.userResearchLink.title"),
+        messages("result.userResearchLink.link"),
+        appConfig.urBannerLink,
+        Some(messages("result.userResearchLink.text"))
+    )
+    )
+    )
+}
+}
+
+
 
 @govuk_wrapper(appConfig = appConfig,
                title = title,
@@ -40,5 +59,6 @@
                contentHeader = contentHeader,
                mainContent = layouts.article(mainContent),
                serviceInfoContent = serviceInfoContent,
-               scriptElem = scriptElem
+               scriptElem = scriptElem,
+               afterHeader = afterHeader
 )
