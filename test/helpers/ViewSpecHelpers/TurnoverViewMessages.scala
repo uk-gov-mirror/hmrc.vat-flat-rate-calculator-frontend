@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(id: String, linkText: String, hiddenContent: String)
+package helpers.ViewSpecHelpers
 
-<details role="group">
-    <summary id=@{s"${id}"} role="button">
-        <span class="summary">@linkText</span>
-    </summary>
+trait TurnoverViewMessages {
+  val turnoverTitle                         = "Enter your turnover"
+  def turnoverHeading(period : String)      = s"Enter your turnover for the $period including VAT"
+  val turnoverIntro                         = "This is the total sales of all goods and services. If you're estimating, give realistic figures."
+  val turnoverError                         = "Enter an amount for turnover"
+  val turnoverContinue                      = "Continue"
 
-    <div class="panel-indent">
-        <p id=@{s"${id}-content"}>
-            @hiddenContent
-        </p>
-    </div>
-</details>
+}
