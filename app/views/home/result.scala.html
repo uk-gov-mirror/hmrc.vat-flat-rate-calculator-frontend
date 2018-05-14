@@ -46,10 +46,18 @@
             @Html(Messages(s"result.${resultCode}.summary", Links.howMuchYouPay))
         </p>
     </div>
-    <div class="form-group">
+
+    <div clas="form-group">
         <strong class="bold-small">@Messages("result.para.1")</strong>
 
-        @helpTextAccordion("firstYearQuestion", Messages("result.accordion.question"), Messages("result.accordion.summary"))
+        <section class="form-group">
+            <details>
+                <summary><span class="summary">@messages("result.accordion.question")</span></summary>
+                <div class="panel-indent">
+                    <p>@messages("result.accordion.summary")</p>
+                </div>
+            </details>
+        </section>
     </div>
     <div class="form-group">
         <h2 class="heading-medium">@Messages("result.heading.2")</h2>

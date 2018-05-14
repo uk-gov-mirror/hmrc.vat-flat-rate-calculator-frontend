@@ -39,20 +39,23 @@ Messages("base.errorSummary"), vatReturnPeriodForm
 @form(action = controllers.routes.VatReturnPeriodController.submitVatReturnPeriod) {
 
     <div class="form-group">
-    @formInputRadioGroup(
-        field = vatReturnPeriodForm("vatReturnPeriod"),
-        Seq(
-            "annually" -> Messages("vatReturnPeriod.option.annual"),
-            "quarterly" -> Messages("vatReturnPeriod.option.quarter")
-        ),
-        '_legend -> Messages("vatReturnPeriod.heading"),
-        '_legendID -> "vatReturnPeriod",
-        '_legendClass -> "visuallyhidden",
-        '_labelAfter -> true,
-        '_labelClass -> "block-label selection-button-radio",
-        '_groupClass -> "inline"
-    )
+        <fieldset class="form-group inline">
+            @govHelpers.inputRadioGroup(
+                vatReturnPeriodForm("vatReturnPeriod"),
+                Seq(
+                    "annually" -> Messages("vatReturnPeriod.option.annual"),
+                    "quarterly" -> Messages("vatReturnPeriod.option.quarter")
+                ),
+                '_legend -> Messages("vatReturnPeriod.heading"),
+                '_legendID -> "vatReturnPeriod",
+                '_legendClass -> "visuallyhidden",
+                '_labelAfter -> true,
+                '_labelClass -> "block-label selection-button-radio"
+            )
+        </fieldset>
     </div>
+
+
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
 }
 
