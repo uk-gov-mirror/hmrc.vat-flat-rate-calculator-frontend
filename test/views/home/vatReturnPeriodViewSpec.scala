@@ -21,14 +21,13 @@ import forms.VatFlatRateForm
 import helpers.ViewSpecHelpers.VatReturnPeriodViewMessages
 import org.jsoup.Jsoup
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.Messages.Implicits._
 import play.api.inject.Injector
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.home.vatReturnPeriod
-import play.api.i18n.Messages.Implicits._
 
-class vatReturnPeriodViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
+class vatReturnPeriodViewSpec extends UnitSpec with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

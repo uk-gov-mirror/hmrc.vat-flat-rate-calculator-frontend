@@ -16,16 +16,16 @@
 
 package controllers
 
-import javax.inject.Inject
 import config.AppConfig
 import controllers.predicates.ValidatedSession
+import javax.inject.Inject
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{errors, home => views}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.{home => views}
 
 import scala.util.Random
 

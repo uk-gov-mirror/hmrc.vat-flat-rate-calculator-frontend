@@ -21,14 +21,13 @@ import forms.VatFlatRateForm
 import helpers.ViewSpecHelpers.TurnoverViewMessages
 import org.jsoup.Jsoup
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.Messages.Implicits._
 import play.api.inject.Injector
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.home.turnover
-import play.api.i18n.Messages.Implicits._
 
-class turnoverViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceOneAppPerSuite with TurnoverViewMessages {
+class turnoverViewSpec extends UnitSpec with GuiceOneAppPerSuite with TurnoverViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

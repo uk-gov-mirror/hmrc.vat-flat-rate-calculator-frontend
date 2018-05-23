@@ -24,6 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
+import play.api.{Configuration, Environment}
 import services.StateService
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -31,6 +32,8 @@ trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite 
 
   val injector: Injector = app.injector
   implicit val mat: Materializer = injector.instanceOf[Materializer]
+  implicit val runModeConfiguration: Configuration = injector.instanceOf[Configuration]
+  implicit val env: Environment = injector.instanceOf[Environment]
 
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]

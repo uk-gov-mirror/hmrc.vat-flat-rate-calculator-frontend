@@ -18,17 +18,15 @@ package views.home
 
 import config.AppConfig
 import helpers.ViewSpecHelpers.ResultViewMessages
-import javax.inject.Inject
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.test.FakeRequest
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
-import uk.gov.hmrc.play.test.UnitSpec
 import org.jsoup.Jsoup
-import play.api.inject.Injector
-import views.html.home.result
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.Messages.Implicits._
+import play.api.inject.Injector
+import play.api.test.FakeRequest
+import uk.gov.hmrc.play.test.UnitSpec
+import views.html.home.result
 
-class resultViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceOneAppPerSuite with ResultViewMessages {
+class resultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

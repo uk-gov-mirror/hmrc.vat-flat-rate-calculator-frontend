@@ -17,7 +17,8 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.Mode.Mode
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait AppConfig {
@@ -32,12 +33,15 @@ trait AppConfig {
 }
 
 @Singleton
-class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig with ServicesConfig {
+class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration,
+                                  environment: Environment) extends AppConfig with ServicesConfig {
 
-  private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  override protected def mode: Mode = environment.mode
+
+  private def loadConfig(key: String): String = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   private lazy val baseUrl = "check-your-vat-flat-rate"
-  private lazy val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
+  private lazy val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
 
   // Feedback Config
   private lazy val contactFrontendService = baseUrl("contact-frontend")
@@ -47,7 +51,7 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   //Business Tax Account
-  override lazy val businessTaxAccount: String = configuration.getString("business-tax-account.url").getOrElse("")
+  override lazy val businessTaxAccount: String = runModeConfiguration.getString("business-tax-account.url").getOrElse("")
 
   // GA
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
@@ -55,5 +59,4 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
 
   //Banner
   override val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
-
 }

@@ -38,7 +38,7 @@ class KeystoreConnectorSpec extends ControllerTestSpec {
 
   lazy implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
 
-  lazy val target = new KeystoreConnector(config, vfrSessionCache)
+  lazy val target = new KeystoreConnector(config, vfrSessionCache, runModeConfiguration, env)
 
   "KeystoreConnector .fetchFormData" should {
 
