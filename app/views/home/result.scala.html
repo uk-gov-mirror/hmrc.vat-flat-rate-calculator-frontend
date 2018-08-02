@@ -22,7 +22,7 @@
 @(appConfig: config.AppConfig, resultCode: Int, gaData: Array[String], showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
-<script type="text/javascript" src='@controllers.routes.Assets.at("javascripts/vfr.js")'></script>
+<script type="text/javascript" src='@controllers.routes.Assets.versioned("javascripts/vfr.js")'></script>
 }
 
 @main_template(title = messages("result.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement), isUserResearchBannerVisible = showUserResearchPanel) {
