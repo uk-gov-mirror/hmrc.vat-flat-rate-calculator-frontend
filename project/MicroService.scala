@@ -4,6 +4,9 @@ import sbt._
 import play.routes.compiler.{InjectedRoutesGenerator, StaticRoutesGenerator}
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import com.typesafe.sbt.digest.Import.digest
+import com.typesafe.sbt.web.Import.pipelineStages
+import com.typesafe.sbt.web.Import.Assets
 
 
 trait MicroService {
@@ -47,6 +50,7 @@ trait MicroService {
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
       routesGenerator := InjectedRoutesGenerator,
+      pipelineStages in Assets := Seq(digest),
       scalaVersion := "2.11.11"
     )
     .configs(IntegrationTest)

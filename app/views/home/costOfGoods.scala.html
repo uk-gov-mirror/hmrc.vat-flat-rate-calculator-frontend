@@ -23,7 +23,7 @@
 @(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
-<script type="text/javascript" src='@controllers.routes.Assets.at("javascripts/vfr.js")'></script>
+<script type="text/javascript" src='@controllers.routes.Assets.versioned("javascripts/vfr.js")'></script>
 }
 
 @main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
