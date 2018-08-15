@@ -1,25 +1,21 @@
 import sbt.Keys._
-import sbt.Tests.{Group, SubProcess}
 import sbt._
-import play.routes.compiler.{InjectedRoutesGenerator, StaticRoutesGenerator}
-import scoverage.ScoverageKeys
+import play.routes.compiler.InjectedRoutesGenerator
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import com.typesafe.sbt.digest.Import.digest
 import com.typesafe.sbt.web.Import.pipelineStages
 import com.typesafe.sbt.web.Import.Assets
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 
 trait MicroService {
 
   import uk.gov.hmrc._
   import DefaultBuildSettings._
-  import uk.gov.hmrc.{SbtBuildInfo, ShellPrompt, SbtAutoBuildPlugin}
+  import uk.gov.hmrc.SbtAutoBuildPlugin
   import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
   import uk.gov.hmrc.versioning.SbtGitVersioning
   import play.sbt.routes.RoutesKeys.routesGenerator
-
-
-  import TestPhases._
 
   val appName: String
 
@@ -39,12 +35,20 @@ trait MicroService {
   }
 
   lazy val microservice: Project = Project(appName, file("."))
-    .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .enablePlugins(
+      Seq(
+        play.sbt.PlayScala,
+        SbtAutoBuildPlugin,
+        SbtGitVersioning,
+        SbtDistributablesPlugin,
+        SbtArtifactory
+      ) ++ plugins : _*)
     .settings(playSettings : _*)
     .settings(scoverageSettings: _*)
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
+    .settings( majorVersion := 0 )
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
@@ -55,22 +59,5 @@ trait MicroService {
     )
     .configs(IntegrationTest)
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
-    .settings(
-      Keys.fork in IntegrationTest := false,
-      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
-      addTestReportOption(IntegrationTest, "int-test-reports"),
-      testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-      parallelExecution in IntegrationTest := false)
-      .settings(resolvers ++= Seq(
-        Resolver.bintrayRepo("hmrc", "releases"),
-        Resolver.jcenterRepo
-      ))
-}
-
-private object TestPhases {
-
-  def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
-    tests map {
-      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
-    }
+    .settings(integrationTestSettings())
 }
