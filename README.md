@@ -33,7 +33,6 @@ sbt 'run 9080'
 ```
 
 
-
 ## Test the application
 
 To test the application execute
