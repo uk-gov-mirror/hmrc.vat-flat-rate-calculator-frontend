@@ -2,7 +2,7 @@
 
 Hi!  Thanks for taking the time to contribute to the [HMRC Multichannel Digital Tax Platform](https://hmrc.github.io) (MDTP)
 
-We welcome contributions to vat-registration-frontend.  By following these guidelines you will greatly improve the likelihood of your change being accepted and merged.
+We welcome contributions to vat-flat-rate-calculator-frontend.  By following these guidelines you will greatly improve the likelihood of your change being accepted and merged.
 
 ## How to Help?
 
