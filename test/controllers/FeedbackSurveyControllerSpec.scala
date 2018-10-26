@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package mocks
+package controllers
 
-import config.AppConfig
+import helpers.ControllerTestSpec
+import play.api.http.Status
+import play.api.test.FakeRequest
 
-class MockConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val contactFormServiceIdentifier: String = ""
-  override val contactFrontendPartialBaseUrl: String = ""
-  override val businessTaxAccount: String = ""
-  override val urBannerLink: String = ""
-  override val feedbackSurvey: String = ""
+
+
+class FeedbackSurveyControllerSpec extends ControllerTestSpec {
+
+  "Feedback survey controller" must {
+    "Redirect to feedback survey page when survey link is clicked" in {
+      lazy val request = FakeRequest("GET", "/")
+      lazy val controller = new FeedbackSurveyController(mockApplicationConfig)
+      lazy val result = controller.redirectFeedbackSurvey(request)
+
+      status(result) shouldBe Status.SEE_OTHER
+
+    }
+  }
 }

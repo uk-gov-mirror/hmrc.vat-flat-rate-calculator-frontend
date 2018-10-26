@@ -82,6 +82,9 @@ class resultViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceO
 
       doc.select("div.form-group > p").eq(4).text() shouldBe ResultNextText4
       doc.select("div.form-group > p > a").eq(2).attr("href") shouldBe ResultNextText4Href
+
+      doc.select("div.form-group > p").eq(5).text() shouldBe FeedbackSurveyText
+      doc.select("div.form-group > p > a").eq(3).attr("href") shouldBe controllers.routes.FeedbackSurveyController.redirectFeedbackSurvey.url
     }
 
     "have a user research banner" in {

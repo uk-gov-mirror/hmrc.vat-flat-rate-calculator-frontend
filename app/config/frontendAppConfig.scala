@@ -29,6 +29,7 @@ trait AppConfig {
   val reportAProblemNonJSUrl: String
   val businessTaxAccount: String
   val urBannerLink: String
+  val feedbackSurvey: String
 }
 
 @Singleton
@@ -45,6 +46,7 @@ class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfi
   override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  override val feedbackSurvey: String = loadConfig(s"feedback-survey-frontend.url")
 
   //Business Tax Account
   override lazy val businessTaxAccount: String = configuration.getString("business-tax-account.url").getOrElse("")

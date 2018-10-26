@@ -15,9 +15,7 @@
  *@
 
 @import views.html.main_template
-@import views.html.helpers._
 @import common.Links
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
 @(appConfig: config.AppConfig, resultCode: Int, gaData: Array[String], showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages)
 
@@ -66,5 +64,6 @@
         <p>@Html(Messages("result.para.3", appConfig.businessTaxAccount))</p>
         <p>@Html(Messages("result.para.4", Links.flatRateScheme))</p>
         <p>@Html(Messages("result.para.5", Links.vatRegistration))</p>
+        <p id="feedback-survey-message"><a id="feedback-survey-link" href="@controllers.routes.FeedbackSurveyController.redirectFeedbackSurvey">@Messages("result.feedbackSurvey")</a></p>
     </div>
 }

@@ -31,6 +31,7 @@ trait ResultViewMessages {
   val ResultNextText3Href                 = "http://www.gov.uk/vat-flat-rate-scheme/join-or-leave-the-scheme"
   val ResultNextText4                     = "You may want to deregister from VAT (opens in a new window)"
   val ResultNextText4Href                 = "http://www.gov.uk/vat-registration/cancel-registration"
+  val FeedbackSurveyText                  = "What did you think of this service?"
   val ResultBannerTitle                   = "Help improve GOV.UK"
   val ResultBannerText                    = "Help improve this digital service by joining the HMRC user panel (opens in new window)"
   val ResultBannerClose                   = "No thanks"
