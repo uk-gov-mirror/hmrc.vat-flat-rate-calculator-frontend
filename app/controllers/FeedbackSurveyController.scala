@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package mocks
+package controllers
 
-import config.AppConfig
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import config.{AppConfig, ApplicationConfig}
+import controllers.predicates.ValidatedSession
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import services.StateService
 
-class MockConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val contactFormServiceIdentifier: String = ""
-  override val contactFrontendPartialBaseUrl: String = ""
-  override val businessTaxAccount: String = ""
-  override val urBannerLink: String = ""
-  override val feedbackSurvey: String = ""
+class FeedbackSurveyController @Inject() (applicationConfig: ApplicationConfig) extends FrontendController {
+
+  def redirectFeedbackSurvey : Action[AnyContent] = Action {
+    implicit request => Redirect(applicationConfig.feedbackSurvey)
+  }
 }

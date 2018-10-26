@@ -17,7 +17,7 @@
 package helpers
 
 import akka.stream.Materializer
-import config.AppConfig
+import config.{AppConfig, ApplicationConfig}
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import org.scalatest.mockito.MockitoSugar
@@ -34,6 +34,7 @@ trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite 
 
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+  lazy val mockApplicationConfig: ApplicationConfig = injector.instanceOf[ApplicationConfig]
   lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
   lazy val mockStateService: StateService = injector.instanceOf[StateService]
   lazy val mockForm: VatFlatRateForm = injector.instanceOf[VatFlatRateForm]

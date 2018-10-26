@@ -25,6 +25,7 @@ class RoutesSpec extends UnitSpec with WithFakeApplication {
   val turnover: String = baseUrl+"/turnover"
   val costOfGoods: String = baseUrl+"/cost-of-goods"
   val result: String = baseUrl+"/result"
+  val feedbackSurvey = baseUrl+"/feedback-survey"
 
   "The route for the vatReturnPeriod action on the vatReturnPeriod controller" should {
     "be /check-your-vat-flat-rate/vat-return-period" in {
@@ -65,4 +66,9 @@ class RoutesSpec extends UnitSpec with WithFakeApplication {
     }
   }
 
+  "The route for the feedback survey on the feedback survey controller" should {
+    "be /check-your-vat-flat-rate/feedback-survey" in {
+      controllers.routes.FeedbackSurveyController.redirectFeedbackSurvey().url shouldBe s"$feedbackSurvey"
+    }
+  }
 }
