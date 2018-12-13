@@ -16,8 +16,9 @@
 
 package config
 
+import com.typesafe.config.Config
 import javax.inject.{Inject, Singleton}
-
+import play.api.{Configuration, Play}
 import uk.gov.hmrc.http.cache.client.SessionCache
 import uk.gov.hmrc.http.hooks.HttpHooks
 import uk.gov.hmrc.http.{HttpDelete, HttpGet, HttpPost, HttpPut}
@@ -30,16 +31,16 @@ import uk.gov.hmrc.play.http.ws.{WSDelete, WSGet, WSPost, WSPut}
 
 
 @Singleton
-class FrontendAuditConnector @Inject()() extends Auditing with AppName {
+class FrontendAuditConnector @Inject()() extends Auditing with AppName with RunModeConfig {
   override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
 }
 
 @Singleton
-class FrontendAuthConnector @Inject()(override val http: WSHttp) extends AuthConnector with ServicesConfig {
+class FrontendAuthConnector @Inject()(override val http: WSHttp) extends AuthConnector with ServicesConfig with RunModeConfig {
   lazy val serviceUrl: String = baseUrl("auth")
 }
 
-object FrontendAuditConnector extends Auditing with AppName {
+object FrontendAuditConnector extends Auditing with AppName with RunModeConfig {
   override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
 }
 
@@ -50,10 +51,14 @@ trait Hooks extends HttpHooks with HttpAuditing {
 
 trait WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete with Hooks with AppName
 
-@Singleton class WSHttpImpl extends WSHttp
+@Singleton class WSHttpImpl extends WSHttp {
+  override protected def configuration: Option[Config] = Some(Play.current.configuration.underlying)
+
+  override protected def appNameConfiguration: Configuration = Play.current.configuration
+}
 
 @Singleton
-class VfrSessionCache @Inject()(val http: WSHttp, appConfig: AppConfig) extends SessionCache with ServicesConfig with AppName {
+class VfrSessionCache @Inject()(val http: WSHttp, appConfig: AppConfig) extends SessionCache with ServicesConfig with AppName with RunModeConfig {
   override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(""))
   override lazy val baseUri: String = baseUrl("cachable.session-cache")
   override lazy val defaultSource: String = appName
