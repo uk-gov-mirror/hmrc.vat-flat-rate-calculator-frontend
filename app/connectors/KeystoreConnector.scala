@@ -17,8 +17,7 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
-
-import config.{AppConfig, VfrSessionCache}
+import config.{AppConfig, RunModeConfig, VfrSessionCache}
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -28,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class KeystoreConnector @Inject()(appConfig: AppConfig,
-                                  sessionCache: VfrSessionCache) extends ServicesConfig {
+                                  sessionCache: VfrSessionCache) extends ServicesConfig with RunModeConfig {
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "applications/vnd.hmrc.1.0+json")
 

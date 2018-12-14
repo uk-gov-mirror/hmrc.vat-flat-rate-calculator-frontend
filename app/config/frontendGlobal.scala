@@ -16,20 +16,24 @@
 
 package config
 
-import javax.inject.{Inject, Singleton}
-
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
+import play.api.Mode.Mode
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Request
 import play.api.{Application, Configuration, Play}
 import play.twirl.api.Html
-import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
 import uk.gov.hmrc.play.frontend.bootstrap.DefaultFrontendGlobal
 import uk.gov.hmrc.play.frontend.filters.{FrontendAuditFilter, FrontendLoggingFilter, MicroserviceFilterSupport}
 import views.html.error_template
+
+trait RunModeConfig {
+  def appNameConfiguration: Configuration = Play.current.configuration
+  def runModeConfiguration: Configuration = Play.current.configuration
+  def mode: Mode = Play.current.mode
+}
 
 object FrontendGlobal
   extends DefaultFrontendGlobal {
@@ -40,7 +44,7 @@ object FrontendGlobal
 
   override def onStart(app: Application) {
     super.onStart(app)
-    ApplicationCrypto.verifyConfiguration()
+    applicationCrypto.verifyConfiguration()
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html ={
@@ -59,7 +63,7 @@ object LoggingFilter extends FrontendLoggingFilter with MicroserviceFilterSuppor
   override def controllerNeedsLogging(controllerName: String): Boolean = ControllerConfiguration.paramsForController(controllerName).needsLogging
 }
 
-object AuditFilter extends FrontendAuditFilter with RunMode with AppName with MicroserviceFilterSupport {
+object AuditFilter extends FrontendAuditFilter with RunMode with AppName with MicroserviceFilterSupport with RunModeConfig {
 
   override lazy val maskedFormFields = Seq("password")
 

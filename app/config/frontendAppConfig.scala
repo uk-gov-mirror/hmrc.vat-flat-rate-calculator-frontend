@@ -33,7 +33,7 @@ trait AppConfig {
 }
 
 @Singleton
-class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig with ServicesConfig {
+class ApplicationConfig @Inject()(configuration: Configuration) extends AppConfig with ServicesConfig with RunModeConfig {
 
   private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 

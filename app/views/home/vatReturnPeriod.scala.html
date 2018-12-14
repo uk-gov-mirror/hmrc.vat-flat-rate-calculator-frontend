@@ -17,14 +17,14 @@
 @import views.html.main_template
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+@import uk.gov.hmrc.play.views.html.helpers
 
 @(appConfig: config.AppConfig, vatReturnPeriodForm: Form[VatFlatRateModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(title = messages("vatReturnPeriod.title"), bodyClasses = None, appConfig = appConfig) {
 
 @if(vatReturnPeriodForm.hasErrors){
-@govHelpers.errorSummary(
+@helpers.errorSummary(
 Messages("base.errorSummary"), vatReturnPeriodForm
 )
 }
@@ -40,7 +40,7 @@ Messages("base.errorSummary"), vatReturnPeriodForm
 
     <div class="form-group">
         <fieldset class="form-group inline">
-            @govHelpers.inputRadioGroup(
+            @helpers.input_radio_group(
                 vatReturnPeriodForm("vatReturnPeriod"),
                 Seq(
                     "annually" -> Messages("vatReturnPeriod.option.annual"),
