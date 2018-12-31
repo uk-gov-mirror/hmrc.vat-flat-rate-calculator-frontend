@@ -16,6 +16,7 @@
 
 package config
 
+import akka.actor.ActorSystem
 import com.typesafe.config.Config
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Play}
@@ -55,6 +56,8 @@ trait WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost wi
   override protected def configuration: Option[Config] = Some(Play.current.configuration.underlying)
 
   override protected def appNameConfiguration: Configuration = Play.current.configuration
+
+  override def actorSystem : ActorSystem = Play.current.actorSystem
 }
 
 @Singleton
