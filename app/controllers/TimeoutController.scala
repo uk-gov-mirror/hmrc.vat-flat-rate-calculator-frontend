@@ -22,7 +22,7 @@ import controllers.predicates.ValidatedSession
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.fallback
 
 import scala.concurrent.Future

@@ -98,7 +98,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
 
       "navigate to the annual turnover page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("turnover.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
 
     }
@@ -133,7 +133,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
 
       "show the technical error page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("techError.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("techError.title")
       }
     }
   }

@@ -71,7 +71,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
       }
 
       "navigate to the turnover page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("vatReturnPeriod.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("vatReturnPeriod.title")
       }
     }
 
@@ -90,7 +90,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
       }
 
       "navigate to the turnover page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("vatReturnPeriod.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("vatReturnPeriod.title")
       }
     }
   }
@@ -107,7 +107,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
         status(result) shouldBe Status.BAD_REQUEST
       }
       "fail with the correct error message" in {
-        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(Messages("error.vatReturnPeriod.required"))
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages("error.vatReturnPeriod.required"))
       }
     }
 
@@ -125,7 +125,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
         status(result) shouldBe Status.BAD_REQUEST
       }
       "fail with the correct error message" in {
-        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(Messages(""))
+        Jsoup.parse(bodyOf(result)).getElementsByClass("error-notification").text should include(messages(""))
       }
     }
 

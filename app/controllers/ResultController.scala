@@ -17,22 +17,22 @@
 package controllers
 
 import javax.inject.Inject
-import config.AppConfig
+import config.{AppConfig, ApplicationConfig}
 import controllers.predicates.ValidatedSession
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.StateService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{errors, home => views}
 
 import scala.util.Random
 
-class ResultController @Inject()(config: AppConfig,
-                                val messagesApi: MessagesApi,
-                                stateService: StateService,
-                                session: ValidatedSession) extends FrontendController with I18nSupport {
+class ResultController @Inject()(config: ApplicationConfig,
+                                 val messagesApi: MessagesApi,
+                                 stateService: StateService,
+                                 session: ValidatedSession) extends FrontendController with I18nSupport {
   val result: Action[AnyContent] = session.async { implicit request =>
     val showUserResearchPanel = setURPanelFlag
     stateService.fetchResultModel.map {

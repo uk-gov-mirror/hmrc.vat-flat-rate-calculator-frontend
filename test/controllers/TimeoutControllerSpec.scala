@@ -23,16 +23,23 @@ import play.api.test.FakeRequest
 
 class TimeoutControllerSpec extends ControllerTestSpec {
 
-  "Calling the .timeout action" should {
-    lazy val request = FakeRequest("GET", "/")
-    lazy val controller = new TimeoutController(mockConfig, messages, mockStateService, mockValidatedSession)
-    lazy val result = controller.timeout(request)
+  class Setup {
+    val controller = new TimeoutController(
+      mockConfig, messages, mockStateService, mockValidatedSession
+    )
+  }
 
-    "return 200" in {
+  "Calling the .timeout action" should {
+
+    "return 200" in new Setup {
+      lazy val request = FakeRequest("GET", "/")
+      lazy val result = controller.timeout(request)
       status(result) shouldBe Status.OK
     }
 
-    "navigate to the timeout page" in {
+    "navigate to the timeout page" in new Setup {
+      lazy val request = FakeRequest("GET", "/")
+      lazy val result = controller.timeout(request)
       Jsoup.parse(bodyOf(result)).title shouldBe messages("timeout.title")
     }
   }

@@ -21,22 +21,19 @@ import config.{AppConfig, ApplicationConfig}
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.MessagesApi
-import play.api.inject.Injector
 import services.StateService
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-trait ControllerTestSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
+trait ControllerTestSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
 
-  val injector: Injector = app.injector
-  implicit val mat: Materializer = injector.instanceOf[Materializer]
+  implicit val mat: Materializer = fakeApplication.injector.instanceOf[Materializer]
 
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-  lazy val mockApplicationConfig: ApplicationConfig = injector.instanceOf[ApplicationConfig]
-  lazy val mockValidatedSession: ValidatedSession = injector.instanceOf[ValidatedSession]
-  lazy val mockStateService: StateService = injector.instanceOf[StateService]
-  lazy val mockForm: VatFlatRateForm = injector.instanceOf[VatFlatRateForm]
+  lazy val messages: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  lazy val mockConfig: AppConfig = fakeApplication.injector.instanceOf[AppConfig]
+  lazy val mockApplicationConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val mockValidatedSession: ValidatedSession = fakeApplication.injector.instanceOf[ValidatedSession]
+  lazy val mockStateService: StateService = fakeApplication.injector.instanceOf[StateService]
+  lazy val mockForm: VatFlatRateForm = fakeApplication.injector.instanceOf[VatFlatRateForm]
 
 }

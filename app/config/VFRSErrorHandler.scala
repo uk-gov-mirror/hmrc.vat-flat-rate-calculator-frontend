@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package config
 
-import play.api.mvc.{Action, AnyContent}
-import config.ApplicationConfig
 import javax.inject.Inject
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.{Configuration, Play, mvc}
+import play.api.i18n.MessagesApi
+import play.mvc.Http.Request
+import play.twirl.api.Html
+import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import views.html.error_template
 
-class FeedbackSurveyController @Inject() (applicationConfig: ApplicationConfig) extends FrontendController {
+class VFRSErrorHandler @Inject()(val messagesApi: MessagesApi, val configuration: Configuration) extends FrontendErrorHandler {
 
-  def redirectFeedbackSurvey : Action[AnyContent] = Action {
-    implicit request => Redirect(applicationConfig.feedbackSurvey)
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: mvc.Request[_]): Html = {
+    val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
+    error_template(pageTitle, heading, message, appConfig)
   }
 }

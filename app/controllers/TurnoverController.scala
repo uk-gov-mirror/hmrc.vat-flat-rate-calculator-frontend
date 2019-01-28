@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
@@ -27,11 +26,11 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.StateService
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{errors, home => views}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class TurnoverController @Inject()(config: AppConfig,
