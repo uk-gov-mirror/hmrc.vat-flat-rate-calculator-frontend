@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,23 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
-import config.{AppConfig, RunModeConfig, VfrSessionCache}
+import config.ApplicationConfig
+import play.api.{Configuration, Mode}
 import play.api.libs.json.Format
-import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.play.bootstrap.config.AppName
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 @Singleton
-class KeystoreConnector @Inject()(appConfig: AppConfig,
-                                  sessionCache: VfrSessionCache) extends ServicesConfig with RunModeConfig {
+class KeystoreConnector @Inject()(appConfig: ApplicationConfig,
+                                  sessionCache: VfrSessionCache) extends ServicesConfig {
+
+  override def mode :Mode.Mode = appConfig.mode
+  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "applications/vnd.hmrc.1.0+json")
 
@@ -39,3 +45,14 @@ class KeystoreConnector @Inject()(appConfig: AppConfig,
     sessionCache.fetchAndGetEntry(key)
   }
 }
+
+@Singleton
+class VfrSessionCache @Inject()(val http: DefaultHttpClient, appConfig: ApplicationConfig) extends SessionCache with ServicesConfig with AppName {
+  override def configuration: Configuration = appConfig.runModeConfiguration
+  override def mode :Mode.Mode = appConfig.mode
+  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
+  override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(""))
+  override lazy val baseUri: String = baseUrl("cachable.session-cache")
+  override lazy val defaultSource: String = appName
+}
+

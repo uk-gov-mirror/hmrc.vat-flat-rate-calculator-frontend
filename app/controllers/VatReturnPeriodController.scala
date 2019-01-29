@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package controllers
 
 import java.util.UUID
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
@@ -27,11 +27,11 @@ import play.api.data.FormError
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
 import services.StateService
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{home => views}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class VatReturnPeriodController @Inject()(config: AppConfig,

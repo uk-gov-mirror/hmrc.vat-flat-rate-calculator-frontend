@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,15 @@ package views.home
 import config.AppConfig
 import forms.VatFlatRateForm
 import helpers.ViewSpecHelpers.CostOfGoodsViewMessages
-import javax.inject.Inject
-import models.VatFlatRateModel
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.test.UnitSpec
 import org.jsoup.Jsoup
 import play.api.inject.Injector
 import views.html.home.costOfGoods
 import play.api.i18n.Messages.Implicits._
 
-class costOfGoodsViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceOneAppPerSuite with CostOfGoodsViewMessages {
+class costOfGoodsViewSpec extends UnitSpec with GuiceOneAppPerSuite with CostOfGoodsViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

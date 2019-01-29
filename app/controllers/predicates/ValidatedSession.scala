@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,16 @@
 package controllers.predicates
 
 import javax.inject.Inject
-
 import config.AppConfig
 import forms.VatFlatRateForm
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{home => views}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class ValidatedSession @Inject()(config: AppConfig,
                                  val messagesApi: MessagesApi,

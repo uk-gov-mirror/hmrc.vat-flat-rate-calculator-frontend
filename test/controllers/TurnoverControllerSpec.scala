@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
 
       "navigate to the annual turnover page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("turnover.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("turnover.title")
       }
 
     }
@@ -133,7 +133,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
       }
 
       "show the technical error page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe Messages("techError.title")
+        Jsoup.parse(bodyOf(result)).title shouldBe messages("techError.title")
       }
     }
   }

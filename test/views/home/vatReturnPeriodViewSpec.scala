@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,11 @@ import org.jsoup.Jsoup
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.Injector
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.home.vatReturnPeriod
 import play.api.i18n.Messages.Implicits._
 
-class vatReturnPeriodViewSpec extends UnitSpec with MicroserviceFilterSupport with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
+class vatReturnPeriodViewSpec extends UnitSpec with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

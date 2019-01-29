@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package connectors
 
 import java.util.UUID
 
-import config.{AppConfig, VfrSessionCache}
+import config.ApplicationConfig
 import helpers.ControllerTestSpec
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -28,12 +28,13 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.SessionId
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class KeystoreConnectorSpec extends ControllerTestSpec {
 
   lazy val sessionId: String = UUID.randomUUID.toString
-  lazy val config: AppConfig = mock[AppConfig]
+  lazy val config: ApplicationConfig = mock[ApplicationConfig]
   lazy val vfrSessionCache: VfrSessionCache = mock[VfrSessionCache]
 
   lazy implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))

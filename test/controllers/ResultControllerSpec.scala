@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import uk.gov.hmrc.http.SessionKeys
 class ResultControllerSpec extends ControllerTestSpec {
 
   def createTestController(data: Option[ResultModel]): ResultController = {
-    object TestResultController extends ResultController(mockConfig, messages, createMockStateService(), mockValidatedSession)
+    object TestResultController extends ResultController(mockApplicationConfig, messages, createMockStateService(), mockValidatedSession)
     def createMockStateService(): StateService = {
       val mockStateService = mock[StateService]
 
@@ -77,7 +77,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 
@@ -93,7 +93,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 
@@ -109,7 +109,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 
@@ -125,7 +125,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 
@@ -141,7 +141,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 
@@ -157,7 +157,7 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
 
     "navigate to the result page" in {
-      Jsoup.parse(bodyOf(result)).title shouldBe Messages("result.title")
+      Jsoup.parse(bodyOf(result)).title shouldBe messages("result.title")
     }
   }
 

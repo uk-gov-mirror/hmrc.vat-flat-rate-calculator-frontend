@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,25 @@
 
 package controllers
 
+import com.codahale.metrics.SharedMetricRegistries
 import helpers.ControllerTestSpec
 import play.api.http.Status
 import play.api.test.FakeRequest
 
-
-
 class FeedbackSurveyControllerSpec extends ControllerTestSpec {
+  SharedMetricRegistries.clear()
+
+  class Setup {
+    val controller = new FeedbackSurveyController(
+     mockApplicationConfig
+    )
+  }
 
   "Feedback survey controller" must {
-    "Redirect to feedback survey page when survey link is clicked" in {
+    "Redirect to feedback survey page when survey link is clicked" in new Setup {
       lazy val request = FakeRequest("GET", "/")
-      lazy val controller = new FeedbackSurveyController(mockApplicationConfig)
       lazy val result = controller.redirectFeedbackSurvey(request)
-
       status(result) shouldBe Status.SEE_OTHER
-
     }
   }
 }

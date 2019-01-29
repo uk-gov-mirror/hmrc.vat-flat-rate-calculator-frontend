@@ -1,17 +1,17 @@
 # microservice specific routes
-GET        /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
+GET        /assets/*file              @controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /vat-return-period         controllers.VatReturnPeriodController.vatReturnPeriod
-POST       /vat-return-period         controllers.VatReturnPeriodController.submitVatReturnPeriod
+GET        /vat-return-period         @controllers.VatReturnPeriodController.vatReturnPeriod
+POST       /vat-return-period         @controllers.VatReturnPeriodController.submitVatReturnPeriod
 
-GET        /turnover                  controllers.TurnoverController.turnover
-POST       /turnover                  controllers.TurnoverController.submitTurnover
+GET        /turnover                  @controllers.TurnoverController.turnover
+POST       /turnover                  @controllers.TurnoverController.submitTurnover
 
-GET        /cost-of-goods             controllers.CostOfGoodsController.costOfGoods
-POST       /cost-of-goods             controllers.CostOfGoodsController.submitCostOfGoods
+GET        /cost-of-goods             @controllers.CostOfGoodsController.costOfGoods
+POST       /cost-of-goods             @controllers.CostOfGoodsController.submitCostOfGoods
 
-GET        /result                    controllers.ResultController.result
+GET        /result                    @controllers.ResultController.result
 
-GET        /timeout                   controllers.TimeoutController.timeout
+GET        /timeout                   @controllers.TimeoutController.timeout
 
-GET        /feedback-survey           controllers.FeedbackSurveyController.redirectFeedbackSurvey
+GET        /feedback-survey           @controllers.FeedbackSurveyController.redirectFeedbackSurvey
