@@ -46,7 +46,7 @@ class resultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMe
     }
 
     "have the correct heading" in {
-      doc.select("span#resultOutcome").text() shouldBe  ResultHeading
+      doc.select("h1").text() shouldBe  ResultHeading
     }
 
     "have some introductory text" in {
