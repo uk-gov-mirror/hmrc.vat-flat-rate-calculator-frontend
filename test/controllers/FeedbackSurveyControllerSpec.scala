@@ -25,9 +25,7 @@ class FeedbackSurveyControllerSpec extends ControllerTestSpec {
   SharedMetricRegistries.clear()
 
   class Setup {
-    val controller = new FeedbackSurveyController(
-     mockApplicationConfig
-    )
+    val controller = new FeedbackSurveyController(mockApplicationConfig, mcc)
   }
 
   "Feedback survey controller" must {

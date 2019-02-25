@@ -20,7 +20,7 @@
 @import common.Links
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, costOfGoodsForm: Form[VatFlatRateModel], costOfGoodsPeriodString: String)(implicit request: Request[_], messages: Messages, lang: Lang)
 
 @scriptElement = {
 <script type="text/javascript" src='@controllers.routes.Assets.versioned("javascripts/vfr.js")'></script>
@@ -29,9 +29,9 @@
 @main_template(title = messages("costOfGoods.title"), bodyClasses = None, appConfig = appConfig, scriptElem=Some(scriptElement)) {
 
 @if(costOfGoodsForm.hasErrors){
-@govHelpers.errorSummary(
-Messages("base.errorSummary"), costOfGoodsForm
-)
+    @govHelpers.errorSummary(
+        Messages("base.errorSummary"), costOfGoodsForm
+    )
 }
 
 <h1>@messages("costOfGoods.heading", costOfGoodsPeriodString)</h1>

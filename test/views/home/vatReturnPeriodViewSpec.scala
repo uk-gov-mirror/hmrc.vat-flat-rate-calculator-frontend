@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import views.html.home.vatReturnPeriod
 import play.api.i18n.Messages.Implicits._
 
-class vatReturnPeriodViewSpec extends UnitSpec with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
+class VatReturnPeriodViewSpec extends UnitSpec with GuiceOneAppPerSuite with VatReturnPeriodViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

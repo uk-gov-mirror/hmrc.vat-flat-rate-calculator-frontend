@@ -26,7 +26,7 @@ import play.api.inject.Injector
 import views.html.home.result
 import play.api.i18n.Messages.Implicits._
 
-class resultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMessages {
+class ResultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector

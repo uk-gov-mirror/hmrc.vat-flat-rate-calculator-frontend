@@ -18,27 +18,28 @@ package controllers
 
 import java.util.UUID
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._
 import services.StateService
-import views.html.{home => views}
-
-import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.{home => views}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class VatReturnPeriodController @Inject()(config: AppConfig,
-                                          val messagesApi: MessagesApi,
+                                          mcc: MessagesControllerComponents,
                                           stateService: StateService,
                                           session: ValidatedSession,
-                                          forms: VatFlatRateForm) extends FrontendController with I18nSupport {
+                                          forms: VatFlatRateForm) extends FrontendController(mcc) with I18nSupport {
 
   val vatReturnPeriod: Action[AnyContent] = Action.async { implicit request =>
 

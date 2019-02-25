@@ -16,7 +16,11 @@
 
 package helpers.ViewSpecHelpers
 
-trait CostOfGoodsViewMessages {
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+
+trait CostOfGoodsViewMessages extends MockitoSugar {
+  implicit val lang: Lang = Lang("en")
   val costOfGoodTitle                      = "Enter your cost of goods"
   def costOfGoodsHeading(period : String)  = s"Enter your cost of goods for the $period including VAT"
   val costOfGoodsParagraph1                = "Goods are moveable items or materials exclusively used in your business. You can also include gas and electricity. If you're estimating, give realistic figures."

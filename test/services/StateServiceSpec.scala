@@ -20,16 +20,16 @@ import connectors.KeystoreConnector
 import models.{ResultModel, VatFlatRateModel}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.UnitSpec
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 
-class StateServiceSpec extends UnitSpec with MockitoSugar{
+class StateServiceSpec extends UnitSpec with MockitoSugar {
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   val mockVatFlatRateModel: Option[VatFlatRateModel] = Some(VatFlatRateModel("annually", Some(10000.00), Some(10.00)))

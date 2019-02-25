@@ -17,14 +17,12 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
   val analyticsToken: String
   val analyticsHost: String
   val contactFormServiceIdentifier: String
-  val contactFrontendPartialBaseUrl: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val businessTaxAccount: String
@@ -33,31 +31,24 @@ trait AppConfig {
 }
 
 @Singleton
-class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration, val environment: Environment) extends AppConfig with ServicesConfig {
+class ApplicationConfig @Inject()(val config: ServicesConfig) extends AppConfig {
 
-  override def mode = environment.mode
+  private def loadConfig(key: String): String = config.getString(key)
 
-  private def loadConfig(key: String): String = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-
-  private lazy val baseUrl = "check-your-vat-flat-rate"
-  private lazy val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
-
-  // Feedback Config
-  private lazy val contactFrontendService = baseUrl("contact-frontend")
-  override lazy val contactFormServiceIdentifier = "VFR"
-  override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
-  override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  override lazy val feedbackSurvey: String = loadConfig(s"feedback-survey-frontend.url")
+  private lazy val contactHost          = config.getString("contact-frontend.host")
+  lazy val contactFormServiceIdentifier = "VFR"
+  lazy val reportAProblemPartialUrl     = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl       = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val feedbackSurvey: String       = loadConfig("feedback-survey-frontend.url")
 
   //Business Tax Account
-  override lazy val businessTaxAccount: String = runModeConfiguration.getString("business-tax-account.url").getOrElse("")
+  lazy val businessTaxAccount: String = config.getString("business-tax-account.url")
 
   // GA
-  override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
-  override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
+  lazy val analyticsToken: String = loadConfig("google-analytics.token")
+  lazy val analyticsHost: String  = loadConfig("google-analytics.host")
 
   //Banner
-  override lazy val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
+  lazy val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
 
 }
