@@ -40,7 +40,7 @@ class VatReturnPeriodControllerSpec extends ControllerTestSpec {
   lazy val testMockStateService = mock[StateService]
 
   def createTestController() = {
-    object TestController extends VatReturnPeriodController(mockConfig, messages, testMockStateService, mockValidatedSession, mockForm)
+    object TestController extends VatReturnPeriodController(mockConfig, mcc, testMockStateService, mockValidatedSession, mockForm)
     TestController
   }
 

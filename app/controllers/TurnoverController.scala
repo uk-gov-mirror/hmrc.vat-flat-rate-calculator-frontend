@@ -16,28 +16,29 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import javax.inject.{Inject, Singleton}
 import models.VatFlatRateModel
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc._
 import services.StateService
-import views.html.{errors, home => views}
-
-import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.{errors, home => views}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class TurnoverController @Inject()(config: AppConfig,
-                                   val messagesApi: MessagesApi,
+                                   mcc: MessagesControllerComponents,
                                    stateService: StateService,
                                    session: ValidatedSession,
-                                   forms: VatFlatRateForm) extends FrontendController with I18nSupport{
+                                   forms: VatFlatRateForm) extends FrontendController(mcc) with I18nSupport {
 
   val turnover: Action[AnyContent] = session.async{ implicit request =>
     routeRequest(Ok, forms.turnoverForm)
@@ -57,17 +58,18 @@ class TurnoverController @Inject()(config: AppConfig,
   }
 
   def routeRequest(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    implicit val lang: Lang = req.lang
     for {
       vfrModel <- stateService.fetchVatFlatRate()
     } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), Messages("common.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), Messages("common.quarter")))
+          case s  if s.equalsIgnoreCase(messagesApi("vatReturnPeriod.option.annual"))    => res(views.turnover(config, form.fill(model), messagesApi("common.year")))
+          case s  if s.equalsIgnoreCase(messagesApi("vatReturnPeriod.option.quarter"))   => res(views.turnover(config, form.fill(model), messagesApi("common.quarter")))
           case _ =>
             Logger.warn(
               s"""Incorrect value found for Vat Return Period:
-                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
+                 |Should be [${messagesApi("vatReturnPeriod.option.annual")}] or [${messagesApi("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
             )
             InternalServerError(errors.technicalError(config))
         }

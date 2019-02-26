@@ -29,8 +29,8 @@ import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class ValidatedSession @Inject()(config: AppConfig,
-                                 val messagesApi: MessagesApi,
-                                 forms: VatFlatRateForm) extends FrontendController with I18nSupport{
+                                 mcc: MessagesControllerComponents,
+                                 forms: VatFlatRateForm) extends FrontendController(mcc) with I18nSupport{
 
   private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]

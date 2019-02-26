@@ -16,7 +16,11 @@
 
 package helpers.ViewSpecHelpers
 
-trait VatReturnPeriodViewMessages {
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+
+trait VatReturnPeriodViewMessages extends MockitoSugar {
+  implicit val lang: Lang = Lang("en")
   val vatReturnPeriodTitle        = "Enter your VAT return details"
   val vatReturnPeriodHeading      = "How often do you do your VAT returns?"
   val vatReturnPeriodIntro        = "If you're using the Flat Rate Scheme, select the period that matches your VAT return."

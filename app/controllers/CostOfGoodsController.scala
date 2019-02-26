@@ -16,32 +16,32 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import common.ResultCodes
 import config.AppConfig
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
+import javax.inject.{Inject, Singleton}
 import models.{ResultModel, VatFlatRateModel}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc._
 import services.StateService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{errors => errs, home => views}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class CostOfGoodsController @Inject()(config: AppConfig,
-                                   val messagesApi: MessagesApi,
-                                   stateService: StateService,
-                                   session: ValidatedSession,
-                                   forms: VatFlatRateForm) extends FrontendController with I18nSupport{
+                                      mcc: MessagesControllerComponents,
+                                      stateService: StateService,
+                                      session: ValidatedSession,
+                                      forms: VatFlatRateForm) extends FrontendController(mcc) with I18nSupport {
 
-  val costOfGoods: Action[AnyContent] = session.async{ implicit request =>
+  val costOfGoods: Action[AnyContent] = session.async { implicit request =>
     routeRequest(Ok, forms.costOfGoodsForm)
   }
 
@@ -53,9 +53,9 @@ class CostOfGoodsController @Inject()(config: AppConfig,
       },
       success => {
         for {
-          saveModel <- stateService.saveVatFlatRate(success)
-          result <- whichResult(success)
-          saveResult <- stateService.saveResultModel(createResultModel(success,result))
+          _        <- stateService.saveVatFlatRate(success)
+          result   =  whichResult(success)
+          _        <- stateService.saveResultModel(createResultModel(success, result))
           response <- Future.successful(Redirect(controllers.routes.ResultController.result()))
         } yield response
       }
@@ -63,19 +63,20 @@ class CostOfGoodsController @Inject()(config: AppConfig,
   }
 
   def routeRequest(res: Status, form: Form[VatFlatRateModel])(implicit req: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    implicit val lang = req.lang
     for {
       vfrModel <- stateService.fetchVatFlatRate()
     } yield vfrModel match {
       case Some(model) =>
         model.vatReturnPeriod match {
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))    =>
-            res(views.costOfGoods(config, form.fill(model), Messages("common.year")))
-          case s  if s.equalsIgnoreCase(Messages("vatReturnPeriod.option.quarter"))   =>
-            res(views.costOfGoods(config, form.fill(model), Messages("common.quarter")))
+          case s  if s.equalsIgnoreCase(messagesApi("vatReturnPeriod.option.annual"))    =>
+            res(views.costOfGoods(config, form.fill(model), messagesApi("common.year")))
+          case s  if s.equalsIgnoreCase(messagesApi("vatReturnPeriod.option.quarter"))   =>
+            res(views.costOfGoods(config, form.fill(model), messagesApi("common.quarter")))
           case _ =>
             Logger.warn(
               s"""Incorrect value found for Vat Return Period:
-                 |Should be [${Messages("vatReturnPeriod.option.annual")}] or [${Messages("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
+                 |Should be [${messagesApi("vatReturnPeriod.option.annual")}] or [${messagesApi("vatReturnPeriod.option.quarter")}] but found ${model.vatReturnPeriod}""".stripMargin
             )
             InternalServerError(errs.technicalError(config))
         }
@@ -91,18 +92,18 @@ class CostOfGoodsController @Inject()(config: AppConfig,
     }
   }
 
-  def whichResult(model: VatFlatRateModel): Future[Int] = {
-    if(model.vatReturnPeriod.equalsIgnoreCase(Messages("vatReturnPeriod.option.annual"))){
+  def whichResult(model: VatFlatRateModel)(implicit req: Request[AnyContent]): Int = {
+    if(model.vatReturnPeriod.equalsIgnoreCase(messagesApi("vatReturnPeriod.option.annual")(req.lang))){
       model match {
-        case VatFlatRateModel(_,_,Some(cost)) if cost < 1000 => Future(ResultCodes.ONE)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 > cost => Future(ResultCodes.TWO)
-        case _ => Future(ResultCodes.THREE)
+        case VatFlatRateModel(_,_,Some(cost)) if cost < 1000 => ResultCodes.ONE
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 > cost => ResultCodes.TWO
+        case _ => ResultCodes.THREE
       }
     } else {
       model match {
-        case VatFlatRateModel(_,_,Some(cost)) if cost < 250 => Future(ResultCodes.FOUR)
-        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 > cost => Future(ResultCodes.FIVE)
-        case _ => Future(ResultCodes.SIX)
+        case VatFlatRateModel(_,_,Some(cost)) if cost < 250 => ResultCodes.FOUR
+        case VatFlatRateModel(_,Some(turnover),Some(cost)) if turnover*0.02 > cost => ResultCodes.FIVE
+        case _ => ResultCodes.SIX
       }
     }
   }

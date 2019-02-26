@@ -21,15 +21,18 @@ import config.{AppConfig, ApplicationConfig}
 import controllers.predicates.ValidatedSession
 import forms.VatFlatRateForm
 import org.scalatest.mockito.MockitoSugar
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Lang, MessagesApi}
+import play.api.mvc.MessagesControllerComponents
 import services.StateService
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 trait ControllerTestSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
 
   implicit val mat: Materializer = fakeApplication.injector.instanceOf[Materializer]
+  implicit val lang: Lang = Lang("en")
 
   lazy val messages: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  lazy val mcc: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   lazy val mockConfig: AppConfig = fakeApplication.injector.instanceOf[AppConfig]
   lazy val mockApplicationConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val mockValidatedSession: ValidatedSession = fakeApplication.injector.instanceOf[ValidatedSession]

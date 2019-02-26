@@ -19,7 +19,7 @@
 @import views.html.helpers._
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(appConfig: config.AppConfig, turnoverForm: Form[VatFlatRateModel], turnoverPeriodString: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, turnoverForm: Form[VatFlatRateModel], turnoverPeriodString: String)(implicit request: Request[_], messages: Messages, lang: Lang)
 
 @main_template(title = messages("turnover.title"), bodyClasses = None, appConfig = appConfig) {
 

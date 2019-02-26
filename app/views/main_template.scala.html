@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts
 @import views.html.helpers.two_thirds_banner_content_ur
 @import views.html.helpers.two_thirds_banner
 
@@ -28,6 +27,8 @@
   appConfig: config.AppConfig)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @serviceInfoContent = {}
+
+@import uk.gov.hmrc.play.views.html.layouts
 
 @sidebar = {
     @if(sidebarLinks.isDefined) {

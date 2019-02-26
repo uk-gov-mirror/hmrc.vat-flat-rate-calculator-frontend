@@ -22,11 +22,12 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import play.api.http.Status
-import play.api.i18n.Messages
+import play.api.i18n.{Lang, Messages}
 import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 import services.StateService
 import play.api.test.Helpers._
+
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
 
@@ -34,7 +35,7 @@ import uk.gov.hmrc.http.SessionKeys
 class ResultControllerSpec extends ControllerTestSpec {
 
   def createTestController(data: Option[ResultModel]): ResultController = {
-    object TestResultController extends ResultController(mockApplicationConfig, messages, createMockStateService(), mockValidatedSession)
+    object TestResultController extends ResultController(mockApplicationConfig, mcc, createMockStateService(), mockValidatedSession)
     def createMockStateService(): StateService = {
       val mockStateService = mock[StateService]
 
@@ -45,8 +46,6 @@ class ResultControllerSpec extends ControllerTestSpec {
     }
     TestResultController
   }
-
-
 
   "Navigating to the result page without a model in keystore" should {
     val data = None

@@ -14,11 +14,11 @@ object FrontendBuild extends Build with MicroService {
   val compile = Seq(
     ws,
 
-    "uk.gov.hmrc" %% "bootstrap-play-25" % "4.8.0",
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "0.36.0",
     "uk.gov.hmrc" %% "play-partials" % "6.4.0",
     "uk.gov.hmrc" %% "http-caching-client" % "8.0.0",
-    "uk.gov.hmrc" %% "govuk-template" % "5.27.0-play-25",
-    "uk.gov.hmrc" %% "play-ui" % "7.31.0-play-25"
+    "uk.gov.hmrc" %% "govuk-template" % "5.28.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "7.32.0-play-26"
   )
 
     trait TestDependencies {
@@ -29,7 +29,7 @@ object FrontendBuild extends Build with MicroService {
     object Test {
       def apply(): Seq[ModuleID] = new TestDependencies {
         override lazy val test = Seq(
-          "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % scope,
+          "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-26" % scope,
           "org.scalatest" %% "scalatest" % "2.2.6" % scope,
           "org.pegdown" % "pegdown" % "1.6.0" % scope,
           "org.jsoup" % "jsoup" % "1.8.3" % scope,

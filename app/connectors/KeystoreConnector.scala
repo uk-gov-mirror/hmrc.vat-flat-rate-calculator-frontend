@@ -16,24 +16,18 @@
 
 package connectors
 
-import javax.inject.{Inject, Singleton}
 import config.ApplicationConfig
-import play.api.{Configuration, Mode}
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Format
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.bootstrap.config.AppName
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 @Singleton
 class KeystoreConnector @Inject()(appConfig: ApplicationConfig,
-                                  sessionCache: VfrSessionCache) extends ServicesConfig {
-
-  override def mode :Mode.Mode = appConfig.mode
-  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
+                                  sessionCache: VfrSessionCache) {
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "applications/vnd.hmrc.1.0+json")
 
@@ -47,12 +41,9 @@ class KeystoreConnector @Inject()(appConfig: ApplicationConfig,
 }
 
 @Singleton
-class VfrSessionCache @Inject()(val http: DefaultHttpClient, appConfig: ApplicationConfig) extends SessionCache with ServicesConfig with AppName {
-  override def configuration: Configuration = appConfig.runModeConfiguration
-  override def mode :Mode.Mode = appConfig.mode
-  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
-  override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(""))
-  override lazy val baseUri: String = baseUrl("cachable.session-cache")
-  override lazy val defaultSource: String = appName
+class VfrSessionCache @Inject()(val http: DefaultHttpClient, appConfig: ApplicationConfig) extends SessionCache {
+  override lazy val domain: String = appConfig.config.getConfString("cachable.session-cache.domain", throw new Exception(""))
+  override lazy val baseUri: String = appConfig.config.baseUrl("cachable.session-cache")
+  override lazy val defaultSource: String = "vat-flat-rate-calculator-frontend"
 }
 

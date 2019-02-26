@@ -27,7 +27,7 @@ import play.api.inject.Injector
 import views.html.home.costOfGoods
 import play.api.i18n.Messages.Implicits._
 
-class costOfGoodsViewSpec extends UnitSpec with GuiceOneAppPerSuite with CostOfGoodsViewMessages {
+class CostOfGoodsViewSpec extends UnitSpec with GuiceOneAppPerSuite with CostOfGoodsViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector
@@ -98,7 +98,7 @@ class costOfGoodsViewSpec extends UnitSpec with GuiceOneAppPerSuite with CostOfG
 
     "have a valid form" in{
       doc.select("form").attr("method") shouldBe "POST"
-      doc.select("form").attr("action") shouldBe controllers.routes.CostOfGoodsController.submitCostOfGoods.url
+      doc.select("form").attr("action") shouldBe controllers.routes.CostOfGoodsController.submitCostOfGoods().url
     }
 
   }

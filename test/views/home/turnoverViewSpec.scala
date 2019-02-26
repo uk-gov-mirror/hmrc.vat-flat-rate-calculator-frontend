@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import views.html.home.turnover
 import play.api.i18n.Messages.Implicits._
 
-class turnoverViewSpec extends UnitSpec with GuiceOneAppPerSuite with TurnoverViewMessages {
+class TurnoverViewSpec extends UnitSpec with GuiceOneAppPerSuite with TurnoverViewMessages {
 
   implicit lazy val fakeRequest = FakeRequest()
   def injector: Injector = app.injector
@@ -74,7 +74,7 @@ class turnoverViewSpec extends UnitSpec with GuiceOneAppPerSuite with TurnoverVi
 
     "have a valid form" in{
       doc.select("form").attr("method") shouldBe "POST"
-      doc.select("form").attr("action") shouldBe controllers.routes.TurnoverController.submitTurnover.url
+      doc.select("form").attr("action") shouldBe controllers.routes.TurnoverController.submitTurnover().url
     }
   }
 

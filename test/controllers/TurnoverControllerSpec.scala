@@ -38,7 +38,7 @@ class TurnoverControllerSpec extends ControllerTestSpec {
   lazy val testMockStateService = mock[StateService]
 
   def createTestController(): TurnoverController = {
-    object TestController extends TurnoverController(mockConfig, messages, testMockStateService, mockValidatedSession, mockForm)
+    object TestController extends TurnoverController(mockConfig, mcc, testMockStateService, mockValidatedSession, mockForm)
     TestController
   }
 

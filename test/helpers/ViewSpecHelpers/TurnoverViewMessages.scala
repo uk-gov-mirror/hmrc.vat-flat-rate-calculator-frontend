@@ -16,7 +16,11 @@
 
 package helpers.ViewSpecHelpers
 
-trait TurnoverViewMessages {
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+
+trait TurnoverViewMessages extends MockitoSugar {
+  implicit val lang: Lang = Lang("en")
   val turnoverTitle                         = "Enter your turnover"
   def turnoverHeading(period : String)      = s"Enter your turnover for the $period including VAT"
   val turnoverIntro                         = "This is the total sales of all goods and services. If you're estimating, give realistic figures."

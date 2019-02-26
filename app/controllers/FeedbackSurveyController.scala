@@ -16,12 +16,13 @@
 
 package controllers
 
-import play.api.mvc.{Action, AnyContent}
 import config.ApplicationConfig
 import javax.inject.Inject
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class FeedbackSurveyController @Inject() (applicationConfig: ApplicationConfig) extends FrontendController {
+class FeedbackSurveyController @Inject() (applicationConfig: ApplicationConfig,
+                                          mcc: MessagesControllerComponents) extends FrontendController(mcc) {
 
   def redirectFeedbackSurvey : Action[AnyContent] = Action {
     implicit request => Redirect(applicationConfig.feedbackSurvey)

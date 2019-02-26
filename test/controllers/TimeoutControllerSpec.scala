@@ -25,7 +25,7 @@ class TimeoutControllerSpec extends ControllerTestSpec {
 
   class Setup {
     val controller = new TimeoutController(
-      mockConfig, messages, mockStateService, mockValidatedSession
+      mockConfig, mcc, mockStateService, mockValidatedSession
     )
   }
 
