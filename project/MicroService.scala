@@ -6,7 +6,8 @@ import com.typesafe.sbt.digest.Import.digest
 import com.typesafe.sbt.web.Import.pipelineStages
 import com.typesafe.sbt.web.Import.Assets
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
-
+import com.timushev.sbt.updates.UpdatesKeys._
+import com.timushev.sbt.updates.UpdatesPlugin.autoImport.moduleFilterRemoveValue
 
 trait MicroService {
 
@@ -48,16 +49,21 @@ trait MicroService {
     .settings(scalaSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
-    .settings( majorVersion := 0 )
+    .settings(majorVersion := 0 )
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
       routesGenerator := InjectedRoutesGenerator,
       pipelineStages in Assets := Seq(digest),
-      scalaVersion := "2.11.11"
+      scalaVersion := "2.11.12"
     )
     .configs(IntegrationTest)
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
     .settings(integrationTestSettings())
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang"))
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play"))
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatest"))
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatestplus.play"))
+    .settings(dependencyUpdatesFailBuild := true)
 }

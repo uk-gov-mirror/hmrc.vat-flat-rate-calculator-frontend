@@ -62,7 +62,7 @@ class CostOfGoodsViewSpec extends UnitSpec with GuiceOneAppPerSuite with CostOfG
     }
 
     "have a h2 with text" in {
-      doc.select("h2").text() shouldBe costOfGoodDontInclude
+      doc.select("h2").text().dropRight(14) shouldBe costOfGoodDontInclude
     }
 
     "have a list of bulletpoints" in {

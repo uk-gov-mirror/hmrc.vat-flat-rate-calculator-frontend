@@ -66,7 +66,7 @@ class ResultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMe
     }
 
     "have a h2 with text" in {
-      doc.select("h2").text() shouldBe ResultH2Text
+      doc.select("h2").text().dropRight(14) shouldBe ResultH2Text
     }
 
     "have instructions on what happens next" in {

@@ -21,3 +21,5 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.8.0")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.5.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.1")
+
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.4.0")
