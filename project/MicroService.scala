@@ -56,7 +56,7 @@ trait MicroService {
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
       routesGenerator := InjectedRoutesGenerator,
       pipelineStages in Assets := Seq(digest),
-      scalaVersion := "2.11.12"
+      scalaVersion := "2.11.11"
     )
     .configs(IntegrationTest)
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
