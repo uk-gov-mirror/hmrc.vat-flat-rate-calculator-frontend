@@ -64,6 +64,8 @@ trait MicroService {
     .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang"))
     .settings(dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play"))
     .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatest"))
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scalameta"))
     .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scalatestplus.play"))
+    .settings(dependencyUpdatesFilter -= moduleFilter(organization = "org.scoverage"))
     .settings(dependencyUpdatesFailBuild := true)
 }
