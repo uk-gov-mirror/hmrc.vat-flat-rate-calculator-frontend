@@ -17,8 +17,8 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "bootstrap-play-26" % "0.39.0",
     "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
     "uk.gov.hmrc" %% "http-caching-client" % "8.3.0",
-    "uk.gov.hmrc" %% "govuk-template" % "5.34.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "7.39.0-play-26"
+    "uk.gov.hmrc" %% "govuk-template" % "5.44.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26"
   )
 
     trait TestDependencies {
@@ -29,13 +29,13 @@ object FrontendBuild extends Build with MicroService {
     object Test {
       def apply(): Seq[ModuleID] = new TestDependencies {
         override lazy val test = Seq(
-          "uk.gov.hmrc" %% "hmrctest" % "3.8.0-play-26" % scope,
+          "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
           "org.scalatest" %% "scalatest" % "2.2.6" % scope,
           "org.pegdown" % "pegdown" % "1.6.0" % scope,
-          "org.jsoup" % "jsoup" % "1.11.3" % scope,
+          "org.jsoup" % "jsoup" % "1.12.1" % scope,
           "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
           "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % scope,
-          "org.mockito" % "mockito-core" % "2.27.0" % "test"
+          "org.mockito" % "mockito-core" % "3.1.0" % "test"
         )
       }.test
     }

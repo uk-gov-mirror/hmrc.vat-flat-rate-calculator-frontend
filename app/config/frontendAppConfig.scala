@@ -28,6 +28,7 @@ trait AppConfig {
   val businessTaxAccount: String
   val urBannerLink: String
   val feedbackSurvey: String
+  val googleTagManagerId: String
 }
 
 @Singleton
@@ -50,5 +51,6 @@ class ApplicationConfig @Inject()(val config: ServicesConfig) extends AppConfig 
 
   //Banner
   lazy val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
+  lazy val googleTagManagerId = loadConfig(s"google-tag-manager.id")
 
 }
