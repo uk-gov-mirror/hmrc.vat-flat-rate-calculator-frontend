@@ -27,4 +27,5 @@ class MockConfig extends AppConfig {
   override val businessTaxAccount: String = ""
   override val urBannerLink: String = ""
   override val feedbackSurvey: String = ""
+  override val googleTagManagerId: String = "N/A"
 }
