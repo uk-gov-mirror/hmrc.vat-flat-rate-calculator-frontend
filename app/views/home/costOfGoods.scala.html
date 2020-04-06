@@ -60,12 +60,10 @@
 @form(action = controllers.routes.CostOfGoodsController.submitCostOfGoods) {
 
         <div class="form-group">
-            <fieldset>
             @moneyInputFormat(
             costOfGoodsForm("costOfGoods"),
             '_legend -> Messages("costOfGoods.heading", costOfGoodsPeriodString)
             )
-            </fieldset>
         </div>
 
     <button class="button" type="submit" id="continue-button">@Messages("common.continue")</button>
