@@ -69,7 +69,7 @@ lazy val microservice: Project = Project(appName, file("."))
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     routesGenerator := InjectedRoutesGenerator,
     pipelineStages in Assets := Seq(digest),
-    scalaVersion := "2.12.10"
+    scalaVersion := "2.12.11"
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
