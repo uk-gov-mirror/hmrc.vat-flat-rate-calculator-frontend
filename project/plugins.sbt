@@ -19,7 +19,7 @@ resolvers += Resolver.url("hmrc-sbt-plugin-releases", url("https://dl.bintray.co
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 resolvers += "Artifactory Releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "2.6.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "2.8.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "2.1.0")
 
@@ -35,8 +35,8 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.13")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.16")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.1")
