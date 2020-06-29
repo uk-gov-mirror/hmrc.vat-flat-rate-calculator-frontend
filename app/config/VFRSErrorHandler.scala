@@ -18,7 +18,8 @@ package config
 
 import javax.inject.Inject
 import play.api.{Configuration, Play, mvc}
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.mvc.Request
 import play.mvc.Http.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
@@ -30,4 +31,12 @@ class VFRSErrorHandler @Inject()(val messagesApi: MessagesApi, val configuration
     val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
     error_template(pageTitle, heading, message, appConfig)
   }
+
+  override def internalServerErrorTemplate(implicit request: mvc.Request[_]): Html =
+    standardErrorTemplate(
+      Messages("techError.title"),
+      Messages("techError.heading"),
+      Messages("techError.message")
+    )
+
 }

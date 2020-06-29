@@ -27,9 +27,9 @@ error.moreThanMaximumTurnover      = Enter an amount less than £9,999,999,999.9
 ############################################################################
 # Technical errors
 ############################################################################
-techError.title                    = Technical Error
-techError.heading                  = Sorry, there''s been a problem
-techError.para.1                   = You''ll need to start your calculation again.
+techError.title                    = Sorry, there is a problem with the service
+techError.heading                  = Sorry, there is a problem with the service
+techError.para.1                   = Try again later.
 
 ############################################################################
 # Timeout
