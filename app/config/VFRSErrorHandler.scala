@@ -36,7 +36,7 @@ class VFRSErrorHandler @Inject()(val messagesApi: MessagesApi, val configuration
     standardErrorTemplate(
       Messages("techError.title"),
       Messages("techError.heading"),
-      Messages("techError.message")
+      Messages("techError.para.1")
     )
 
 }
