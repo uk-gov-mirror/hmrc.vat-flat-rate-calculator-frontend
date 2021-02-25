@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,12 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
-  val analyticsToken: String
-  val analyticsHost: String
   val contactFormServiceIdentifier: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val businessTaxAccount: String
   val urBannerLink: String
   val feedbackSurvey: String
-  val googleTagManagerId: String
 }
 
 @Singleton
@@ -45,12 +42,7 @@ class ApplicationConfig @Inject()(val config: ServicesConfig) extends AppConfig 
   //Business Tax Account
   lazy val businessTaxAccount: String = config.getString("business-tax-account.url")
 
-  // GA
-  lazy val analyticsToken: String = loadConfig("google-analytics.token")
-  lazy val analyticsHost: String  = loadConfig("google-analytics.host")
-
   //Banner
   lazy val urBannerLink: String = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VFRS_results&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=114"
-  lazy val googleTagManagerId = loadConfig(s"google-tag-manager.id")
 
 }

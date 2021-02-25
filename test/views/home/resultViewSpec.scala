@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,11 @@ class ResultViewSpec extends UnitSpec with GuiceOneAppPerSuite with ResultViewMe
   def appConfig: AppConfig = injector.instanceOf[AppConfig]
   val resultCode = 1
   val showUserResearchPanel = true
-  val gaData = Array("annually", "1000", "100")
 
 
   "the ResultView" should {
 
-    lazy val view = result(appConfig ,resultCode, gaData, showUserResearchPanel)
+    lazy val view = result(appConfig ,resultCode, showUserResearchPanel)
     lazy val doc = Jsoup.parse(view.body)
 
     "have the correct title" in {
