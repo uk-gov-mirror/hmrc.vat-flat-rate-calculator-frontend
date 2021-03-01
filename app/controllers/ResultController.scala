@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,23 +38,13 @@ class ResultController @Inject()(config: ApplicationConfig,
   val result: Action[AnyContent] = session.async { implicit request =>
     val showUserResearchPanel = setURPanelFlag
     stateService.fetchResultModel.map {
-      case Some(model)  => Ok(views.result(config, model.result, recordToGA(model.result), showUserResearchPanel))
+      case Some(model)  => Ok(views.result(config, model.result, showUserResearchPanel))
       case None         =>
         Logger.warn("ResultModel could not be retrieved from Keystore")
         Redirect(controllers.routes.VatReturnPeriodController.vatReturnPeriod())
     }
   }
 
-  def recordToGA(resultCode: Int): Array[String] = { // PASS THIS THROUGH IN PARAMETER OF VIEW
-    resultCode match {
-      case 1 => Array("Annual","use16.5%","under1000")
-      case 2 => Array("Annual","use16.5%","costs<2%")
-      case 3 => Array("Annual","useBFR","qualifyForBFR")
-      case 4 => Array("Quarter","use16.5%","under250")
-      case 5 => Array("Quarter","use16.5%","costs<2%")
-      case 6 => Array("Quarter","useBFR","qualifyForBFR")
-    }
-  }
   private[controllers] def setURPanelFlag(implicit hc: HeaderCarrier): Boolean = {
     val random = new Random()
     val seed = getLongFromSessionID(hc)

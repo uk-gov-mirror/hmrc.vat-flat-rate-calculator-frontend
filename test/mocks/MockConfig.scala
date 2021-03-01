@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@ package mocks
 import config.AppConfig
 
 class MockConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
   override val reportAProblemNonJSUrl: String = ""
   override val reportAProblemPartialUrl: String = ""
   override val contactFormServiceIdentifier: String = ""
   override val businessTaxAccount: String = ""
   override val urBannerLink: String = ""
   override val feedbackSurvey: String = ""
-  override val googleTagManagerId: String = "N/A"
 }
